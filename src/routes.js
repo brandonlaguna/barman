@@ -93,7 +93,7 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/sync_server",
     component: <SyncServer />,
-  }
+  },
 ];
 
 export default routes;
