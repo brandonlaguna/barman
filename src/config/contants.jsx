@@ -33,7 +33,7 @@ export const APP_MEDIAQUERY = {
   tablet: 768,
   mobile: 480,
 };
-//solo para pruebas, falta inicio de sesion
+// solo para pruebas, falta inicio de sesion
 export const headers = {
   "Content-Type": "application/json",
   Accept: "application/json",
