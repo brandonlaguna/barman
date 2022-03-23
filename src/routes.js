@@ -32,6 +32,14 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Sincronizar Servicios",
+    key: "sync_server",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/sync_server",
+    component: <SyncServer />,
+  },
+  {
+    type: "collapse",
     name: "Tables",
     key: "tables",
     icon: <Icon fontSize="small">table_view</Icon>,
@@ -85,14 +93,6 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
-  },
-  {
-    type: "collapse",
-    name: "Sincronizar Servicios",
-    key: "sync_server",
-    icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/sync_server",
-    component: <SyncServer />,
   },
 ];
 
