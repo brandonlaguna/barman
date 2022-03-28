@@ -11,6 +11,7 @@ import Grid from "@mui/material/Grid";
 import HeaderBarMenu from "./components/HeaderBarMenu";
 import ItemCartBar from "./components/ItemCartBar";
 import ItemsBar from "./components/ItemsBar";
+// import ScrollMenuItem from "./components/ItemsBar/second";
 
 function Bar() {
   const [controller, dispatch] = useMaterialUIController();
@@ -33,7 +34,7 @@ function Bar() {
             <ItemCartBar />
           </Grid>
           <Grid item xs={12} md={9} lg={9}>
-            <MDBox mb={1.5}>
+            <MDBox mb={1.5} sx={{ height: "300px" }}>
               <ItemsBar />
             </MDBox>
           </Grid>
