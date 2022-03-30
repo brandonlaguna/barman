@@ -47,11 +47,7 @@ function Card({
       <div className="card" selected={selected} id={title}>
         <Grid container spacing={1} py={3} px={3}>
           {Object.entries(listItems[itemId].items).map((element) => (
-            <ItemsCard
-              itemId={element[1].id}
-              itemTitle={element[1].articulo}
-              onClickItem={onClickItem}
-            />
+            <ItemsCard rol="button" data={element[1]} onclickItem={onClickItem} />
           ))}
         </Grid>
       </div>
@@ -74,16 +70,12 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem }) {
     setPosition(0);
   }, []);
 
-  const handleClick =
-    (id) =>
-    ({ getItemById, scrollToItem }) => {
-      const itemSelected = isItemSelected(id);
-      console.log(getItemById);
-      console.log(scrollToItem);
-      setSelected((currentSelected) =>
-        itemSelected ? currentSelected.filter((el) => el !== id) : currentSelected.concat(id)
-      );
-    };
+  const handleClick = (id) => () => {
+    const itemSelected = isItemSelected(id);
+    setSelected((currentSelected) =>
+      itemSelected ? currentSelected.filter((el) => el !== id) : currentSelected.concat(id)
+    );
+  };
   const onKeyPressHandle = (id) => console.log(id);
 
   return (
