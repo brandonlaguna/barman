@@ -3,8 +3,9 @@ import MDBox from "components/MDBox";
 import PropTypes from "prop-types";
 import { useMaterialUIController } from "context";
 import { useBarCartController, deleteToCart } from "context/barCartContext";
-import Cards, { Card } from "react-swipe-card";
-// import ItemCartCard from "./components/ItemCartCard";
+import { SwipeableList } from "@sandstreamdev/react-swipeable-list";
+import "@sandstreamdev/react-swipeable-list/dist/styles.css";
+import ItemCartCard from "./components/ItemCartCard";
 import ItemCartBarStyle from "./style";
 
 export default function ItemCartBar({ light }) {
@@ -14,17 +15,13 @@ export default function ItemCartBar({ light }) {
   // context methods
   const { darkMode, sidenavColor } = controller;
   const { listCarts } = controllerBar;
+  const handledeleteItemToCart = (itemId) => deleteToCart(dispatchBar, itemId);
+  const active = true;
 
   const [listItemCart, setListItemCart] = useState([]);
-
   useEffect(() => {
     setListItemCart(listCarts);
   }, [listCarts]);
-  const handledeleteItemToCart = (itemId) => deleteToCart(dispatchBar, itemId);
-  const moreAction = (idItem) => console.log(`mas acciones ${idItem}`);
-
-  const active = true;
-  // const action = (data) => console.log(data);
 
   return (
     <MDBox
@@ -37,18 +34,11 @@ export default function ItemCartBar({ light }) {
         })
       }
     >
-      <Cards className="master-root" offsetWidth={5}>
+      <SwipeableList>
         {listItemCart.map((item) => (
-          // <ItemCartCard data={item} deleteItemCart={() => handledeleteItemToCart} />
-          <Card
-            key={item.id}
-            onSwipeLeft={() => handledeleteItemToCart(item.id)}
-            onSwipeRight={() => moreAction(item.id)}
-          >
-            <h2>{item.articulo}</h2>
-          </Card>
+          <ItemCartCard data={item} deleteItemCart={handledeleteItemToCart} />
         ))}
-      </Cards>
+      </SwipeableList>
       <p>{light}</p>
     </MDBox>
   );

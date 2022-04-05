@@ -1,13 +1,26 @@
-import { Card } from "react-swipe-card";
+import { SwipeableListItem } from "@sandstreamdev/react-swipeable-list";
 import PropTypes from "prop-types";
 
 export default function ItemCartCard({ data, deleteItemCart }) {
-  const { id, articulo } = data;
-  const moreAction = (idItem) => console.log(`mas acciones ${idItem}`);
+  const { id, articulo, cantidad } = data;
   return (
-    <Card key={id} onSwipeLeft={() => deleteItemCart(id)} onSwipeRight={() => moreAction(id)}>
-      <h2>{articulo}</h2>
-    </Card>
+    <SwipeableListItem
+      swipeLeft={{
+        content: <div style={{ background: "green", width: "100%", height: "100%" }} />,
+        action: () => console.info("swipe action triggered"),
+      }}
+      swipeRight={{
+        content: <div style={{ background: "red", width: "100%", height: "100%" }} />,
+        action: () => deleteItemCart(id),
+      }}
+      onSwipeProgress={(progress) => console.info(`Swipe progress: ${progress}%`)}
+    >
+      <div style={{ background: "white", color: "black", width: "100%", height: "100%" }}>
+        <p>
+          {articulo} x {cantidad}
+        </p>
+      </div>
+    </SwipeableListItem>
   );
 }
 

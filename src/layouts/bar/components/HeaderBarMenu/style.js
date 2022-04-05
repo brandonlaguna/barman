@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-
-export default function HeaderStyle(theme, ownerState) {
+export function HeaderStyle(theme, ownerState) {
   const { palette, transitions, breakpoints, boxShadows, borders, functions } = theme;
   const { active, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = ownerState;
 
@@ -8,10 +6,6 @@ export default function HeaderStyle(theme, ownerState) {
   const { md } = boxShadows;
   const { borderRadius } = borders;
   const { pxToRem, rgba, linearGradient } = functions;
-
-  useEffect(() => {
-    console.log("darkmode");
-  }, [darkMode]);
 
   return {
     background: active
@@ -26,6 +20,54 @@ export default function HeaderStyle(theme, ownerState) {
     borderRadius: borderRadius.md,
     cursor: "pointer",
     userSelect: "none",
+    whiteSpace: "nowrap",
+    boxShadow: active && !whiteSidenav && !darkMode && !transparentSidenav ? md : "none",
+    [breakpoints.up("xl")]: {
+      transition: transitions.create(["box-shadow", "background-color"], {
+        easing: transitions.easing.easeInOut,
+        duration: transitions.duration.shorter,
+      }),
+    },
+
+    "&:hover, &:focus": {
+      backgroundColor: () => {
+        let backgroundValue;
+
+        if (!active) {
+          backgroundValue =
+            transparentSidenav && !darkMode
+              ? grey[300]
+              : rgba(whiteSidenav ? grey[400] : white.main, 0.2);
+        }
+
+        return backgroundValue;
+      },
+    },
+  };
+}
+
+export function ModalStyle(theme, ownerState) {
+  const { palette, transitions, breakpoints, boxShadows, borders, functions } = theme;
+  const { active, transparentSidenav, whiteSidenav, darkMode } = ownerState;
+  const { white, transparent, dark, grey } = palette;
+  const { md } = boxShadows;
+  const { borderRadius } = borders;
+  const { pxToRem, rgba } = functions;
+
+  return {
+    background: active ? "white" : transparent.main,
+    color: (!darkMode && !active) || (whiteSidenav && !active) ? dark.main : white.main,
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    width: "80%",
+    height: "auto",
+    transform: "translate(-50%, -50%)",
+    bgcolor: "background.paper",
+    display: "flex",
+    alignItems: "center",
+    padding: `${pxToRem(8)} ${pxToRem(10)}`,
+    borderRadius: borderRadius.md,
     whiteSpace: "nowrap",
     boxShadow: active && !whiteSidenav && !darkMode && !transparentSidenav ? md : "none",
     [breakpoints.up("xl")]: {

@@ -27,8 +27,24 @@ function reducer(state, action) {
           };
     }
     case "REMOVE_ITEM_TO_CART": {
-      console.log("removiendo");
-      return value;
+      const itemToRemove = state.listCarts.find((item) => item.id === value);
+      return itemToRemove.cantidad > 1
+        ? {
+            ...state,
+            listCarts: state.listCarts.map((item) =>
+              item.id === value ? { ...item, cantidad: item.cantidad - 1 } : item
+            ),
+          }
+        : {
+            ...state,
+            listCarts: state.listCarts.filter((item) => item.id !== value),
+          };
+    }
+    case "SET_TABLE_TO_CART": {
+      return {
+        ...state,
+        tableSelected: value,
+      };
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
@@ -40,7 +56,8 @@ function reducer(state, action) {
 function BarCartControllerProvider({ children }) {
   const initialState = {
     listCarts: [],
-    listMesas: [],
+    listTables: 60,
+    tableSelected: null,
   };
 
   const [controllerBar, dispatchBar] = useReducer(reducer, initialState);
@@ -68,10 +85,12 @@ BarCartControllerProvider.propTypes = {
 
 const addItemToCart = (dispatchBar, value) => dispatchBar({ type: "ADD_ITEM_TO_CART", value });
 const deleteToCart = (dispatchBar, value) => dispatchBar({ type: "REMOVE_ITEM_TO_CART", value });
+const setTableToCart = (dispatchBar, value) => dispatchBar({ type: "SET_TABLE_TO_CART", value });
 
-// const addItemToCart = (dispatchBar, value) => {
-//   console.log(dispatchBar);
-//   console.log(value);
-// };
-
-export { BarCartControllerProvider, useBarCartController, addItemToCart, deleteToCart };
+export {
+  BarCartControllerProvider,
+  useBarCartController,
+  addItemToCart,
+  deleteToCart,
+  setTableToCart,
+};
