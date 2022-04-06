@@ -55,7 +55,7 @@ export function ModalStyle(theme, ownerState) {
   const { pxToRem, rgba } = functions;
 
   return {
-    background: active ? "white" : transparent.main,
+    background: active ? "red" : transparent.main,
     color: (!darkMode && !active) || (whiteSidenav && !active) ? dark.main : white.main,
     position: "absolute",
     top: "50%",
@@ -63,7 +63,7 @@ export function ModalStyle(theme, ownerState) {
     width: "80%",
     height: "auto",
     transform: "translate(-50%, -50%)",
-    bgcolor: "background.paper",
+    bgcolor: "red",
     display: "flex",
     alignItems: "center",
     padding: `${pxToRem(8)} ${pxToRem(10)}`,
