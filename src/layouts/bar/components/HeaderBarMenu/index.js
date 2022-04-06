@@ -1,29 +1,33 @@
 import { useState, useEffect } from "react";
 import MDBox from "components/MDBox";
 import { useMaterialUIController } from "context";
-import { useBarCartController } from "context/barCartContext";
+import { useBarCartController, setTableToCart } from "context/barCartContext";
 import MainModal from "components/MDModales";
 // import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
+import TablesCard from "./components/TablesCard";
 import { HeaderStyle, ModalStyle } from "./style";
 
 export default function HeaderBarMenu() {
   // context controllers
-  const [controllerBar] = useBarCartController();
+  const [controllerBar, dispatchBar] = useBarCartController();
   const [controller] = useMaterialUIController();
+  // context methods
   const { darkMode, sidenavColor } = controller;
   const active = true;
+  // states
   const [isOpen, setIsOpen] = useState(false);
-  const { listTables } = controllerBar;
+  const { listTables, tableSelected } = controllerBar;
   const [itemsTables, setItemsTables] = useState([]);
+  // context methods
+  const handleSelectTable = (tableId) => {
+    setTableToCart(dispatchBar, tableId);
+    setIsOpen(false);
+  };
 
-  // const selectTable = (id) => setTableToCart(dispatchBar, id);
+  const handleOnForceClose = () => setIsOpen(false);
+
   const loadListTables = () => {
     const temporalTables = [];
     for (let index = 1; index <= listTables; index += 1) {
@@ -55,44 +59,27 @@ export default function HeaderBarMenu() {
         })
       }
     >
-      <Button onClick={() => setIsOpen(true)}>Open modal</Button>
+      <Button onClick={() => setIsOpen(true)} style={{ color: "white" }}>
+        {`Mesas ${tableSelected ? `#${tableSelected}` : ""}`}
+      </Button>
       <MainModal
         isOpen={isOpen}
+        onForceClose={handleOnForceClose}
         modalStyle={(theme) =>
           ModalStyle(theme, {
             darkMode,
             sidenavColor,
             active,
+            scrollY: "scroll",
           })
         }
       >
-        <div style={{ width: "100%" }}>
-          <Grid container spacing={4}>
-            {itemsTables.map((table) => (
-              <Card>
-                <Box>
-                  <CardContent>
-                    <Typography component="div" variant="h5">
-                      {`Mesa #${table.id}`}
-                    </Typography>
-                  </CardContent>
-                </Box>
-                <CardMedia
-                  component="img"
-                  sx={{ width: 100 }}
-                  image="https://cdn-icons-png.flaticon.com/512/1209/1209474.png"
-                  alt="Live from space album cover"
-                />
-              </Card>
-            ))}
-          </Grid>
-        </div>
+        <Grid container spacing={1} style={{ overflowY: "scroll", height: "100%" }}>
+          {itemsTables.map((table) => (
+            <TablesCard data={table} onClickTable={handleSelectTable} />
+          ))}
+        </Grid>
       </MainModal>
     </MDBox>
   );
 }
-
-// RenderTables.prototype = {
-//   table: PropTypes.instanceOf(Array).isRequired,
-//   idx: PropTypes.number.isRequired,
-// };
