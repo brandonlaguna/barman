@@ -46,6 +46,12 @@ function reducer(state, action) {
         tableSelected: value,
       };
     }
+    case "SET_CLIENT_TO_CART": {
+      return {
+        ...state,
+        clientSelected: value,
+      };
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -58,6 +64,7 @@ function BarCartControllerProvider({ children }) {
     listCarts: [],
     listTables: 60,
     tableSelected: null,
+    clientSelected: [],
   };
 
   const [controllerBar, dispatchBar] = useReducer(reducer, initialState);
@@ -86,6 +93,8 @@ BarCartControllerProvider.propTypes = {
 const addItemToCart = (dispatchBar, value) => dispatchBar({ type: "ADD_ITEM_TO_CART", value });
 const deleteToCart = (dispatchBar, value) => dispatchBar({ type: "REMOVE_ITEM_TO_CART", value });
 const setTableToCart = (dispatchBar, value) => dispatchBar({ type: "SET_TABLE_TO_CART", value });
+const selectClientToCart = (dispatchBar, value) =>
+  dispatchBar({ type: "SET_CLIENT_TO_CART", value });
 
 export {
   BarCartControllerProvider,
@@ -93,4 +102,5 @@ export {
   addItemToCart,
   deleteToCart,
   setTableToCart,
+  selectClientToCart,
 };

@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import MDBox from "components/MDBox";
 import { useMaterialUIController } from "context";
-import { useBarCartController, setTableToCart } from "context/barCartContext";
-import MainModal from "components/MDModales";
-// import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
+import { useBarCartController, setTableToCart, selectClientToCart } from "context/barCartContext";
+import { getClients } from "model/clientsModel";
 import Button from "@mui/material/Button";
-import TablesCard from "./components/TablesCard";
-import { HeaderStyle, ModalStyle } from "./style";
+import ModalTables from "./components/Modals/ModalTables";
+import { HeaderStyle } from "./style";
+import ModalClient from "./components/Modals/ModalClients";
 
 export default function HeaderBarMenu() {
   // context controllers
@@ -17,16 +16,27 @@ export default function HeaderBarMenu() {
   const { darkMode, sidenavColor } = controller;
   const active = true;
   // states
-  const [isOpen, setIsOpen] = useState(false);
-  const { listTables, tableSelected } = controllerBar;
+  // for tables modal
+  const [isOpenModalTables, setIsOpenModalTables] = useState(false);
+  const [isOpenModalClients, setIsOpenModalClients] = useState(false);
   const [itemsTables, setItemsTables] = useState([]);
+  const [itemsClient, setItemsClients] = useState([]);
+
   // context methods
+  const { listTables, tableSelected, clientSelected } = controllerBar;
+
   const handleSelectTable = (tableId) => {
     setTableToCart(dispatchBar, tableId);
-    setIsOpen(false);
+    setIsOpenModalTables(false);
   };
 
-  const handleOnForceClose = () => setIsOpen(false);
+  const handleSelectClient = (client) => {
+    selectClientToCart(dispatchBar, client);
+    setIsOpenModalClients(false);
+  };
+
+  const handleOnForceCloseTables = () => setIsOpenModalTables(false);
+  const handleOnForCloseClient = () => setIsOpenModalClients(false);
 
   const loadListTables = () => {
     const temporalTables = [];
@@ -46,6 +56,7 @@ export default function HeaderBarMenu() {
   useEffect(() => {
     const list = loadListTables();
     setItemsTables(list);
+    getClients().then((resClients) => setItemsClients(resClients));
   }, []);
 
   return (
@@ -59,27 +70,25 @@ export default function HeaderBarMenu() {
         })
       }
     >
-      <Button onClick={() => setIsOpen(true)} style={{ color: "white" }}>
+      <Button onClick={() => setIsOpenModalTables(true)} style={{ color: "white" }}>
         {`Mesas ${tableSelected ? `#${tableSelected}` : ""}`}
       </Button>
-      <MainModal
-        isOpen={isOpen}
-        onForceClose={handleOnForceClose}
-        modalStyle={(theme) =>
-          ModalStyle(theme, {
-            darkMode,
-            sidenavColor,
-            active,
-            scrollY: "scroll",
-          })
-        }
-      >
-        <Grid container spacing={1} style={{ overflowY: "scroll", height: "100%" }}>
-          {itemsTables.map((table) => (
-            <TablesCard data={table} onClickTable={handleSelectTable} />
-          ))}
-        </Grid>
-      </MainModal>
+      <Button onClick={() => setIsOpenModalClients(true)} style={{ color: "white" }}>
+        {`Clientes ${clientSelected.id ? `#${clientSelected.id}` : ""}`}
+      </Button>
+      {/** Modals */}
+      <ModalTables
+        isOpen={isOpenModalTables}
+        handleOnForceClose={handleOnForceCloseTables}
+        data={itemsTables}
+        handleSelectTable={handleSelectTable}
+      />
+      <ModalClient
+        isOpen={isOpenModalClients}
+        handleOnForceClose={handleOnForCloseClient}
+        data={itemsClient}
+        handleSelectClient={handleSelectClient}
+      />
     </MDBox>
   );
 }
