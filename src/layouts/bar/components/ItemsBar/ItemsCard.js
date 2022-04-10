@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { cardImageStyle } from "./style";
 import "./styles.css";
 
-export default function ItemsCard({ data, shadow, onclickItem }) {
+export default function ItemsCard({ data, onclickItem }) {
   const background = "https://pngimg.com/uploads/burger_sandwich/burger_sandwich_PNG96777.png";
   const { id, articulo } = data;
   return (
@@ -12,26 +12,23 @@ export default function ItemsCard({ data, shadow, onclickItem }) {
       role="button"
       item
       xs={4}
-      md={3}
+      md={2}
       lg={2}
       key={id}
-      style={{ padding: "2px" }}
+      style={{ marginTop: "1rem", padding: 0 }}
       onClick={() => onclickItem(data)}
     >
       <div className="cardContainerStyle">
-        <Card sx={cardImageStyle({ background, shadow })} />
+        <div className="content-img-card">
+          <Card sx={cardImageStyle({ background })} />
+        </div>
         <p style={{ fontSize: "12px" }}>{articulo}</p>
       </div>
     </Grid>
   );
 }
 
-ItemsCard.defaultProps = {
-  shadow: true,
-};
-
 ItemsCard.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
-  shadow: PropTypes.bool,
   onclickItem: PropTypes.func.isRequired,
 };

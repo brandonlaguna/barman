@@ -4,7 +4,7 @@ export const cardImageStyle = ({ background, shadow }) => [
     boxShadow: !shadow && "none",
     backgroundImage: `url(${background})`,
     backgroundPosition: "center",
-    backgroundSize: "cover",
+    backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
   },
 ];

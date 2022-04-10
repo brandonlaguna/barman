@@ -1,7 +1,32 @@
   .cardContainerStyle {
     background: white;
+    margin-top: 1rem;
     color: black;
-    border-radius: 12px;
-    padding-top: 3px;
+    border-radius: 1rem;
+    padding: 1rem;
     text-align: center;
+    width: 9rem;
+    height: 8rem;
+    transition: .5s;
+  }
+  .cardContainerStyle p{
+    padding-top: .7rem;
+    font-weight: 700;
+    line-height: initial;
+  }
+  .content-img-card{
+    padding: 0.2rem;
+    margin-top: -35px;
+    border-radius: 1rem;
+    box-shadow: 0 3px 8px #8080806e;
+    background: white;
+    transition: .5s;
+  }
+  .cardContainerStyle:active .content-img-card{
+    transform: scale(1.07) translateY(-12px);
+    transition: .5s;
+  }
+  .cardContainerStyle:active{
+    box-shadow: 0 0 12px white;
+    transition: .5s;
   }
