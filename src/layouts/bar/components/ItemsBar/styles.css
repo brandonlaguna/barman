@@ -7,7 +7,6 @@
     text-align: center;
     width: 9rem;
     height: 8rem;
-    transition: .5s;
   }
   .cardContainerStyle p{
     padding-top: .7rem;
@@ -28,5 +27,4 @@
   }
   .cardContainerStyle:active{
     box-shadow: 0 0 12px white;
-    transition: .5s;
   }
