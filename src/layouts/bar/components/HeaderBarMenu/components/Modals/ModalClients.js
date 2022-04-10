@@ -12,6 +12,8 @@ export default function ModalClient({ isOpen, handleOnForceClose, data, handleSe
   const { darkMode, sidenavColor } = controller;
   const active = true;
 
+  const onClickClient = (client) => handleSelectClient(client);
+
   return (
     <MainModal
       key={2}
@@ -27,13 +29,10 @@ export default function ModalClient({ isOpen, handleOnForceClose, data, handleSe
       }
     >
       <Grid container spacing={1} style={{ overflowY: "scroll", height: "100%" }}>
-        <SearchBar />
-        <CardClient data={data} onClickClient={handleSelectClient} />
-        {/* data.map((element) => (
-          <button type="button" key={element.id} onClick={() => handleSelectClient(element)}>
-            <p>{element.nombres}</p>
-          </button>
-        ))  */}
+        <div style={{ width: "100%" }}>
+          <SearchBar />
+          <CardClient data={data} onClickClient={onClickClient} />
+        </div>
       </Grid>
     </MainModal>
   );

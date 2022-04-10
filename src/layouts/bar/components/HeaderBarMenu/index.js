@@ -31,6 +31,7 @@ export default function HeaderBarMenu() {
   };
 
   const handleSelectClient = (client) => {
+    console.log(`cliente tal seleccionado ${client}`);
     selectClientToCart(dispatchBar, client);
     setIsOpenModalClients(false);
   };

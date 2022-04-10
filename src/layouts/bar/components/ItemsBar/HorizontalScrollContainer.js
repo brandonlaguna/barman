@@ -64,6 +64,9 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem }) {
   const [selected, setSelected] = React.useState([]);
   const [position, setPosition] = React.useState(0);
   const isItemSelected = (id) => !!selected.find((el) => el === id);
+  const { scrollToItem } = React.useContext(VisibilityContext);
+
+  const handleSctrollTo = () => scrollToItem;
 
   React.useEffect(() => {
     console.log(position);
@@ -79,22 +82,31 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem }) {
   const onKeyPressHandle = (id) => console.log(id);
 
   return (
-    <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow} style={{ position: "relative" }}>
-      {Object.keys(listItems).map((id) => (
-        <Card
-          itemId={id} // NOTE: itemId is required for track items
-          title={id}
-          key={id}
-          onClick={handleClick(id)}
-          selected={isItemSelected(id)}
-          onKeyPress={onKeyPressHandle}
-          style={{ width: "200px" }}
-          childWidth={parentWidth}
-          listItems={listItems}
-          onClickItem={onClickItem}
-        />
-      ))}
-    </ScrollMenu>
+    <Grid container spacing={1}>
+      <Grid item xs={11} md={11} lg={11}>
+        <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow} style={{ position: "relative" }}>
+          {Object.keys(listItems).map((id) => (
+            <Card
+              itemId={id}
+              title={id}
+              key={id}
+              onClick={handleClick(id)}
+              selected={isItemSelected(id)}
+              onKeyPress={onKeyPressHandle}
+              style={{ width: "200px" }}
+              childWidth={parentWidth}
+              listItems={listItems}
+              onClickItem={onClickItem}
+            />
+          ))}
+        </ScrollMenu>
+      </Grid>
+      <Grid item xs={1} md={1} lg={1}>
+        <button type="button" onClick={() => handleSctrollTo(1)}>
+          H
+        </button>
+      </Grid>
+    </Grid>
   );
 }
 

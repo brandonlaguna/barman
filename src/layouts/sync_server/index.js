@@ -15,6 +15,8 @@ import { importClientes } from "services/clientsServices";
 import { importCategorias } from "services/categoriasServices";
 import { importComprobantes } from "services/comprobantesServices";
 import { importConfiguracion } from "services/configuracionServices";
+import { importTipoTransacciones } from "services/tipoTransaccion.services";
+import { importMetodosPago } from "services/metodosPago.services";
 
 function SyncServer() {
   const [statusSync, setStatusSyc] = useState("Conectando con el servidor");
@@ -27,12 +29,34 @@ function SyncServer() {
     });
   };
 
+  const getMetodosPago = () => {
+    importMetodosPago()
+      .then((result) => {
+        localStorage.setItem("metodosPago", JSON.stringify(result.data));
+        setStatusSyc("Obteniento metodos de pago");
+        setData(`${Object.keys(result.data).length.toString()} Metodos de pago obtenidos`);
+      })
+      .catch(notify);
+  };
+
+  const getTipoTransacciones = () => {
+    importTipoTransacciones()
+      .then((result) => {
+        localStorage.setItem("tipoTransacciones", JSON.stringify(result.data));
+        setStatusSyc("Obteniento tipos de transacciones");
+        setData(`${Object.keys(result.data).length.toString()} Tipos de transacciones obtenidas`);
+        getMetodosPago();
+      })
+      .catch(notify);
+  };
+
   const getConfiguracion = () => {
     importConfiguracion()
       .then((result) => {
         localStorage.setItem("configuracion", JSON.stringify(result));
         setStatusSyc("Obteniendo configuracion");
         setData(`${Object.keys(result).length.toString()} Configuraciones obtenidas`);
+        getTipoTransacciones();
       })
       .catch(notify);
   };
@@ -53,7 +77,7 @@ function SyncServer() {
       .then((result) => {
         localStorage.setItem("categorias", JSON.stringify(result));
         setStatusSyc("Obteniendo categorias");
-        setData(`${Object.keys(result).length.toString()} Categorias obtenidas`);
+        setData(`${Object.keys(result.data).length.toString()} Categorias obtenidas`);
         getComprobantes();
       })
       .catch(notify);
@@ -64,7 +88,7 @@ function SyncServer() {
       .then((result) => {
         localStorage.setItem("clientes", JSON.stringify(result));
         setStatusSyc("Obteniendo clientes");
-        setData(`${Object.keys(result).length.toString()} Clientes obtenidos`);
+        setData(`${Object.keys(result.data).length.toString()} Clientes obtenidos`);
         getCategorias();
       })
       .catch(notify);
@@ -75,7 +99,7 @@ function SyncServer() {
       .then((result) => {
         localStorage.setItem("items", JSON.stringify(result));
         setStatusSyc("Obteniendo articulos");
-        setData(`${Object.keys(result).length.toString()} Articulos obtenidas`);
+        setData(`${Object.keys(result.data).length.toString()} Articulos obtenidas`);
         getClients();
       })
       .catch(notify);

@@ -17,11 +17,11 @@ function Bar() {
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav } = controller;
 
-  const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
+  const handleMiniSidenav = () => setMiniSidenav(dispatch, true);
 
   useEffect(() => {
     handleMiniSidenav();
-  }, []);
+  }, [miniSidenav]);
 
   return (
     <BarCartControllerProvider>
