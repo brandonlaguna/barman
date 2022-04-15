@@ -1,5 +1,6 @@
 import { IconButton } from "@mui/material";
 import PropTypes from "prop-types";
+import { APP_COLORS } from "config/contants";
 
 export default function CircleButton({ iconPath, sx, sxIcon, onClick, badgeAlert }) {
   return (
@@ -12,7 +13,7 @@ export default function CircleButton({ iconPath, sx, sxIcon, onClick, badgeAlert
               width: "10px",
               height: "10px",
               borderRadius: "10px",
-              background: "green",
+              background: APP_COLORS.success,
               position: "relative",
               top: -10,
               border: "1px white solid",

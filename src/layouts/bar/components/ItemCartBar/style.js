@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 export default function ItemCartBarStyle(theme, ownerState) {
   const { palette, transitions, breakpoints, boxShadows, borders, functions } = theme;
   const { active, transparentSidenav, whiteSidenav, darkMode, sidenavColor, height } = ownerState;
@@ -8,10 +6,6 @@ export default function ItemCartBarStyle(theme, ownerState) {
   const { md } = boxShadows;
   const { borderRadius } = borders;
   const { pxToRem, rgba, linearGradient } = functions;
-
-  useEffect(() => {
-    console.log("darkmode");
-  }, [darkMode]);
 
   return {
     background: active
@@ -49,5 +43,27 @@ export default function ItemCartBarStyle(theme, ownerState) {
         return backgroundValue;
       },
     },
+  };
+}
+
+export function ItemCartCardStyle(theme, ownerState) {
+  const { boxShadows, borders, functions } = theme;
+  const { active, transparentSidenav, whiteSidenav, darkMode } = ownerState;
+
+  const { md } = boxShadows;
+  const { borderRadius } = borders;
+  const { pxToRem } = functions;
+
+  return {
+    background: "white",
+    color: (!darkMode && !active) || (whiteSidenav && !active) ? "white" : "black",
+    width: "100%",
+    height: "70px",
+    padding: `${pxToRem(1)} ${pxToRem(5)}`,
+    margin: `${pxToRem(1)} ${pxToRem(5)}`,
+    borderRadius: borderRadius.md,
+    userSelect: "none",
+    whiteSpace: "nowrap",
+    boxShadow: active && !whiteSidenav && !darkMode && !transparentSidenav ? md : "none",
   };
 }
