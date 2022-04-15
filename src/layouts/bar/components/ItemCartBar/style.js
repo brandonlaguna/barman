@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 export default function ItemCartBarStyle(theme, ownerState) {
   const { palette, transitions, breakpoints, boxShadows, borders, functions } = theme;
-  const { active, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = ownerState;
+  const { active, transparentSidenav, whiteSidenav, darkMode, sidenavColor, height } = ownerState;
 
   const { white, transparent, dark, grey, gradients } = palette;
   const { md } = boxShadows;
@@ -21,10 +21,10 @@ export default function ItemCartBarStyle(theme, ownerState) {
     display: "flex",
     alignItems: "center",
     width: "100%",
+    height: height - 145,
     padding: `${pxToRem(8)} ${pxToRem(10)}`,
     margin: `${pxToRem(1.5)} ${pxToRem(16)}`,
     borderRadius: borderRadius.md,
-    cursor: "pointer",
     userSelect: "none",
     whiteSpace: "nowrap",
     boxShadow: active && !whiteSidenav && !darkMode && !transparentSidenav ? md : "none",

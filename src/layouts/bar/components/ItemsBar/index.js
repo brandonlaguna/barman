@@ -4,6 +4,7 @@ import MDBox from "components/MDBox";
 import CartContainerStyle from "assets/theme/carBarStyle";
 import { useMaterialUIController } from "context";
 import { getItems, groupItems } from "model/ItemsModel";
+import useWindowDimensions from "functions/windowDimension";
 import ScrollMenuItem from "./HorizontalScrollContainer";
 
 export default function ItemsBar() {
@@ -14,6 +15,8 @@ export default function ItemsBar() {
   const { darkMode, sidenavColor } = controller;
   const [listItems, setListItem] = useState([]);
   const active = true;
+
+  const { height } = useWindowDimensions();
 
   useEffect(() => {
     getItems().then((resItem) => setListItem(groupItems(resItem)));
@@ -29,6 +32,7 @@ export default function ItemsBar() {
           darkMode,
           sidenavColor,
           active,
+          height,
         })
       }
     >

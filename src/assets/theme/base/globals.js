@@ -21,6 +21,13 @@ const { info, dark } = colors;
 const globals = {
   html: {
     scrollBehavior: "smooth",
+    "*": {
+      "scrollbar-width": "thin",
+    },
+    "*::-webkit-scrollbar": {
+      width: "4px",
+      height: "4px",
+    },
   },
   "*, *::before, *::after": {
     margin: 0,

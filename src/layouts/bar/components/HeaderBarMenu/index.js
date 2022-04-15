@@ -3,7 +3,7 @@ import MDBox from "components/MDBox";
 import { useMaterialUIController } from "context";
 import { useBarCartController, setTableToCart, selectClientToCart } from "context/barCartContext";
 import { getClients } from "model/clientsModel";
-import Button from "@mui/material/Button";
+import CircleButton from "components/MDCircleButton";
 import ModalTables from "./components/Modals/ModalTables";
 import { HeaderStyle } from "./style";
 import ModalClient from "./components/Modals/ModalClients";
@@ -60,6 +60,14 @@ export default function HeaderBarMenu() {
     getClients().then((resClients) => setItemsClients(resClients));
   }, []);
 
+  const buttonIconStyle = {
+    width: "20px",
+    height: "20px",
+    color: "white",
+    filter:
+      "invert(88%) sepia(21%) saturate(935%) hue-rotate(123deg) brightness(85%) contrast(97%)",
+  };
+
   return (
     <MDBox
       mb={1.5}
@@ -71,12 +79,21 @@ export default function HeaderBarMenu() {
         })
       }
     >
-      <Button onClick={() => setIsOpenModalTables(true)} style={{ color: "white" }}>
-        {`Mesas ${tableSelected ? `#${tableSelected}` : ""}`}
-      </Button>
-      <Button onClick={() => setIsOpenModalClients(true)} style={{ color: "white" }}>
-        {`Clientes ${clientSelected.id ? `#${clientSelected.id}` : ""}`}
-      </Button>
+      <CircleButton
+        iconPath="../../assets/BankIcon/interface/usuario.svg"
+        sx={{ width: "45px", height: "45px" }}
+        sxIcon={buttonIconStyle}
+        onClick={() => setIsOpenModalClients(true)}
+        badgeAlert={clientSelected.id ?? false}
+      />
+      <CircleButton
+        rol="button"
+        iconPath="../../assets/BankIcon/interface/coctel-alt.svg"
+        sx={{ width: "45px", height: "45px" }}
+        sxIcon={buttonIconStyle}
+        onClick={() => setIsOpenModalTables(true)}
+        badgeAlert={tableSelected ?? true}
+      />
       {/** Modals */}
       <ModalTables
         isOpen={isOpenModalTables}

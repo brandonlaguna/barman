@@ -1,6 +1,6 @@
 export default function CartContainerStyle(theme, ownerState) {
   const { palette, transitions, breakpoints, boxShadows, borders, functions } = theme;
-  const { active, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = ownerState;
+  const { active, transparentSidenav, whiteSidenav, darkMode, sidenavColor, height } = ownerState;
   const { white, transparent, dark, grey, gradients } = palette;
   const { md } = boxShadows;
   const { borderRadius } = borders;
@@ -34,5 +34,6 @@ export default function CartContainerStyle(theme, ownerState) {
         return backgroundValue;
       },
     },
+    height: height - 145,
   };
 }

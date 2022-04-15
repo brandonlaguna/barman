@@ -52,6 +52,18 @@ function reducer(state, action) {
         clientSelected: value,
       };
     }
+    case "ADD_PAYMENT_METHOD": {
+      return {
+        ...state,
+        paymentMethods: [...state.paymentMethods, value],
+      };
+    }
+    case "REMOVE_PAYMENT_METHOD": {
+      return {
+        ...state,
+        paymentMethods: state.paymentMethods.filter((payment) => payment.id !== value.id),
+      };
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -63,8 +75,9 @@ function BarCartControllerProvider({ children }) {
   const initialState = {
     listCarts: [],
     listTables: 60,
-    tableSelected: null,
+    tableSelected: false,
     clientSelected: [],
+    paymentMethods: [],
   };
 
   const [controllerBar, dispatchBar] = useReducer(reducer, initialState);
@@ -95,6 +108,9 @@ const deleteToCart = (dispatchBar, value) => dispatchBar({ type: "REMOVE_ITEM_TO
 const setTableToCart = (dispatchBar, value) => dispatchBar({ type: "SET_TABLE_TO_CART", value });
 const selectClientToCart = (dispatchBar, value) =>
   dispatchBar({ type: "SET_CLIENT_TO_CART", value });
+const addPaymentMethod = (dispatchBar, value) => dispatchBar({ type: "ADD_PAYMENT_METHOD", value });
+const removePaymentMethod = (dispatchBar, value) =>
+  dispatchBar({ type: "REMOVE_PAYMENT_METHOD", value });
 
 export {
   BarCartControllerProvider,
@@ -103,4 +119,6 @@ export {
   deleteToCart,
   setTableToCart,
   selectClientToCart,
+  addPaymentMethod,
+  removePaymentMethod,
 };

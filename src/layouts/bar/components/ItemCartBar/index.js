@@ -3,6 +3,7 @@ import MDBox from "components/MDBox";
 import PropTypes from "prop-types";
 import { useMaterialUIController } from "context";
 import { useBarCartController, deleteToCart } from "context/barCartContext";
+import useWindowDimensions from "functions/windowDimension";
 import { SwipeableList } from "@sandstreamdev/react-swipeable-list";
 import "@sandstreamdev/react-swipeable-list/dist/styles.css";
 import ItemCartCard from "./components/ItemCartCard";
@@ -17,6 +18,7 @@ export default function ItemCartBar({ light }) {
   const { listCarts } = controllerBar;
   const handledeleteItemToCart = (itemId) => deleteToCart(dispatchBar, itemId);
   const active = true;
+  const { height } = useWindowDimensions();
 
   const [listItemCart, setListItemCart] = useState([]);
   useEffect(() => {
@@ -31,10 +33,11 @@ export default function ItemCartBar({ light }) {
           darkMode,
           sidenavColor,
           active,
+          height,
         })
       }
     >
-      <SwipeableList>
+      <SwipeableList style={{ height }}>
         {listItemCart.map((item) => (
           <ItemCartCard data={item} deleteItemCart={handledeleteItemToCart} />
         ))}
