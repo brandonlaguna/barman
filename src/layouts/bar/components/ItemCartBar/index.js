@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import MDBox from "components/MDBox";
-import PropTypes from "prop-types";
 import { useMaterialUIController } from "context";
 import { useBarCartController, deleteToCart } from "context/barCartContext";
 import useWindowDimensions from "functions/windowDimension";
 import { SwipeableList } from "@sandstreamdev/react-swipeable-list";
 import "@sandstreamdev/react-swipeable-list/dist/styles.css";
 import ItemCartCard from "./components/ItemCartCard";
+import PaymentButton from "./components/PaymentButton";
 import ItemCartBarStyle from "./style";
 
-export default function ItemCartBar({ light }) {
+export default function ItemCartBar() {
   // context controllers
   const [controller] = useMaterialUIController();
   const [controllerBar, dispatchBar] = useBarCartController();
@@ -37,20 +37,12 @@ export default function ItemCartBar({ light }) {
         })
       }
     >
-      <SwipeableList style={{ height }}>
+      <SwipeableList style={{ height: "90%" }}>
         {listItemCart.map((item) => (
           <ItemCartCard data={item} deleteItemCart={handledeleteItemToCart} />
         ))}
       </SwipeableList>
-      <p>{light}</p>
+      <PaymentButton />
     </MDBox>
   );
 }
-
-ItemCartBar.defaultProps = {
-  light: false,
-};
-
-ItemCartBar.propTypes = {
-  light: PropTypes.bool,
-};

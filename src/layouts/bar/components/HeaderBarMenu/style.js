@@ -96,10 +96,10 @@ export function ModalStyle(theme, ownerState) {
 export function ModalClientStyle(theme, ownerState) {
   const { palette, transitions, breakpoints, boxShadows, borders, functions } = theme;
   const { active, transparentSidenav, whiteSidenav, darkMode } = ownerState;
-  const { white, transparent, dark, grey } = palette;
+  const { white, transparent, dark } = palette;
   const { md } = boxShadows;
   const { borderRadius } = borders;
-  const { pxToRem, rgba } = functions;
+  const { pxToRem } = functions;
 
   return {
     background: active ? "white" : transparent.main,
@@ -111,8 +111,6 @@ export function ModalClientStyle(theme, ownerState) {
     height: "90%",
     transform: "translate(-50%, -50%)",
     bgcolor: "background.paper",
-    display: "flex",
-    alignItems: "center",
     padding: `${pxToRem(10)} ${pxToRem(10)}`,
     borderRadius: borderRadius.md,
     whiteSpace: "nowrap",
@@ -123,20 +121,36 @@ export function ModalClientStyle(theme, ownerState) {
         duration: transitions.duration.shorter,
       }),
     },
+  };
+}
 
-    "&:hover, &:focus": {
-      backgroundColor: () => {
-        let backgroundValue;
+export function ModalPaymentMethodsStyle(theme, ownerState) {
+  const { palette, transitions, breakpoints, boxShadows, borders, functions } = theme;
+  const { active, transparentSidenav, whiteSidenav, darkMode } = ownerState;
+  const { white, transparent, dark } = palette;
+  const { md } = boxShadows;
+  const { borderRadius } = borders;
+  const { pxToRem } = functions;
 
-        if (!active) {
-          backgroundValue =
-            transparentSidenav && !darkMode
-              ? grey[300]
-              : rgba(whiteSidenav ? grey[400] : white.main, 0.2);
-        }
-
-        return backgroundValue;
-      },
+  return {
+    background: active ? "white" : transparent.main,
+    color: (!darkMode && !active) || (whiteSidenav && !active) ? dark.main : white.main,
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    width: "40%",
+    height: "90%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: "background.paper",
+    padding: `${pxToRem(10)} ${pxToRem(10)}`,
+    borderRadius: borderRadius.md,
+    whiteSpace: "nowrap",
+    boxShadow: active && !whiteSidenav && !darkMode && !transparentSidenav ? md : "none",
+    [breakpoints.up("xl")]: {
+      transition: transitions.create(["box-shadow", "background-color"], {
+        easing: transitions.easing.easeInOut,
+        duration: transitions.duration.shorter,
+      }),
     },
   };
 }

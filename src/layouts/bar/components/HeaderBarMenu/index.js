@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
+import { BANK_ICONS } from "config/contants";
 import MDBox from "components/MDBox";
 import { useMaterialUIController } from "context";
 import { useBarCartController, setTableToCart, selectClientToCart } from "context/barCartContext";
 import { getClients } from "model/clientsModel";
+import { getPaymentMethods } from "model/paymentMethodsModel";
+import { getListTables } from "model/tablesModel";
 import CircleButton from "components/MDCircleButton";
 import ModalTables from "./components/Modals/ModalTables";
 import { HeaderStyle } from "./style";
 import ModalClient from "./components/Modals/ModalClients";
+import ModalPaymentMethods from "./components/Modals/ModalPaymentMethods";
 
 export default function HeaderBarMenu() {
   // context controllers
@@ -16,11 +20,14 @@ export default function HeaderBarMenu() {
   const { darkMode, sidenavColor } = controller;
   const active = true;
   // states
-  // for tables modal
+  // to modal
   const [isOpenModalTables, setIsOpenModalTables] = useState(false);
   const [isOpenModalClients, setIsOpenModalClients] = useState(false);
+  const [isOpenModalPayments, setIsOpenModalPayments] = useState(false);
+  // to data in modals
   const [itemsTables, setItemsTables] = useState([]);
   const [itemsClient, setItemsClients] = useState([]);
+  const [itemsPaymentMethods, setItemsPaymentMethods] = useState([]);
 
   // context methods
   const { listTables, tableSelected, clientSelected } = controllerBar;
@@ -31,33 +38,18 @@ export default function HeaderBarMenu() {
   };
 
   const handleSelectClient = (client) => {
-    console.log(`cliente tal seleccionado ${client}`);
     selectClientToCart(dispatchBar, client);
     setIsOpenModalClients(false);
   };
 
   const handleOnForceCloseTables = () => setIsOpenModalTables(false);
   const handleOnForCloseClient = () => setIsOpenModalClients(false);
-
-  const loadListTables = () => {
-    const temporalTables = [];
-    for (let index = 1; index <= listTables; index += 1) {
-      const thisTable = [];
-      thisTable.push({
-        id: index,
-        status: false,
-        mesa: false,
-        itemsFromMesa: [],
-      });
-      temporalTables.push(thisTable[0]);
-    }
-    return temporalTables;
-  };
+  const handleOnForClosePayment = () => setIsOpenModalPayments(false);
 
   useEffect(() => {
-    const list = loadListTables();
-    setItemsTables(list);
+    getListTables(listTables).then((resTables) => setItemsTables(resTables));
     getClients().then((resClients) => setItemsClients(resClients));
+    getPaymentMethods().then((resPayments) => setItemsPaymentMethods(resPayments));
   }, []);
 
   const buttonIconStyle = {
@@ -80,7 +72,7 @@ export default function HeaderBarMenu() {
       }
     >
       <CircleButton
-        iconPath="../../assets/BankIcon/interface/usuario.svg"
+        iconPath={`${BANK_ICONS}/interface/usuario.svg`}
         sx={{ width: "45px", height: "45px" }}
         sxIcon={buttonIconStyle}
         onClick={() => setIsOpenModalClients(true)}
@@ -88,10 +80,18 @@ export default function HeaderBarMenu() {
       />
       <CircleButton
         rol="button"
-        iconPath="../../assets/BankIcon/interface/coctel-alt.svg"
+        iconPath={`${BANK_ICONS}/interface/coctel-alt.svg`}
         sx={{ width: "45px", height: "45px" }}
         sxIcon={buttonIconStyle}
         onClick={() => setIsOpenModalTables(true)}
+        badgeAlert={tableSelected ?? true}
+      />
+      <CircleButton
+        rol="button"
+        iconPath={`${BANK_ICONS}/interface/dollar.svg`}
+        sx={{ width: "45px", height: "45px" }}
+        sxIcon={buttonIconStyle}
+        onClick={() => setIsOpenModalPayments(true)}
         badgeAlert={tableSelected ?? true}
       />
       {/** Modals */}
@@ -106,6 +106,11 @@ export default function HeaderBarMenu() {
         handleOnForceClose={handleOnForCloseClient}
         data={itemsClient}
         handleSelectClient={handleSelectClient}
+      />
+      <ModalPaymentMethods
+        isOpen={isOpenModalPayments}
+        handleOnForceClose={handleOnForClosePayment}
+        data={itemsPaymentMethods}
       />
     </MDBox>
   );

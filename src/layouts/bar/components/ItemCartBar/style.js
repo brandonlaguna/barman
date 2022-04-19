@@ -12,12 +12,9 @@ export default function ItemCartBarStyle(theme, ownerState) {
       ? linearGradient(gradients[sidenavColor].main, gradients[sidenavColor].state)
       : transparent.main,
     color: (!darkMode && !active) || (whiteSidenav && !active) ? dark.main : white.main,
-    display: "flex",
-    alignItems: "center",
     width: "100%",
     height: height - 145,
     padding: `${pxToRem(8)} ${pxToRem(10)}`,
-    margin: `${pxToRem(1.5)} ${pxToRem(16)}`,
     borderRadius: borderRadius.md,
     userSelect: "none",
     whiteSpace: "nowrap",

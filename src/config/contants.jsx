@@ -43,3 +43,5 @@ export const headers = {
   dbd: "silposco_demobarmaster",
   Company: 71,
 };
+
+export const BANK_ICONS = "../../assets/BankIcon";
