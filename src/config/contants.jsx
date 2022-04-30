@@ -6,7 +6,8 @@ export const API_URL = "https://api.silpos.com";
 export const API_SILPOS_WEB =
   environment === "development" ? "https://pruebas.silpos.com" : "https://sistema.silpos.com";
 export const API_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRlbW9iYXJAZ21haWwuY29tIiwiaWF0IjoxNjQ3NDc3MDEwLCJleHAiOjE2NTAwNjkwMTB9.kVxnZyaPdUsYtWVzD3PRllQ6o6WklTyzya2cYFbRel4";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRlbW9iYXJAZ21haWwuY29tIiwiaWF0IjoxNjUxMTE5NTkzLCJleHAiOjE2NTM3MTE1OTN9.RV7mxpxyM75ui0ikIaefcslM7WqyXPJ8iwALQTmjzDQ";
+export const API_CAJA_SOURCE = "/app/models/api_caja";
 
 export const APP_COLORS = {
   primary: "#5d9cec",
@@ -45,3 +46,5 @@ export const headers = {
 };
 
 export const BANK_ICONS = "../../assets/BankIcon";
+
+export const DEFAULT_TIMEZONE = "Australia/Sydney";

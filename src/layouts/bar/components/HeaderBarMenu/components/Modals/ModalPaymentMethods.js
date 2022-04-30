@@ -31,16 +31,16 @@ export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }
       currentListValue.push({ ...payment, value: 0 });
     });
     setValueMethod(currentListValue);
-    addPaymentMethod(dispatchBar, currentListValue);
+    // addPaymentMethod(dispatchBar, currentListValue);
   }, [listMethods]);
 
   const addValuePaymentMethod = (payment, value) => {
     let currentListValue = valueMethod;
     currentListValue = valueMethod.map((item) =>
-      item.id === payment.id ? { ...item, value } : item
+      item.id === payment.id && value > 0 ? { ...item, value } : item
     );
     setValueMethod(currentListValue);
-    addPaymentMethod(dispatchBar, currentListValue);
+    addPaymentMethod(dispatchBar, { ...payment, value });
   };
 
   const buttonIconStyle = {

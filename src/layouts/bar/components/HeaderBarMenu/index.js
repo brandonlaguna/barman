@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import { BANK_ICONS } from "config/contants";
 import MDBox from "components/MDBox";
 import { useMaterialUIController } from "context";
-import { useBarCartController, setTableToCart, selectClientToCart } from "context/barCartContext";
+import {
+  useBarCartController,
+  setTableToCart,
+  selectClientToCart,
+  setTransactionType,
+} from "context/barCartContext";
 import { getClients } from "model/clientsModel";
 import { getPaymentMethods } from "model/paymentMethodsModel";
 import { getListTables } from "model/tablesModel";
@@ -11,6 +16,7 @@ import ModalTables from "./components/Modals/ModalTables";
 import { HeaderStyle } from "./style";
 import ModalClient from "./components/Modals/ModalClients";
 import ModalPaymentMethods from "./components/Modals/ModalPaymentMethods";
+import ModalTypeTransaction from "./components/Modals/ModalTypeTransaction";
 
 export default function HeaderBarMenu() {
   // context controllers
@@ -24,13 +30,15 @@ export default function HeaderBarMenu() {
   const [isOpenModalTables, setIsOpenModalTables] = useState(false);
   const [isOpenModalClients, setIsOpenModalClients] = useState(false);
   const [isOpenModalPayments, setIsOpenModalPayments] = useState(false);
+  const [isOpenModalTypeTransaction, setIsOpenModalTypeTransaction] = useState(false);
   // to data in modals
   const [itemsTables, setItemsTables] = useState([]);
   const [itemsClient, setItemsClients] = useState([]);
   const [itemsPaymentMethods, setItemsPaymentMethods] = useState([]);
 
   // context methods
-  const { listTables, tableSelected, clientSelected } = controllerBar;
+  const { listTables, tableSelected, clientSelected, paymentSelected, transactionType } =
+    controllerBar;
 
   const handleSelectTable = (tableId) => {
     setTableToCart(dispatchBar, tableId);
@@ -42,9 +50,15 @@ export default function HeaderBarMenu() {
     setIsOpenModalClients(false);
   };
 
+  const handleSelectTypeTransaction = (typeTransaction) => {
+    setIsOpenModalTypeTransaction(false);
+    setTransactionType(dispatchBar, typeTransaction);
+  };
+
   const handleOnForceCloseTables = () => setIsOpenModalTables(false);
-  const handleOnForCloseClient = () => setIsOpenModalClients(false);
-  const handleOnForClosePayment = () => setIsOpenModalPayments(false);
+  const handleOnForceCloseClient = () => setIsOpenModalClients(false);
+  const handleOnForceClosePayment = () => setIsOpenModalPayments(false);
+  const handleOnForceCloseTypeTransaction = () => setIsOpenModalTypeTransaction(false);
 
   useEffect(() => {
     getListTables(listTables).then((resTables) => setItemsTables(resTables));
@@ -92,7 +106,15 @@ export default function HeaderBarMenu() {
         sx={{ width: "45px", height: "45px" }}
         sxIcon={buttonIconStyle}
         onClick={() => setIsOpenModalPayments(true)}
-        badgeAlert={tableSelected ?? true}
+        badgeAlert={paymentSelected ?? true}
+      />
+      <CircleButton
+        rol="button"
+        iconPath={`${BANK_ICONS}/interface/receipt.svg`}
+        sx={{ width: "45px", height: "45px" }}
+        sxIcon={buttonIconStyle}
+        onClick={() => setIsOpenModalTypeTransaction(true)}
+        badgeAlert={transactionType ?? true}
       />
       {/** Modals */}
       <ModalTables
@@ -103,14 +125,19 @@ export default function HeaderBarMenu() {
       />
       <ModalClient
         isOpen={isOpenModalClients}
-        handleOnForceClose={handleOnForCloseClient}
+        handleOnForceClose={handleOnForceCloseClient}
         data={itemsClient}
         handleSelectClient={handleSelectClient}
       />
       <ModalPaymentMethods
         isOpen={isOpenModalPayments}
-        handleOnForceClose={handleOnForClosePayment}
+        handleOnForceClose={handleOnForceClosePayment}
         data={itemsPaymentMethods}
+      />
+      <ModalTypeTransaction
+        isOpen={isOpenModalTypeTransaction}
+        handleOnForceClose={handleOnForceCloseTypeTransaction}
+        handleSelectTypeTransaction={handleSelectTypeTransaction}
       />
     </MDBox>
   );

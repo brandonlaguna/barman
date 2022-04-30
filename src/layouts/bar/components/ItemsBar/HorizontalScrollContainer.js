@@ -14,11 +14,13 @@ function Card({
   childWidth,
   listItems,
   onClickItem,
+  key,
 }) {
   const visibility = React.useContext(VisibilityContext);
   const { height } = useWindowDimensions();
   return (
     <div
+      key={key}
       role="button"
       onClick={() => onClick(visibility)}
       onKeyPress={() => onKeyPress(visibility)}
@@ -63,7 +65,7 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem }) {
         <Card
           itemId={id}
           title={id}
-          key={id}
+          key={`cildCard${id}`}
           onClick={handleClick(id)}
           selected={isItemSelected(id)}
           onKeyPress={onKeyPressHandle}
@@ -86,6 +88,7 @@ Card.propTypes = {
   childWidth: PropTypes.number.isRequired,
   listItems: PropTypes.instanceOf(Array).isRequired,
   onClickItem: PropTypes.func.isRequired,
+  key: PropTypes.string.isRequired,
 };
 
 console.log();

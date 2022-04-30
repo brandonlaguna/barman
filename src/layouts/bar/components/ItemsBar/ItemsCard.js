@@ -20,7 +20,7 @@ export default function ItemsCard({ data, onclickItem }) {
     >
       <div className="cardContainerStyle">
         <div className="content-img-card">
-          <Card sx={cardImageStyle({ background })} />
+          <Card sx={cardImageStyle({ background })} key={`childItem${id}`} />
         </div>
         <p style={{ fontSize: "12px" }}>{articulo}</p>
       </div>

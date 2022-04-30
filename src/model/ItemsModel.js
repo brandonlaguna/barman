@@ -36,6 +36,13 @@ export function groupItems(itemsObject) {
       unidad: x.unidad,
       total: x.total,
       url_foto: x.url_foto,
+      imp_ipoconsumo: x.imp_ipoconsumo,
+      impuesto_dane: x.impuesto_dane,
+      invima: x.invima,
+      ipoconsumo: x.ipoconsumo,
+      iva: x.iva,
+      factor_venta: x.factor_venta,
+      precio_costo: x.precio_costo,
     });
   });
   return nuevoObjeto;

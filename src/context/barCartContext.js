@@ -53,15 +53,31 @@ function reducer(state, action) {
       };
     }
     case "ADD_PAYMENT_METHOD": {
-      return {
-        ...state,
-        paymentMethods: [...state.paymentMethods, value],
-      };
+      const paymentToRemove = state.paymentMethods.find((item) => item.id === value.id);
+      return paymentToRemove !== undefined
+        ? {
+            ...state,
+            paymentSelected: true,
+            paymentMethods: state.paymentMethods.map((item) =>
+              item.id === value.id ? value : item
+            ),
+          }
+        : {
+            ...state,
+            paymentSelected: true,
+            paymentMethods: [...state.paymentMethods, value],
+          };
     }
     case "REMOVE_PAYMENT_METHOD": {
       return {
         ...state,
         paymentMethods: state.paymentMethods.filter((payment) => payment.id !== value.id),
+      };
+    }
+    case "ADD_TRANSACTION_TYPE": {
+      return {
+        ...state,
+        transactionType: value,
       };
     }
     default: {
@@ -78,6 +94,8 @@ function BarCartControllerProvider({ children }) {
     tableSelected: false,
     clientSelected: [],
     paymentMethods: [],
+    paymentSelected: false,
+    transactionType: false,
   };
 
   const [controllerBar, dispatchBar] = useReducer(reducer, initialState);
@@ -111,6 +129,8 @@ const selectClientToCart = (dispatchBar, value) =>
 const addPaymentMethod = (dispatchBar, value) => dispatchBar({ type: "ADD_PAYMENT_METHOD", value });
 const removePaymentMethod = (dispatchBar, value) =>
   dispatchBar({ type: "REMOVE_PAYMENT_METHOD", value });
+const setTransactionType = (dispatchBar, value) =>
+  dispatchBar({ type: "ADD_TRANSACTION_TYPE", value });
 
 export {
   BarCartControllerProvider,
@@ -121,4 +141,5 @@ export {
   selectClientToCart,
   addPaymentMethod,
   removePaymentMethod,
+  setTransactionType,
 };
