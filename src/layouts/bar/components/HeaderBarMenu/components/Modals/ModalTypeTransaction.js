@@ -5,12 +5,12 @@ import PropTypes from "prop-types";
 import MainModal from "components/MDModales";
 import transactionTypeModel from "model/TransactionTypeModel";
 import { ModalTypeTransactionStyle } from "../../style";
-import CardTypeTransaction from "../CardTypeTransaction";
+import CardTransactionType from "../CardTransactionType";
 
 export default function ModalTypeTransaction({
   isOpen,
   handleOnForceClose,
-  handleSelectTypeTransaction,
+  handleSelectTransactionType,
 }) {
   const [listTypeTransaction, setListTypeTransaction] = useState([]);
   const [controller] = useMaterialUIController();
@@ -45,13 +45,14 @@ export default function ModalTypeTransaction({
           alignItems: "center",
           padding: 6,
           marginLeft: -2,
+          overflowX: "scroll",
         }}
       >
         {listTypeTransaction.map((transactionType) => (
-          <CardTypeTransaction
+          <CardTransactionType
             key={transactionType.id}
             data={transactionType}
-            onClickTypeTransaction={handleSelectTypeTransaction}
+            onClickTransactionType={handleSelectTransactionType}
           />
         ))}
       </Grid>
@@ -62,5 +63,5 @@ export default function ModalTypeTransaction({
 ModalTypeTransaction.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   handleOnForceClose: PropTypes.func.isRequired,
-  handleSelectTypeTransaction: PropTypes.func.isRequired,
+  handleSelectTransactionType: PropTypes.func.isRequired,
 };

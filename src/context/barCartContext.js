@@ -44,6 +44,10 @@ function reducer(state, action) {
       return {
         ...state,
         tableSelected: value,
+        transactionType: {
+          guardar_vender: 0,
+          tipo_transaccion: 0,
+        },
       };
     }
     case "SET_CLIENT_TO_CART": {
@@ -75,6 +79,7 @@ function reducer(state, action) {
       };
     }
     case "ADD_TRANSACTION_TYPE": {
+      console.log(value);
       return {
         ...state,
         transactionType: value,
@@ -95,7 +100,7 @@ function BarCartControllerProvider({ children }) {
     clientSelected: [],
     paymentMethods: [],
     paymentSelected: false,
-    transactionType: false,
+    transactionType: null,
   };
 
   const [controllerBar, dispatchBar] = useReducer(reducer, initialState);

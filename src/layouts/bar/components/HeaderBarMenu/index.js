@@ -13,7 +13,7 @@ import { getPaymentMethods } from "model/paymentMethodsModel";
 import { getListTables } from "model/tablesModel";
 import CircleButton from "components/MDCircleButton";
 import ModalTables from "./components/Modals/ModalTables";
-import { HeaderStyle } from "./style";
+import { HeaderStyle, buttonIconStyle } from "./style";
 import ModalClient from "./components/Modals/ModalClients";
 import ModalPaymentMethods from "./components/Modals/ModalPaymentMethods";
 import ModalTypeTransaction from "./components/Modals/ModalTypeTransaction";
@@ -50,7 +50,7 @@ export default function HeaderBarMenu() {
     setIsOpenModalClients(false);
   };
 
-  const handleSelectTypeTransaction = (typeTransaction) => {
+  const handleSelectTransactionType = (typeTransaction) => {
     setIsOpenModalTypeTransaction(false);
     setTransactionType(dispatchBar, typeTransaction);
   };
@@ -65,14 +65,6 @@ export default function HeaderBarMenu() {
     getClients().then((resClients) => setItemsClients(resClients));
     getPaymentMethods().then((resPayments) => setItemsPaymentMethods(resPayments));
   }, []);
-
-  const buttonIconStyle = {
-    width: "20px",
-    height: "20px",
-    color: "white",
-    filter:
-      "invert(88%) sepia(21%) saturate(935%) hue-rotate(123deg) brightness(85%) contrast(97%)",
-  };
 
   return (
     <MDBox
@@ -114,7 +106,7 @@ export default function HeaderBarMenu() {
         sx={{ width: "45px", height: "45px" }}
         sxIcon={buttonIconStyle}
         onClick={() => setIsOpenModalTypeTransaction(true)}
-        badgeAlert={transactionType ?? true}
+        badgeAlert={transactionType !== false ?? true}
       />
       {/** Modals */}
       <ModalTables
@@ -137,7 +129,7 @@ export default function HeaderBarMenu() {
       <ModalTypeTransaction
         isOpen={isOpenModalTypeTransaction}
         handleOnForceClose={handleOnForceCloseTypeTransaction}
-        handleSelectTypeTransaction={handleSelectTypeTransaction}
+        handleSelectTransactionType={handleSelectTransactionType}
       />
     </MDBox>
   );

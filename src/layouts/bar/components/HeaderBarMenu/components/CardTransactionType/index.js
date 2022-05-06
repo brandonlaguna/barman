@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import { Grid, Box, Card } from "@mui/material";
 import MDTypography from "components/MDTypography";
 
-export default function CardTypeTransaction({ data, onClickTypeTransaction }) {
-  const { id, title, detail, image } = data;
+export default function CardTransactionType({ data, onClickTransactionType }) {
+  const { id, title, detail, image, guardarVender, tipoTransaccion } = data;
   return (
     <Grid
       role="button"
@@ -12,7 +12,12 @@ export default function CardTypeTransaction({ data, onClickTypeTransaction }) {
       md={12}
       lg={6}
       key={id}
-      onClick={() => onClickTypeTransaction(id)}
+      onClick={() =>
+        onClickTransactionType({
+          guardar_vender: guardarVender,
+          tipo_transaccion: tipoTransaccion,
+        })
+      }
       style={{ justifyContent: "center", alignItems: "center" }}
     >
       <Card sx={{ justifyContent: "center" }} key={id}>
@@ -38,7 +43,7 @@ export default function CardTypeTransaction({ data, onClickTypeTransaction }) {
         >
           {title}
         </MDTypography>
-        <MDTypography
+        {/* <MDTypography
           fontWeight="thin"
           textTransform="capitalize"
           variant="span"
@@ -46,13 +51,13 @@ export default function CardTypeTransaction({ data, onClickTypeTransaction }) {
           noWrap
         >
           {detail}
-        </MDTypography>
+        </MDTypography> */}
       </Card>
     </Grid>
   );
 }
 
-CardTypeTransaction.propTypes = {
+CardTransactionType.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
-  onClickTypeTransaction: PropTypes.func.isRequired,
+  onClickTransactionType: PropTypes.func.isRequired,
 };

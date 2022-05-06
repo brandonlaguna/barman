@@ -1,6 +1,3 @@
-// import { useState, useEffect } from "react";
-// import { useBarCartController } from "context/barCartContext";
-// import { useSelectorController } from "context/selectorContext";
 import { dataTransaction, ventaTransaction } from "model/dataTransaction";
 import PropTypes from "prop-types";
 import { sendIndividualTransaction } from "services/transactionServices";
@@ -21,9 +18,13 @@ function itemsCollection(listCarts) {
       interno: element.id,
       producto: element.articulo,
       total: element.venta_uno * element.cantidad,
+      totale: element.venta_uno * element.cantidad,
       cantida: element.cantidad,
       factor_venta: element.factor_venta,
       precio_costo: element.precio_costo,
+      venta_uno: element.venta_uno,
+      venta_dos: element.venta_dos,
+      venta_tres: element.venta_tres,
       idventa,
     });
   });
@@ -42,7 +43,7 @@ function paymentMethodsCollection(paymentMethods) {
   return arrayPayments;
 }
 
-function dataCollection(tableSelected, clientSelected, paymentMethods, listCarts) {
+function dataCollection(tableSelected, clientSelected, paymentMethods, listCarts, transactionType) {
   const arrayPayments = paymentMethodsCollection(paymentMethods);
 
   const hashToken = `${
@@ -50,11 +51,11 @@ function dataCollection(tableSelected, clientSelected, paymentMethods, listCarts
   }-${getDate().toString()}`;
 
   const totales = calculateTotal(listCarts);
-  console.log(totales);
+  console.log("transactionType", transactionType);
 
   const arrayData = {
     ...dataTransaction,
-    // ...totales,
+    ...totales,
     cc_cliente: clientSelected.length > 0 ? clientSelected.documento : dataTransaction.cc_cliente, // client or default
     cliente: clientSelected.length > 0 ? clientSelected.id : dataTransaction.cliente,
     nombre:
@@ -64,6 +65,12 @@ function dataCollection(tableSelected, clientSelected, paymentMethods, listCarts
     puesto: tableSelected,
     payments: arrayPayments,
     token: md5(`${clientSelected.documento}${hashToken}`),
+    guardar_vender: transactionType
+      ? transactionType.guardar_vender
+      : dataTransaction.guardar_vender,
+    tipo_transaccion: transactionType
+      ? transactionType.tipo_transaccion
+      : dataTransaction.tipo_transaccion,
     idventa,
   };
   return arrayData;
@@ -74,13 +81,22 @@ const generateTransaction = async ({
   tableSelected,
   clientSelected,
   paymentMethods,
+  transactionType,
 }) => {
   let estado = false;
   let mensajeEstado = "Oh! No se pudo realizar ésta venta.";
   let dataResponse = [];
   try {
     const venta = itemsCollection(listCarts);
-    const data = dataCollection(tableSelected, clientSelected, paymentMethods, listCarts);
+
+    const data = dataCollection(
+      tableSelected,
+      clientSelected,
+      paymentMethods,
+      listCarts,
+      transactionType
+    );
+
     console.log([venta, data]);
     if (paymentMethods.length === 0 && data.guardar_vender !== 0) {
       // excepcion en guardar vender = 0
@@ -103,6 +119,7 @@ generateTransaction.propTypes = {
   tableSelected: PropTypes.instanceOf(Array).isRequired,
   clientSelected: PropTypes.instanceOf(Array).isRequired,
   paymentMethods: PropTypes.instanceOf(Array).isRequired,
+  transactionType: PropTypes.instanceOf(Array).isRequired,
 };
 
 export default generateTransaction;

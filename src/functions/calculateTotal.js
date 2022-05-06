@@ -10,11 +10,11 @@ export default function (items) {
   items.forEach((item) => {
     const tax = getTax(item.iva);
     if (tax > 0) {
-      total += item.venta_uno;
-      totalGeneral += item.venta_uno;
+      total += item.venta_uno * item.cantidad;
+      totalGeneral += item.venta_uno * item.cantidad;
     } else {
-      totalGeneral += item.venta_uno;
-      total += item.venta_uno;
+      totalGeneral += item.venta_uno * item.cantidad;
+      total += item.venta_uno * item.cantidad;
     }
   });
 

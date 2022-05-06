@@ -185,3 +185,10 @@ export function ModalTypeTransactionStyle(theme, ownerState) {
     },
   };
 }
+
+export const buttonIconStyle = {
+  width: "20px",
+  height: "20px",
+  color: "white",
+  filter: "invert(88%) sepia(21%) saturate(935%) hue-rotate(123deg) brightness(85%) contrast(97%)",
+};

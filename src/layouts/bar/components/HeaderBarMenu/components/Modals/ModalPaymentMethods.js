@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import PropTypes from "prop-types";
 import NumPad from "react-numpad";
 import CircleButton from "components/MDCircleButton";
-import { ModalPaymentMethodsStyle } from "../../style";
+import { ModalPaymentMethodsStyle, buttonIconStyle } from "../../style";
 
 export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }) {
   const [controller] = useMaterialUIController();
@@ -41,14 +41,6 @@ export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }
     );
     setValueMethod(currentListValue);
     addPaymentMethod(dispatchBar, { ...payment, value });
-  };
-
-  const buttonIconStyle = {
-    width: "20px",
-    height: "20px",
-    color: "white",
-    filter:
-      "invert(88%) sepia(21%) saturate(935%) hue-rotate(123deg) brightness(85%) contrast(97%)",
   };
 
   function RenderPaymentMethods() {

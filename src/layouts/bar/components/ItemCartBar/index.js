@@ -7,6 +7,7 @@ import useWindowDimensions from "functions/windowDimension";
 import { SwipeableList } from "@sandstreamdev/react-swipeable-list";
 import generateTransaction from "transactions/generateTransaction";
 import "@sandstreamdev/react-swipeable-list/dist/styles.css";
+import calculateTotal from "functions/calculateTotal";
 import ItemCartCard from "./components/ItemCartCard";
 import PaymentButton from "./components/PaymentButton";
 import ItemCartBarStyle from "./style";
@@ -18,28 +19,31 @@ export default function ItemCartBar() {
   const [controllerSelector, dispatchSelector] = useSelectorController();
   // context methods
   const { darkMode, sidenavColor } = controller;
-  const { listCarts, tableSelected, clientSelected, paymentMethods } = controllerBar;
+  const { listCarts, tableSelected, clientSelected, paymentMethods, transactionType } =
+    controllerBar;
   const { isLoading } = controllerSelector;
   const handleDeleteItemToCart = (itemId) => deleteToCart(dispatchBar, itemId);
   const active = true;
   const { height } = useWindowDimensions();
 
   const [listItemCart, setListItemCart] = useState([]);
+  const [totalTransaction, setTotalTransaction] = useState([]);
 
   useEffect(() => {
     setListItemCart(listCarts);
+    setTotalTransaction(calculateTotal(listCarts));
   }, [listCarts]);
 
   const handleSentTransaction = () => {
     setIsLoading(dispatchSelector, true);
     console.log(isLoading);
-    generateTransaction({ listCarts, tableSelected, clientSelected, paymentMethods }).then(
-      (response) => {
-        console.log("transaction response");
-        console.log(response);
-        setIsLoading(dispatchSelector, false);
-      }
-    );
+    generateTransaction({
+      listCarts,
+      tableSelected,
+      clientSelected,
+      paymentMethods,
+      transactionType,
+    }).then(() => setIsLoading(dispatchSelector, false));
   };
 
   return (
@@ -60,7 +64,7 @@ export default function ItemCartBar() {
         ))}
       </SwipeableList>
       <PaymentButton
-        value="10000"
+        value={totalTransaction ? totalTransaction.total : 0}
         onclickTransaction={handleSentTransaction}
         isLoading={isLoading}
       />

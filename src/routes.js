@@ -1,6 +1,6 @@
 // Silpos Barman React layouts
 import Dashboard from "layouts/dashboard";
-import Tables from "layouts/tables";
+// import Tables from "layouts/tables";
 import Billing from "layouts/billing";
 import RTL from "layouts/rtl";
 import Notifications from "layouts/notifications";
@@ -9,6 +9,7 @@ import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import Bar from "layouts/bar";
 import SyncServer from "layouts/sync_server";
+import Printers from "layouts/printers";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -40,11 +41,11 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Tables",
-    key: "tables",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tables",
-    component: <Tables />,
+    name: "Impresoras",
+    key: "printers",
+    icon: <Icon fontSize="small">print_icon</Icon>,
+    route: "/printers",
+    component: <Printers />,
   },
   {
     type: "collapse",
