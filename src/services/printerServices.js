@@ -1,6 +1,4 @@
-import OperacionTicket from "model/OperationTicketModel";
-
-export const C = {
+const C = {
   AccionWrite: "write",
   AccionCut: "cut",
   AccionCash: "cash",
@@ -35,12 +33,21 @@ export const C = {
 
 export const URL_PLUGIN = "http://localhost:8000";
 
-export class Impresora {
+export class OperacionTicket {
+  constructor(accion, datos) {
+    this.accion = `${accion}`;
+    this.datos = `${datos}`;
+  }
+}
+
+export class Impresora extends OperacionTicket {
   constructor(ruta) {
+    super();
     this.ruta = ruta ?? URL_PLUGIN;
     this.operaciones = [];
     this.estadoValidMedida = false;
     this.estadoValidarTipo = false;
+    this.importPrinters = false;
   }
 
   static setImpresora(nombreImpresora, ruta) {
@@ -95,7 +102,6 @@ export class Impresora {
   }
 
   setEmphasize(val) {
-    if (val.isNaN() || val.parseInt() < 0) throw Error("Valor inválido");
     this.operaciones.push(new OperacionTicket(C.AccionEmphasize, val));
   }
 
@@ -115,7 +121,7 @@ export class Impresora {
   }
 
   feed(n) {
-    if (!n.parseInt() || n.parseInt() < 0) {
+    if (n < 0) {
       throw Error("Valor para feed inválido");
     }
     this.operaciones.push(new OperacionTicket(C.AccionFeed, n));

@@ -1,31 +1,14 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/function-component-definition */
-/**
-=========================================================
-* Silpos Barman React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// Silpos Barman React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDAvatar from "components/MDAvatar";
 import MDBadge from "components/MDBadge";
-
+import PropTypes from "prop-types";
+import { getAllPrinters } from "model/printersModel";
 // Images
-import team2 from "assets/images/team-2.jpg";
+import team2 from "assets/images/icons/hardware/printer.png";
 
-export default function data() {
-  const Author = ({ image, name }) => (
+function Printer({ image, name }) {
+  return (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDAvatar src={image} name={name} size="sm" variant="rounded" />
       <MDTypography display="block" variant="button" fontWeight="medium" ml={1} lineHeight={1}>
@@ -33,8 +16,10 @@ export default function data() {
       </MDTypography>
     </MDBox>
   );
+}
 
-  const Job = ({ title, description }) => (
+function Type({ title, description }) {
+  return (
     <MDBox lineHeight={1} textAlign="left">
       <MDTypography display="block" variant="caption" color="text" fontWeight="medium">
         {title}
@@ -42,20 +27,19 @@ export default function data() {
       <MDTypography variant="caption">{description}</MDTypography>
     </MDBox>
   );
+}
 
-  return {
-    columns: [
-      { Header: "Nombre", accessor: "printer", width: "45%", align: "left" },
-      { Header: "Tipo", accessor: "function", align: "left" },
-      { Header: "Estado", accessor: "status", align: "center" },
-      { Header: "Ruta", accessor: "route", align: "center" },
-      { Header: "Accion", accessor: "action", align: "center" },
-    ],
-
-    rows: [
-      {
-        printer: <Author image={team2} name="John Michael" email="john@creative-tim.com" />,
-        function: <Job title="Manager" description="Organization" />,
+const data = async () => {
+  try {
+    const rows = [];
+    const printerList = getAllPrinters();
+    printerList.forEach((printer) => {
+      console.log("impresoras", printer);
+      rows.push({
+        printer: <Printer image={team2} name={printer.printerName} email="" />,
+        function: (
+          <Type title={printer.printerType.type} description={printer.printerType.format} />
+        ),
         status: (
           <MDBox ml={-1}>
             <MDBadge badgeContent="online" color="success" variant="gradient" size="sm" />
@@ -63,7 +47,7 @@ export default function data() {
         ),
         route: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            192.168.1.211
+            {printer.printerRoute}
           </MDTypography>
         ),
         action: (
@@ -71,7 +55,23 @@ export default function data() {
             Edit
           </MDTypography>
         ),
-      },
-    ],
-  };
-}
+      });
+    });
+
+    return rows;
+  } catch (e) {
+    return e;
+  }
+};
+
+Printer.propTypes = {
+  name: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+};
+
+Type.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+};
+
+export default data;

@@ -14,7 +14,7 @@ import { importItems } from "services/itemsServices";
 import { importClientes } from "services/clientsServices";
 import { importCategorias } from "services/categoriasServices";
 import { importComprobantes } from "services/comprobantesServices";
-import { importConfiguracion } from "services/configuracionServices";
+import { importConfiguracion, generateDefaultPrinters } from "services/configuracionServices";
 import { importTipoTransacciones } from "services/tipoTransaccion.services";
 import { importMetodosPago } from "services/metodosPago.services";
 
@@ -29,12 +29,20 @@ function SyncServer() {
     });
   };
 
+  const getPrintersConfig = () => {
+    setStatusSyc("Obteniendo informacion de impresoras");
+    const printers = generateDefaultPrinters();
+    localStorage.setItem("printersConfig", JSON.stringify(printers));
+    setData(`${Object.keys(printers).length.toString()} Impresoras configuradas`);
+  };
+
   const getMetodosPago = () => {
     importMetodosPago()
       .then((result) => {
         localStorage.setItem("metodosPago", JSON.stringify(result.data));
-        setStatusSyc("Obteniento metodos de pago");
+        setStatusSyc("Obteniendo metodos de pago");
         setData(`${Object.keys(result.data).length.toString()} Metodos de pago obtenidos`);
+        getPrintersConfig();
       })
       .catch(notify);
   };
@@ -43,7 +51,7 @@ function SyncServer() {
     importTipoTransacciones()
       .then((result) => {
         localStorage.setItem("tipoTransacciones", JSON.stringify(result.data));
-        setStatusSyc("Obteniento tipos de transacciones");
+        setStatusSyc("Obteniendo tipos de transacciones");
         setData(`${Object.keys(result.data).length.toString()} Tipos de transacciones obtenidas`);
         getMetodosPago();
       })

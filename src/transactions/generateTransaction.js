@@ -9,7 +9,6 @@ const idventa = Math.floor(Math.random() * 1000);
 
 function itemsCollection(listCarts) {
   const arrayItems = [];
-  console.log("itemes", listCarts);
   listCarts.forEach((element) => {
     arrayItems.push({
       ...ventaTransaction,
@@ -26,6 +25,7 @@ function itemsCollection(listCarts) {
       venta_dos: element.venta_dos,
       venta_tres: element.venta_tres,
       idventa,
+      valor: element.venta_uno,
     });
   });
   return arrayItems;
@@ -33,9 +33,7 @@ function itemsCollection(listCarts) {
 
 function paymentMethodsCollection(paymentMethods) {
   const arrayPayments = [];
-  console.log(paymentMethods);
   paymentMethods.forEach((element) => {
-    // console.log(element);
     if (element.id > 0) {
       arrayPayments.push(element);
     }
@@ -51,7 +49,6 @@ function dataCollection(tableSelected, clientSelected, paymentMethods, listCarts
   }-${getDate().toString()}`;
 
   const totales = calculateTotal(listCarts);
-  console.log("transactionType", transactionType);
 
   const arrayData = {
     ...dataTransaction,
@@ -84,8 +81,8 @@ const generateTransaction = async ({
   transactionType,
 }) => {
   let estado = false;
-  let mensajeEstado = "Oh! No se pudo realizar ésta venta.";
-  let dataResponse = [];
+  let mensajeEstado = "Transaccion realizada correctamente.";
+  const dataResponse = [];
   try {
     const venta = itemsCollection(listCarts);
 
@@ -96,22 +93,23 @@ const generateTransaction = async ({
       listCarts,
       transactionType
     );
-
-    console.log([venta, data]);
     if (paymentMethods.length === 0 && data.guardar_vender !== 0) {
       // excepcion en guardar vender = 0
       throw new Error("Oops! No hay metodos de pago agregados.");
     }
 
-    sendIndividualTransaction({ data, venta }).then((response) => {
-      console.log(response);
+    await sendIndividualTransaction({ data, venta }).then((response) => {
+      dataResponse.push(response[0].data);
+      if (response[0].httpStatus === 200) {
+        mensajeEstado = "mensaje cambiado";
+        // throw new Error("Ocurrió un error al realizar la venta.");
+      }
     });
     estado = true;
-    dataResponse = [];
+    return [estado, mensajeEstado, dataResponse];
   } catch (e) {
-    mensajeEstado = e;
+    return [estado, e, dataResponse];
   }
-  return [estado, mensajeEstado, dataResponse];
 };
 
 generateTransaction.propTypes = {

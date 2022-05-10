@@ -8,6 +8,7 @@ import { SwipeableList } from "@sandstreamdev/react-swipeable-list";
 import generateTransaction from "transactions/generateTransaction";
 import "@sandstreamdev/react-swipeable-list/dist/styles.css";
 import calculateTotal from "functions/calculateTotal";
+import printTransaction from "transactions/printTransaction";
 import ItemCartCard from "./components/ItemCartCard";
 import PaymentButton from "./components/PaymentButton";
 import ItemCartBarStyle from "./style";
@@ -43,7 +44,11 @@ export default function ItemCartBar() {
       clientSelected,
       paymentMethods,
       transactionType,
-    }).then(() => setIsLoading(dispatchSelector, false));
+    }).then((dataTransaction) => {
+      const itemsData = dataTransaction[2];
+      printTransaction(itemsData, transactionType);
+      setIsLoading(dispatchSelector, false);
+    });
   };
 
   return (

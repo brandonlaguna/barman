@@ -20,7 +20,14 @@ import { buttonIconStyle } from "./style";
 function Printers() {
   const [isOpenModalPrinter, setIsOpenModalPrinter] = useState(false);
   const [printerList, setPrinterList] = useState([]);
-  const { columns, rows } = printersTableData();
+  const [rows, setRows] = useState([]);
+  const columns = [
+    { Header: "Nombre", accessor: "printer", width: "45%", align: "left" },
+    { Header: "Tipo", accessor: "function", align: "left" },
+    { Header: "Estado", accessor: "status", align: "center" },
+    { Header: "Ruta", accessor: "route", align: "center" },
+    { Header: "Accion", accessor: "action", align: "center" },
+  ];
 
   const handleOnForClosePrinter = () => setIsOpenModalPrinter(false);
 
@@ -31,15 +38,11 @@ function Printers() {
 
   const limpiarLista = () => {
     setPrinterList([]);
-    // for (let i = $listaDeImpresoras.options.length; i >= 0; i--) {
-    //     $listaDeImpresoras.remove(i);
-    // }
   };
 
   const refrescarNombreDeImpresoraSeleccionada = () => {
     Impresora.getImpresora().then((nombreImpresora) => {
       console.log(nombreImpresora);
-      // $impresoraSeleccionada.textContent = nombreImpresora;
     });
   };
 
@@ -50,29 +53,12 @@ function Printers() {
       console.log("Lista cargada");
       limpiarLista();
       setPrinterList(listaDeImpresoras);
-      // listaDeImpresoras.forEach(nombreImpresora => {
-      //     const option = document.createElement('option');
-      //     option.value = option.text = nombreImpresora;
-      //     $listaDeImpresoras.appendChild(option);
-      // })
     });
   };
 
-  // const establecerImpresoraComoPredeterminada = nombreImpresora => {
-  //   console.log("Estableciendo impresora...");
-  //   Impresora.setImpresora(nombreImpresora)
-  //       .then(respuesta => {
-  //           refrescarNombreDeImpresoraSeleccionada();
-  //           if (respuesta) {
-  //               console.log(`Impresora ${nombreImpresora} establecida correctamente`);
-  //           } else {
-  //               console.log(`No se pudo establecer la impresora con el nombre ${nombreImpresora}`);
-  //           }
-  //       });
-  // };
-
   useEffect(() => {
     obtenerListaDeImpresoras();
+    printersTableData().then((result) => setRows(result));
   }, []);
 
   return (
