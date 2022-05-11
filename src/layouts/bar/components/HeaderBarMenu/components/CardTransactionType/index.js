@@ -43,15 +43,6 @@ export default function CardTransactionType({ data, onClickTransactionType }) {
         >
           {title}
         </MDTypography>
-        {/* <MDTypography
-          fontWeight="thin"
-          textTransform="capitalize"
-          variant="span"
-          color="dark"
-          noWrap
-        >
-          {detail}
-        </MDTypography> */}
       </Card>
     </Grid>
   );

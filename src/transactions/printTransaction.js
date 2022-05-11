@@ -7,28 +7,30 @@ import replaceTemplate from "functions/replaceTemplate";
 //   return plainString;
 // };
 
-const printTransaction = (dataTransaction, transactionType) => {
+const printTransaction = (dataTransaction, transactionType, printPrinter) => {
   // print logic
-  console.log(transactionType);
-  const printerList = getAllPrinters();
-  printerList.forEach((element) => {
-    const content = replaceTemplate({
-      template: element.printerFormat,
-      itemList: dataTransaction[0],
+  console.log(dataTransaction, transactionType, printPrinter);
+  if (dataTransaction !== undefined) {
+    const printerList = getAllPrinters();
+    printerList.forEach((element) => {
+      const content = replaceTemplate({
+        template: element.printerFormat,
+        itemList: dataTransaction[0],
+      });
+      const impresora = new Impresora();
+      impresora.setFontSize(1, 1);
+      impresora.setEmphasize(0);
+      impresora.setAlign("center");
+      content.forEach((text) => {
+        impresora.write(`${text} \n`);
+      });
+      impresora.cut();
+      impresora.cutPartial();
+      impresora.imprimirEnImpresora(element.printerName).then((valor) => {
+        console.log(`Al imprimir: ${valor}`);
+      });
     });
-    const impresora = new Impresora();
-    impresora.setFontSize(1, 1);
-    impresora.setEmphasize(0);
-    impresora.setAlign("center");
-    content.forEach((text) => {
-      impresora.write(`${text} \n`);
-    });
-    impresora.cut();
-    impresora.cutPartial();
-    impresora.imprimirEnImpresora(element.printerName).then((valor) => {
-      console.log(`Al imprimir: ${valor}`);
-    });
-  });
+  }
 };
 
 export default printTransaction;

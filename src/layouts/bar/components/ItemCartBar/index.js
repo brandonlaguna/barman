@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import MDBox from "components/MDBox";
 import { useMaterialUIController } from "context";
-import { useBarCartController, deleteToCart } from "context/barCartContext";
+import { useBarCartController, deleteToCart, setLaunchPrinter } from "context/barCartContext";
 import { useSelectorController, setIsLoading } from "context/selectorContext";
 import useWindowDimensions from "functions/windowDimension";
 import { SwipeableList } from "@sandstreamdev/react-swipeable-list";
@@ -20,8 +20,14 @@ export default function ItemCartBar() {
   const [controllerSelector, dispatchSelector] = useSelectorController();
   // context methods
   const { darkMode, sidenavColor } = controller;
-  const { listCarts, tableSelected, clientSelected, paymentMethods, transactionType } =
-    controllerBar;
+  const {
+    listCarts,
+    tableSelected,
+    clientSelected,
+    paymentMethods,
+    transactionType,
+    printPrinter,
+  } = controllerBar;
   const { isLoading } = controllerSelector;
   const handleDeleteItemToCart = (itemId) => deleteToCart(dispatchBar, itemId);
   const active = true;
@@ -29,6 +35,7 @@ export default function ItemCartBar() {
 
   const [listItemCart, setListItemCart] = useState([]);
   const [totalTransaction, setTotalTransaction] = useState([]);
+  const [responseTransaction, setResponseTransaction] = useState([]);
 
   useEffect(() => {
     setListItemCart(listCarts);
@@ -37,7 +44,6 @@ export default function ItemCartBar() {
 
   const handleSentTransaction = () => {
     setIsLoading(dispatchSelector, true);
-    console.log(isLoading);
     generateTransaction({
       listCarts,
       tableSelected,
@@ -45,11 +51,21 @@ export default function ItemCartBar() {
       paymentMethods,
       transactionType,
     }).then((dataTransaction) => {
-      const itemsData = dataTransaction[2];
-      printTransaction(itemsData, transactionType);
-      setIsLoading(dispatchSelector, false);
+      setResponseTransaction(dataTransaction);
     });
   };
+
+  useEffect(() => {
+    if (responseTransaction.length > 0) {
+      console.log(responseTransaction);
+      setLaunchPrinter(dispatchBar, true);
+      setIsLoading(dispatchSelector, false);
+    }
+  }, [responseTransaction]);
+
+  useEffect(() => {
+    printTransaction(responseTransaction[2], transactionType, printPrinter);
+  }, [printPrinter]);
 
   return (
     <MDBox

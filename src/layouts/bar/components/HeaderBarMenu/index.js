@@ -7,6 +7,8 @@ import {
   setTableToCart,
   selectClientToCart,
   setTransactionType,
+  setLaunchPrinter,
+  setPrintPrinter,
 } from "context/barCartContext";
 import { getClients } from "model/clientsModel";
 import { getPaymentMethods } from "model/paymentMethodsModel";
@@ -17,6 +19,7 @@ import { HeaderStyle, buttonIconStyle } from "./style";
 import ModalClient from "./components/Modals/ModalClients";
 import ModalPaymentMethods from "./components/Modals/ModalPaymentMethods";
 import ModalTypeTransaction from "./components/Modals/ModalTypeTransaction";
+import ModalPrint from "./components/Modals/ModalPrint";
 
 export default function HeaderBarMenu() {
   // context controllers
@@ -31,14 +34,22 @@ export default function HeaderBarMenu() {
   const [isOpenModalClients, setIsOpenModalClients] = useState(false);
   const [isOpenModalPayments, setIsOpenModalPayments] = useState(false);
   const [isOpenModalTypeTransaction, setIsOpenModalTypeTransaction] = useState(false);
+  const [isOpenModalPrint, setIsOpenModalPrint] = useState(false);
+
   // to data in modals
   const [itemsTables, setItemsTables] = useState([]);
   const [itemsClient, setItemsClients] = useState([]);
   const [itemsPaymentMethods, setItemsPaymentMethods] = useState([]);
 
   // context methods
-  const { listTables, tableSelected, clientSelected, paymentSelected, transactionType } =
-    controllerBar;
+  const {
+    listTables,
+    tableSelected,
+    clientSelected,
+    paymentSelected,
+    transactionType,
+    launchPrinter,
+  } = controllerBar;
 
   const handleSelectTable = (tableId) => {
     setTableToCart(dispatchBar, tableId);
@@ -55,16 +66,26 @@ export default function HeaderBarMenu() {
     setTransactionType(dispatchBar, typeTransaction);
   };
 
+  const handleSelectPrint = (print) => {
+    setPrintPrinter(dispatchBar, print);
+    setLaunchPrinter(dispatchBar, false);
+  };
+
   const handleOnForceCloseTables = () => setIsOpenModalTables(false);
   const handleOnForceCloseClient = () => setIsOpenModalClients(false);
   const handleOnForceClosePayment = () => setIsOpenModalPayments(false);
   const handleOnForceCloseTypeTransaction = () => setIsOpenModalTypeTransaction(false);
+  const handleOnForceClosePrint = () => setLaunchPrinter(dispatchBar, false);
 
   useEffect(() => {
     getListTables(listTables).then((resTables) => setItemsTables(resTables));
     getClients().then((resClients) => setItemsClients(resClients));
     getPaymentMethods().then((resPayments) => setItemsPaymentMethods(resPayments));
   }, []);
+
+  useEffect(() => {
+    setIsOpenModalPrint(launchPrinter);
+  }, [launchPrinter]);
 
   return (
     <MDBox
@@ -130,6 +151,11 @@ export default function HeaderBarMenu() {
         isOpen={isOpenModalTypeTransaction}
         handleOnForceClose={handleOnForceCloseTypeTransaction}
         handleSelectTransactionType={handleSelectTransactionType}
+      />
+      <ModalPrint
+        isOpen={isOpenModalPrint}
+        handleOnForceClose={handleOnForceClosePrint}
+        handleSelectPrint={handleSelectPrint}
       />
     </MDBox>
   );

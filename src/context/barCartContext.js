@@ -79,10 +79,33 @@ function reducer(state, action) {
       };
     }
     case "ADD_TRANSACTION_TYPE": {
-      console.log(value);
       return {
         ...state,
         transactionType: value,
+      };
+    }
+    case "SEND_TRANSACTION": {
+      return {
+        ...state,
+        sendTransaction: value,
+      };
+    }
+    case "LAUNCH_TRANSACTION": {
+      return {
+        ...state,
+        launchTransaction: value,
+      };
+    }
+    case "LAUNCH_PRINTER": {
+      return {
+        ...state,
+        launchPrinter: value,
+      };
+    }
+    case "SET_PRINT_PRINTER": {
+      return {
+        ...state,
+        printPrinter: value,
       };
     }
     default: {
@@ -101,6 +124,10 @@ function BarCartControllerProvider({ children }) {
     paymentMethods: [],
     paymentSelected: false,
     transactionType: null,
+    sendTransaction: false,
+    launchTransaction: false,
+    launchPrinter: false,
+    printPrinter: "all",
   };
 
   const [controllerBar, dispatchBar] = useReducer(reducer, initialState);
@@ -136,6 +163,11 @@ const removePaymentMethod = (dispatchBar, value) =>
   dispatchBar({ type: "REMOVE_PAYMENT_METHOD", value });
 const setTransactionType = (dispatchBar, value) =>
   dispatchBar({ type: "ADD_TRANSACTION_TYPE", value });
+const sendTransaction = (dispatchBar, value) => dispatchBar({ type: "SEND_TRANSACTION", value });
+const setLaunchTransaction = (dispatchBar, value) =>
+  dispatchBar({ type: "LAUNCH_TRANSACTION", value });
+const setLaunchPrinter = (dispatchBar, value) => dispatchBar({ type: "LAUNCH_PRINTER", value });
+const setPrintPrinter = (dispatchBar, value) => dispatchBar({ type: "SET_PRINT_PRINTER", value });
 
 export {
   BarCartControllerProvider,
@@ -147,4 +179,8 @@ export {
   addPaymentMethod,
   removePaymentMethod,
   setTransactionType,
+  sendTransaction,
+  setLaunchTransaction,
+  setLaunchPrinter,
+  setPrintPrinter,
 };
