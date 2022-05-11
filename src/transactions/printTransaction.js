@@ -11,7 +11,15 @@ const printTransaction = (dataTransaction, transactionType, printPrinter) => {
   // print logic
   console.log(dataTransaction, transactionType, printPrinter);
   if (dataTransaction !== undefined) {
-    const printerList = getAllPrinters();
+    let printerList = [];
+    if (printPrinter === "all") {
+      printerList = getAllPrinters();
+    } else if (!printPrinter.isNaN) {
+      const list = getAllPrinters();
+      printerList = list.filter((printer) => printer.printerId === printPrinter);
+    }
+    console.log(printerList);
+
     printerList.forEach((element) => {
       const content = replaceTemplate({
         template: element.printerFormat,

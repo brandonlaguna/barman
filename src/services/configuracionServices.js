@@ -52,4 +52,21 @@ export const generateDefaultPrinters = () => [
       `{{minFooter}}`,
     ],
   },
+  {
+    printerId: 2,
+    printerName: "SAT15TUS(USB)",
+    printerType: {
+      type: "POS",
+      format: "80mm",
+    },
+    printerRoute: "USB",
+    printerState: true,
+    printerFormat: [
+      `Silpos Barman 2`,
+      `{{minBusiness}}`,
+      `***Cocina***`,
+      `{{minItems}}`,
+      `{{minFooter}}`,
+    ],
+  },
 ];

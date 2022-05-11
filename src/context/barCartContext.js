@@ -127,7 +127,7 @@ function BarCartControllerProvider({ children }) {
     sendTransaction: false,
     launchTransaction: false,
     launchPrinter: false,
-    printPrinter: "all",
+    printPrinter: false,
   };
 
   const [controllerBar, dispatchBar] = useReducer(reducer, initialState);

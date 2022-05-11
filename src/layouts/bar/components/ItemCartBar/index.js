@@ -64,6 +64,7 @@ export default function ItemCartBar() {
   }, [responseTransaction]);
 
   useEffect(() => {
+    console.log("enviando a imprimir");
     printTransaction(responseTransaction[2], transactionType, printPrinter);
   }, [printPrinter]);
 
