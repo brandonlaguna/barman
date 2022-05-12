@@ -8,6 +8,19 @@ const BarCart = createContext();
 BarCart.displayName = "BarCartContext";
 
 // Silpos Barman React Bar Cart reducer
+const initialState = {
+  listCarts: [],
+  listTables: 60,
+  tableSelected: false,
+  clientSelected: [],
+  paymentMethods: [],
+  paymentSelected: false,
+  transactionType: null,
+  sendTransaction: false,
+  launchTransaction: false,
+  launchPrinter: false,
+  printPrinter: false,
+};
 
 function reducer(state, action) {
   const { value } = action;
@@ -108,6 +121,9 @@ function reducer(state, action) {
         printPrinter: value,
       };
     }
+    case "RESET_CART": {
+      return initialState;
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -116,20 +132,6 @@ function reducer(state, action) {
 
 // Silpos Barman React Bar Cart context provider
 function BarCartControllerProvider({ children }) {
-  const initialState = {
-    listCarts: [],
-    listTables: 60,
-    tableSelected: false,
-    clientSelected: [],
-    paymentMethods: [],
-    paymentSelected: false,
-    transactionType: null,
-    sendTransaction: false,
-    launchTransaction: false,
-    launchPrinter: false,
-    printPrinter: false,
-  };
-
   const [controllerBar, dispatchBar] = useReducer(reducer, initialState);
 
   const value = useMemo(() => [controllerBar, dispatchBar], [controllerBar, dispatchBar]);
@@ -168,6 +170,7 @@ const setLaunchTransaction = (dispatchBar, value) =>
   dispatchBar({ type: "LAUNCH_TRANSACTION", value });
 const setLaunchPrinter = (dispatchBar, value) => dispatchBar({ type: "LAUNCH_PRINTER", value });
 const setPrintPrinter = (dispatchBar, value) => dispatchBar({ type: "SET_PRINT_PRINTER", value });
+const clean = (dispatchBar, value) => dispatchBar({ type: "RESET_CART", value });
 
 export {
   BarCartControllerProvider,
@@ -183,4 +186,5 @@ export {
   setLaunchTransaction,
   setLaunchPrinter,
   setPrintPrinter,
+  clean,
 };

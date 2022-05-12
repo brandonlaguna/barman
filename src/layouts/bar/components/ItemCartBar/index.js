@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import MDBox from "components/MDBox";
 import { useMaterialUIController } from "context";
-import { useBarCartController, deleteToCart, setLaunchPrinter } from "context/barCartContext";
+import {
+  useBarCartController,
+  deleteToCart,
+  setLaunchPrinter,
+  clean,
+} from "context/barCartContext";
 import { useSelectorController, setIsLoading } from "context/selectorContext";
 import useWindowDimensions from "functions/windowDimension";
 import { SwipeableList } from "@sandstreamdev/react-swipeable-list";
@@ -66,6 +71,7 @@ export default function ItemCartBar() {
   useEffect(() => {
     console.log("enviando a imprimir");
     printTransaction(responseTransaction[2], transactionType, printPrinter);
+    clean(dispatchBar, true);
   }, [printPrinter]);
 
   return (
