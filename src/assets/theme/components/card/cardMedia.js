@@ -25,7 +25,7 @@ const cardMedia = {
   styleOverrides: {
     root: {
       borderRadius: borderRadius.xl,
-      margin: `${pxToRem(16)} ${pxToRem(16)} 0`,
+      margin: `0 ${pxToRem(96)}  ${pxToRem(32)}`,
     },
 
     media: {

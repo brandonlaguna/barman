@@ -20,9 +20,9 @@ export default function TablesCard({ data, onClickTable }) {
         </Box>
         <CardMedia
           component="img"
-          sx={{ width: 40 }}
+          sx={{ width: 60 }}
           image="https://cdn-icons-png.flaticon.com/512/1209/1209474.png"
-          alt="Live from space album cover"
+          alt="Live from space album "
         />
       </Card>
     </Grid>
