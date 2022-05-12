@@ -5,7 +5,13 @@ import PropTypes from "prop-types";
 import TablesCard from "../TablesCard";
 import { ModalStyle } from "../../style";
 
-export default function ModalTables({ isOpen, handleOnForceClose, data, handleSelectTable }) {
+export default function ModalTables({
+  isOpen,
+  handleOnForceClose,
+  data,
+  handleSelectTable,
+  busyTables,
+}) {
   const [controller] = useMaterialUIController();
   // context methods
   const { darkMode, sidenavColor } = controller;
@@ -29,6 +35,7 @@ export default function ModalTables({ isOpen, handleOnForceClose, data, handleSe
         {data.map((table) => (
           <TablesCard data={table} onClickTable={handleSelectTable} />
         ))}
+        <p style={{ color: "black" }}>{JSON.stringify(busyTables)}</p>
       </Grid>
     </MainModal>
   );
@@ -39,4 +46,5 @@ ModalTables.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
   handleSelectTable: PropTypes.func.isRequired,
   handleOnForceClose: PropTypes.func.isRequired,
+  busyTables: PropTypes.instanceOf(Array).isRequired,
 };

@@ -13,6 +13,7 @@ import {
 import { getClients } from "model/clientsModel";
 import { getPaymentMethods } from "model/paymentMethodsModel";
 import { getListTables } from "model/tablesModel";
+import importBusyTables from "services/tableServices";
 import CircleButton from "components/MDCircleButton";
 import ModalTables from "./components/Modals/ModalTables";
 import { HeaderStyle, buttonIconStyle } from "./style";
@@ -40,6 +41,7 @@ export default function HeaderBarMenu() {
   const [itemsTables, setItemsTables] = useState([]);
   const [itemsClient, setItemsClients] = useState([]);
   const [itemsPaymentMethods, setItemsPaymentMethods] = useState([]);
+  const [busyTables, setBusyTables] = useState([]);
 
   // context methods
   const {
@@ -81,6 +83,7 @@ export default function HeaderBarMenu() {
     getListTables(listTables).then((resTables) => setItemsTables(resTables));
     getClients().then((resClients) => setItemsClients(resClients));
     getPaymentMethods().then((resPayments) => setItemsPaymentMethods(resPayments));
+    importBusyTables().then((result) => setBusyTables(result));
   }, []);
 
   useEffect(() => {
@@ -135,6 +138,7 @@ export default function HeaderBarMenu() {
         handleOnForceClose={handleOnForceCloseTables}
         data={itemsTables}
         handleSelectTable={handleSelectTable}
+        busyTables={busyTables}
       />
       <ModalClient
         isOpen={isOpenModalClients}
