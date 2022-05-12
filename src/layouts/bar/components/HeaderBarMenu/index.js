@@ -79,11 +79,17 @@ export default function HeaderBarMenu() {
   const handleOnForceCloseTypeTransaction = () => setIsOpenModalTypeTransaction(false);
   const handleOnForceClosePrint = () => setLaunchPrinter(dispatchBar, false);
 
+  const initBusyTables = () => {
+    importBusyTables().then((result) => {
+      setBusyTables(result);
+      setIsOpenModalTables(true);
+    });
+  };
+
   useEffect(() => {
     getListTables(listTables).then((resTables) => setItemsTables(resTables));
     getClients().then((resClients) => setItemsClients(resClients));
     getPaymentMethods().then((resPayments) => setItemsPaymentMethods(resPayments));
-    importBusyTables().then((result) => setBusyTables(result));
   }, []);
 
   useEffect(() => {
@@ -113,7 +119,7 @@ export default function HeaderBarMenu() {
         iconPath={`${BANK_ICONS}/interface/coctel-alt.svg`}
         sx={{ width: "45px", height: "45px" }}
         sxIcon={buttonIconStyle}
-        onClick={() => setIsOpenModalTables(true)}
+        onClick={() => initBusyTables()}
         badgeAlert={tableSelected ?? true}
       />
       <CircleButton
