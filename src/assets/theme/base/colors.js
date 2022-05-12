@@ -253,6 +253,16 @@ const colors = {
     dark: "#404040",
   },
 
+  disponible: {
+    background: "#4caf4f",
+    text: "#339537",
+  },
+
+  ocupado: {
+    background: "#f44336",
+    text: "#339537",
+  },
+
   inputBorderColor: "#d2d6da",
 
   tabs: {
