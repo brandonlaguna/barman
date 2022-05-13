@@ -6,7 +6,8 @@ import "./styles.css";
 
 export default function ItemsCard({ data, onclickItem }) {
   const background = "https://pngimg.com/uploads/burger_sandwich/burger_sandwich_PNG96777.png";
-  const { id, articulo } = data;
+  // eslint-disable-next-line camelcase
+  const { id, articulo, venta_uno } = data;
   return (
     <Grid
       role="button"
@@ -22,7 +23,13 @@ export default function ItemsCard({ data, onclickItem }) {
         <div className="content-img-card">
           <Card sx={cardImageStyle({ background })} key={`childItem${id}`} />
         </div>
-        <p style={{ fontSize: "12px" }}>{articulo}</p>
+        <p style={{ fontSize: "12px" }}>
+          {articulo}
+          <br />
+          <small style={{ fontSize: "10px" }}>
+            ${Intl.NumberFormat("en-US").format(Number.parseInt(venta_uno, 10))}
+          </small>
+        </p>
       </div>
     </Grid>
   );

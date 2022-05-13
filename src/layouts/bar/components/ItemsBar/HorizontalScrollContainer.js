@@ -2,7 +2,6 @@ import React from "react";
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import Grid from "@mui/material/Grid";
 import PropTypes from "prop-types";
-import useWindowDimensions from "functions/windowDimension";
 import ItemsCard from "./ItemsCard";
 
 function Card({
@@ -17,7 +16,6 @@ function Card({
   key,
 }) {
   const visibility = React.useContext(VisibilityContext);
-  const { height } = useWindowDimensions();
   return (
     <div
       key={key}
@@ -26,7 +24,6 @@ function Card({
       onKeyPress={() => onKeyPress(visibility)}
       style={{
         width: `${childWidth}px`,
-        height: `${height - 140}px`,
       }}
       tabIndex={0}
     >

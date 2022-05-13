@@ -8,7 +8,8 @@ import { ItemCartCardStyle } from "../../style";
 import "./style.css";
 
 export default function ItemCartCard({ data, deleteItemCart }) {
-  const { id, articulo, cantidad } = data;
+  // eslint-disable-next-line camelcase
+  const { id, articulo, cantidad, venta_uno } = data;
   const [controller] = useMaterialUIController();
   // context methods
   const { darkMode, sidenavColor } = controller;
@@ -88,6 +89,10 @@ export default function ItemCartCard({ data, deleteItemCart }) {
               opacity={0.5}
             >
               x{cantidad}
+              {" Precio: $"}
+              {Intl.NumberFormat("en-US").format(
+                (Number.parseInt(cantidad, 10) * Number.parseInt(venta_uno, 10)).toFixed(2)
+              )}
             </Typography>
           </Grid>
         </Grid>

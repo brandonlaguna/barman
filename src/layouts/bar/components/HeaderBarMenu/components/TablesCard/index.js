@@ -20,19 +20,19 @@ export default function TablesCard({ data, onClickTable, busyTables }) {
     return state;
   }
   const statusMesa = validateState(id);
-  const colorStatus = statusMesa === true ? disponible : ocupado;
+  const colorStatus = statusMesa === false ? disponible : ocupado;
   const imgStatus =
-    statusMesa === true
+    statusMesa === false
       ? "assets/Bankicon/icons/tables/mesa_libre.png"
       : "assets/Bankicon/icons/tables/mesa_ocupada.png";
-  const altStatus = statusMesa === true ? "Mesa Disponible" : "Mesa Ocupada";
+  const altStatus = statusMesa === false ? "Mesa Disponible" : "Mesa Ocupada";
 
   return (
     <Grid role="button" item xs={4} md={3} lg={2} key={id} onClick={() => onClickTable(id)}>
       <Card style={colorStatus}>
         <Box>
           <CardContent>
-            <Typography component="div" variant="h5">
+            <Typography style={{ color: "#ffffff" }} component="div" variant="h5">
               {`Mesa #${id}`}
             </Typography>
           </CardContent>
