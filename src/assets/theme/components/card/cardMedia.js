@@ -17,7 +17,6 @@ Coded by www.creative-tim.com
 import borders from "assets/theme/base/borders";
 
 // Silpos Barman React Helper Functions
-import pxToRem from "assets/theme/functions/pxToRem";
 
 const { borderRadius } = borders;
 
@@ -25,7 +24,7 @@ const cardMedia = {
   styleOverrides: {
     root: {
       borderRadius: borderRadius.xl,
-      margin: `${pxToRem(-32)} ${pxToRem(96)} 0`,
+      margin: `auto`,
     },
 
     media: {

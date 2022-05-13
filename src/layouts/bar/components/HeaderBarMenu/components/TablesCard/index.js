@@ -31,7 +31,7 @@ export default function TablesCard({ data, onClickTable, busyTables }) {
     <Grid role="button" item xs={4} md={3} lg={2} key={id} onClick={() => onClickTable(id)}>
       <Card style={colorStatus}>
         <Box>
-          <CardContent>
+          <CardContent style={{ paddingBottom: "0px" }}>
             <Typography style={{ color: "#ffffff" }} component="div" variant="h5">
               {`Mesa #${id}`}
             </Typography>
