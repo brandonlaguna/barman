@@ -7,15 +7,26 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import colors from "assets/theme/base/colors";
 
-export default function TablesCard({ data, onClickTable }) {
-  const { id, status } = data;
+export default function TablesCard({ data, onClickTable, busyTables }) {
+  const { id } = data;
   const { disponible, ocupado } = colors;
-  const colorStatus = status === true ? disponible : ocupado;
+  function validateState(puesto) {
+    let state = false;
+    busyTables.forEach((items) => {
+      if (Number.parseInt(items.puesto, 10) === Number.parseInt(puesto, 10)) {
+        state = true;
+      }
+    });
+    return state;
+  }
+  const statusMesa = validateState(id);
+  const colorStatus = statusMesa === true ? disponible : ocupado;
   const imgStatus =
-    status === true
+    statusMesa === true
       ? "assets/Bankicon/icons/tables/mesa_libre.png"
       : "assets/Bankicon/icons/tables/mesa_ocupada.png";
-  const altStatus = status === true ? "Mesa Disponible" : "Mesa Ocupada";
+  const altStatus = statusMesa === true ? "Mesa Disponible" : "Mesa Ocupada";
+
   return (
     <Grid role="button" item xs={4} md={3} lg={2} key={id} onClick={() => onClickTable(id)}>
       <Card style={colorStatus}>
@@ -39,5 +50,6 @@ export default function TablesCard({ data, onClickTable }) {
 
 TablesCard.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
+  busyTables: PropTypes.instanceOf(Array).isRequired,
   onClickTable: PropTypes.func.isRequired,
 };

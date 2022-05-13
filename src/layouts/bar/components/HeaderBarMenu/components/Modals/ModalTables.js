@@ -33,9 +33,8 @@ export default function ModalTables({
     >
       <Grid container spacing={1} style={{ overflowY: "scroll", height: "100%" }}>
         {data.map((table) => (
-          <TablesCard data={table} onClickTable={handleSelectTable} />
+          <TablesCard data={table} onClickTable={handleSelectTable} busyTables={busyTables} />
         ))}
-        <p style={{ color: "black" }}>{JSON.stringify(busyTables)}</p>
       </Grid>
     </MainModal>
   );
