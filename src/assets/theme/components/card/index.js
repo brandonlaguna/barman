@@ -21,7 +21,7 @@ import boxShadows from "assets/theme/base/boxShadows";
 // Silpos Barman React Helper Function
 import rgba from "assets/theme/functions/rgba";
 
-const { black, white } = colors;
+const { black, success } = colors;
 const { borderWidth, borderRadius } = borders;
 const { md } = boxShadows;
 
@@ -33,7 +33,7 @@ const card = {
       position: "relative",
       minWidth: 0,
       wordWrap: "break-word",
-      backgroundColor: white.main,
+      backgroundColor: success.main,
       backgroundClip: "border-box",
       border: `${borderWidth[0]} solid ${rgba(black.main, 0.125)} `,
       borderRadius: borderRadius.xl,

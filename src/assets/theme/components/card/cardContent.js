@@ -21,7 +21,6 @@ const cardContent = {
       textAlign: "center",
       marginTop: 0,
       marginBottom: 0,
-      padding: `10`,
     },
   },
 };

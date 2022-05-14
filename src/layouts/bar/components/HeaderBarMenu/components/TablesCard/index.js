@@ -50,8 +50,8 @@ export default function TablesCard({ data, onClickTable, busyTables }) {
         <CardMedia
           component="img"
           sx={{ width: 60 }}
-          image={process.env.PUBLIC_URL + imgStatus}
-          alt={altStatus}
+          image="https://cdn-icons-png.flaticon.com/512/1209/1209474.png"
+          alt="Live from space album "
         />
       </Card>
     </Grid>
