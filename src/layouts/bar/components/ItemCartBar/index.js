@@ -8,6 +8,7 @@ import {
   clean,
 } from "context/barCartContext";
 import { useSelectorController, setIsLoading } from "context/selectorContext";
+import { toast } from "react-toastify";
 import useWindowDimensions from "functions/windowDimension";
 import { SwipeableList } from "@sandstreamdev/react-swipeable-list";
 import generateTransaction from "transactions/generateTransaction";
@@ -56,20 +57,24 @@ export default function ItemCartBar() {
       paymentMethods,
       transactionType,
     }).then((dataTransaction) => {
-      setResponseTransaction(dataTransaction);
+      if (!dataTransaction[0]) {
+        toast.error(dataTransaction[1]);
+        setIsLoading(dispatchSelector, false);
+      } else {
+        setResponseTransaction(dataTransaction);
+        toast.success("Transaccion realizada correctamente");
+      }
     });
   };
 
   useEffect(() => {
     if (responseTransaction.length > 0) {
-      console.log(responseTransaction);
       setLaunchPrinter(dispatchBar, true);
       setIsLoading(dispatchSelector, false);
     }
   }, [responseTransaction]);
 
   useEffect(() => {
-    console.log("enviando a imprimir");
     printTransaction(responseTransaction[2], transactionType, printPrinter);
     clean(dispatchBar, true);
   }, [printPrinter]);

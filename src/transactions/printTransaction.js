@@ -18,7 +18,6 @@ const printTransaction = (dataTransaction, transactionType, printPrinter) => {
       const list = getAllPrinters();
       printerList = list.filter((printer) => printer.printerId === printPrinter);
     }
-    console.log(printerList);
 
     printerList.forEach((element) => {
       const content = replaceTemplate({

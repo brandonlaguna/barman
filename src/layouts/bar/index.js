@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-// import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { useMaterialUIController, setMiniSidenav } from "context";
-
 // Design
 import MDBox from "components/MDBox";
 import Grid from "@mui/material/Grid";

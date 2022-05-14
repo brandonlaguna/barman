@@ -124,6 +124,12 @@ function reducer(state, action) {
     case "RESET_CART": {
       return initialState;
     }
+    case "RESET_ITEMS_CART": {
+      return {
+        ...state,
+        listCarts: [],
+      };
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -171,6 +177,7 @@ const setLaunchTransaction = (dispatchBar, value) =>
 const setLaunchPrinter = (dispatchBar, value) => dispatchBar({ type: "LAUNCH_PRINTER", value });
 const setPrintPrinter = (dispatchBar, value) => dispatchBar({ type: "SET_PRINT_PRINTER", value });
 const clean = (dispatchBar, value) => dispatchBar({ type: "RESET_CART", value });
+const resetItemsCart = (dispatchBar, value) => dispatchBar({ type: "RESET_ITEMS_CART", value });
 
 export {
   BarCartControllerProvider,
@@ -187,4 +194,5 @@ export {
   setLaunchPrinter,
   setPrintPrinter,
   clean,
+  resetItemsCart,
 };

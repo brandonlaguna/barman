@@ -6,6 +6,8 @@ import { Auth0Provider } from "@auth0/auth0-react";
 // Silpos Barman React Context Provider
 import { MaterialUIControllerProvider } from "context";
 import { SelectorProvider } from "context/selectorContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -19,6 +21,17 @@ ReactDOM.render(
           <App />
         </MaterialUIControllerProvider>
       </Auth0Provider>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </SelectorProvider>
   </BrowserRouter>,
   document.getElementById("root")
