@@ -23,7 +23,7 @@ function Card({
       onClick={() => onClick(visibility)}
       onKeyPress={() => onKeyPress(visibility)}
       style={{
-        width: `${childWidth - 900}%`,
+        width: `${childWidth}px`,
       }}
       tabIndex={0}
     >
@@ -90,7 +90,7 @@ Card.propTypes = {
 
 console.log();
 ScrollMenuItem.defaultProps = {
-  parentWidth: 1000,
+  parentWidth: 1200,
   listItems: [],
 };
 
