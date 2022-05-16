@@ -23,7 +23,7 @@ function Card({
       onClick={() => onClick(visibility)}
       onKeyPress={() => onKeyPress(visibility)}
       style={{
-        width: `${childWidth}px`,
+        width: `${childWidth - 900}%`,
       }}
       tabIndex={0}
     >
