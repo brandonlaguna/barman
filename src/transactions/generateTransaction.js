@@ -93,7 +93,15 @@ const generateTransaction = async ({
       listCarts,
       transactionType
     );
-    if (paymentMethods.length === 0 && data.guardar_vender !== 0) {
+    if (listCarts.length === 0) {
+      // excepcion en guardar vender = 0
+      throw new Error("Vaya!, No hay articulos para vender");
+    }
+    const listTypeTransaccionException = [0, 1, 2, 3, 4];
+    if (
+      paymentMethods.length === 0 &&
+      !listTypeTransaccionException.includes(data.guardar_vender)
+    ) {
       // excepcion en guardar vender = 0
       throw new Error("Oops! No hay metodos de pago agregados.");
     }
@@ -108,7 +116,7 @@ const generateTransaction = async ({
     estado = true;
     return [estado, mensajeEstado, dataResponse];
   } catch (e) {
-    return [estado, e, dataResponse];
+    return [estado, e.message, dataResponse];
   }
 };
 

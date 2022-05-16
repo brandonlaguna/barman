@@ -10,11 +10,13 @@ import colors from "assets/theme/base/colors";
 export default function TablesCard({ data, onClickTable, busyTables }) {
   const { id } = data;
   const { disponible, ocupado } = colors;
+  const tableData = [];
   function validateState(puesto) {
     let state = false;
     busyTables.forEach((items) => {
       if (Number.parseInt(items.puesto, 10) === Number.parseInt(puesto, 10)) {
         state = true;
+        tableData.push(items);
       }
     });
     return state;
@@ -28,7 +30,15 @@ export default function TablesCard({ data, onClickTable, busyTables }) {
   const altStatus = statusMesa === false ? "Mesa Disponible" : "Mesa Ocupada";
 
   return (
-    <Grid role="button" item xs={4} md={3} lg={2} key={id} onClick={() => onClickTable(id)}>
+    <Grid
+      role="button"
+      item
+      xs={4}
+      md={3}
+      lg={2}
+      key={id}
+      onClick={() => onClickTable(id, tableData)}
+    >
       <Card style={colorStatus}>
         <Box>
           <CardContent style={{ paddingBottom: "0px" }}>

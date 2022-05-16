@@ -5,10 +5,12 @@ import { useMaterialUIController } from "context";
 import {
   useBarCartController,
   setTableToCart,
+  addItemToCart,
   selectClientToCart,
   setTransactionType,
   setLaunchPrinter,
   setPrintPrinter,
+  resetItemsCart,
 } from "context/barCartContext";
 import { getClients } from "model/clientsModel";
 import { getPaymentMethods } from "model/paymentMethodsModel";
@@ -53,9 +55,24 @@ export default function HeaderBarMenu() {
     launchPrinter,
   } = controllerBar;
 
-  const handleSelectTable = (tableId) => {
+  const insertTablesToCard = (tableData) => {
+    if (tableData.length > 0) {
+      resetItemsCart(dispatchBar, []);
+      tableData.forEach((item) => {
+        addItemToCart(dispatchBar, {
+          ...item,
+          id: Number.parseInt(item.interno, 10),
+          articulo: item.producto,
+          puesto: Number.parseInt(item.puesto, 10),
+        });
+      });
+    }
+  };
+
+  const handleSelectTable = (tableId, tableData) => {
     setTableToCart(dispatchBar, tableId);
     setIsOpenModalTables(false);
+    insertTablesToCard(tableData);
   };
 
   const handleSelectClient = (client) => {

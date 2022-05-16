@@ -12,6 +12,7 @@ const getAllTransactionType = async () => {
         guardarVender: 2,
         tipoTransaccion: 1,
         print: true,
+        printPrinter: [1, 2],
       },
       {
         id: 2,
@@ -22,6 +23,7 @@ const getAllTransactionType = async () => {
         guardarVender: 2,
         tipoTransaccion: 2,
         print: true,
+        printPrinter: [1],
       },
       {
         id: 3,
@@ -32,6 +34,7 @@ const getAllTransactionType = async () => {
         guardarVender: 2,
         tipoTransaccion: 3,
         print: false,
+        printPrinter: [],
       },
       {
         id: 4,
@@ -42,6 +45,7 @@ const getAllTransactionType = async () => {
         guardarVender: 0,
         tipoTransaccion: 1,
         print: true,
+        printPrinter: [1],
       },
       {
         id: 5,
@@ -50,7 +54,8 @@ const getAllTransactionType = async () => {
         image: `${BANK_ICONS}/interface/waiter.png`,
         guardarVender: 0,
         tipoTransaccion: 0,
-        print: false,
+        print: true,
+        printPrinter: [2],
       },
     ];
   } catch (e) {
