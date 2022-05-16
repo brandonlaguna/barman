@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { BANK_ICONS } from "config/contants";
 import { useMaterialUIController } from "context";
 import { useBarCartController, addPaymentMethod } from "context/barCartContext";
+import calculateTotal from "functions/calculateTotal";
+import getConfiguracion from "model/configuracionModel";
 import MainModal from "components/MDModales";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
@@ -15,13 +17,30 @@ export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }
   const [controllerBar, dispatchBar] = useBarCartController();
   const [listMethods, setListMethods] = useState([]);
   const [valueMethod, setValueMethod] = useState([]);
+  const [comisionPercent, setComisionPercent] = useState(null);
   // context methods
   const { darkMode, sidenavColor } = controller;
-  const { paymentMethods } = controllerBar;
+  const { paymentMethods, listCarts } = controllerBar;
   const active = true;
 
   useEffect(() => {
-    setListMethods(data);
+    getConfiguracion().then((conf) => {
+      const { comision } = conf[0];
+      setComisionPercent(comision);
+    });
+  }, []);
+
+  useEffect(() => {
+    const dataPaymentMethod = [
+      {
+        id: 0,
+        descripcion: "PROPINA",
+        var_pago_mixto: "propina",
+      },
+      ...data,
+    ];
+
+    setListMethods(dataPaymentMethod);
     console.log(paymentMethods);
   }, [data]);
 
@@ -42,6 +61,14 @@ export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }
     setValueMethod(currentListValue);
     addPaymentMethod(dispatchBar, { ...payment, value });
   };
+
+  useEffect(() => {
+    if (comisionPercent !== null) {
+      const percent = comisionPercent / 100;
+      const { total } = calculateTotal(listCarts);
+      addValuePaymentMethod({ id: 0 }, total * percent);
+    }
+  }, [listCarts]);
 
   function RenderPaymentMethods() {
     const render = [];
