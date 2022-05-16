@@ -50,8 +50,8 @@ export default function TablesCard({ data, onClickTable, busyTables }) {
         <CardMedia
           component="img"
           sx={{ width: 60 }}
-          image={process.env.PUBLIC_URL + imgStatus }
-          alt={altStatus }
+          image={process.env.PUBLIC_URL + imgStatus}
+          alt={altStatus}
         />
       </Card>
     </Grid>
