@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL } from "../components/Common/constants";
+import { API_URL } from "config/contants";
 
 const DEFAULT_ERROR_DATA = {
   status: false,
@@ -7,13 +7,13 @@ const DEFAULT_ERROR_DATA = {
   data: [],
 };
 
-export const login = ({ email, password }) => {
-  return axios
+export const login = async ({ user, password }) =>
+  axios
     .post(
       `${API_URL}/login`,
       {
-        logUsuario: email,
-        passwordUsuario: password,
+        user,
+        password,
       },
       {
         headers: {
@@ -23,12 +23,11 @@ export const login = ({ email, password }) => {
     )
     .then((response) => response.data)
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
-};
 
-export const checkAuthStatus = ({ accessToken }) => {
-  return axios
+export const checkAuthStatus = ({ accessToken }) =>
+  axios
     .post(
-      `${API_URL}/auth/checkAuthStatus`,
+      `${API_URL}/checkAuthStatus`,
       {
         accessToken,
       },
@@ -40,4 +39,3 @@ export const checkAuthStatus = ({ accessToken }) => {
     )
     .then((response) => response.data)
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
-};

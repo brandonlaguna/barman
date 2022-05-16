@@ -23,6 +23,7 @@ import ModalClient from "./components/Modals/ModalClients";
 import ModalPaymentMethods from "./components/Modals/ModalPaymentMethods";
 import ModalTypeTransaction from "./components/Modals/ModalTypeTransaction";
 import ModalPrint from "./components/Modals/ModalPrint";
+import ModalChange from "./components/Modals/ModalChange";
 
 export default function HeaderBarMenu() {
   // context controllers
@@ -38,6 +39,7 @@ export default function HeaderBarMenu() {
   const [isOpenModalPayments, setIsOpenModalPayments] = useState(false);
   const [isOpenModalTypeTransaction, setIsOpenModalTypeTransaction] = useState(false);
   const [isOpenModalPrint, setIsOpenModalPrint] = useState(false);
+  const [isOpenModalChange, setIsOpenModalChange] = useState(false);
 
   // to data in modals
   const [itemsTables, setItemsTables] = useState([]);
@@ -95,6 +97,7 @@ export default function HeaderBarMenu() {
   const handleOnForceClosePayment = () => setIsOpenModalPayments(false);
   const handleOnForceCloseTypeTransaction = () => setIsOpenModalTypeTransaction(false);
   const handleOnForceClosePrint = () => setLaunchPrinter(dispatchBar, false);
+  const handleOnForceCloseChange = () => setIsOpenModalChange(false);
 
   const initBusyTables = () => {
     importBusyTables().then((result) => {
@@ -183,6 +186,11 @@ export default function HeaderBarMenu() {
         isOpen={isOpenModalPrint}
         handleOnForceClose={handleOnForceClosePrint}
         handleSelectPrint={handleSelectPrint}
+      />
+      <ModalChange
+        isOpen={isOpenModalChange}
+        handleOnForceClose={handleOnForceCloseChange}
+        data={[]}
       />
     </MDBox>
   );

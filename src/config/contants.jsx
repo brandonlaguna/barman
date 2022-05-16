@@ -48,3 +48,8 @@ export const headers = {
 export const BANK_ICONS = "../../assets/BankIcon";
 
 export const DEFAULT_TIMEZONE = "Australia/Sydney";
+
+export const ACCESS = {
+  user: "demobar@gmail.com",
+  password: "827ccb0eea8a706c4c34a16891f84e7b",
+};
