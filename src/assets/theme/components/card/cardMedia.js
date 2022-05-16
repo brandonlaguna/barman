@@ -15,7 +15,7 @@ Coded by www.creative-tim.com
 
 // Silpos Barman React Base Styles
 import borders from "assets/theme/base/borders";
-
+import pxToRem from "assets/theme/functions/pxToRem";
 // Silpos Barman React Helper Functions
 
 const { borderRadius } = borders;
