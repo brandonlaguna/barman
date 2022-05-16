@@ -3,11 +3,9 @@ import replaceDataModel from "model/replaceDataModel";
 
 export default function replaceTemplate({ template, itemList, dataTransaction, dataBusiness }) {
   const stringReturn = [];
-  console.log(dataTransaction);
-  console.log(dataBusiness);
-  const replaceParams = replaceDataModel;
+  const replaceParams = [replaceDataModel];
 
-  let dataToReplace = [...itemList];
+  let dataToReplace = [];
 
   if (dataTransaction !== undefined) {
     dataToReplace = [...dataToReplace, ...dataTransaction];
@@ -15,20 +13,25 @@ export default function replaceTemplate({ template, itemList, dataTransaction, d
   if (dataBusiness !== undefined) {
     dataToReplace = [...dataToReplace, ...dataBusiness];
   }
-
+  // const joined = replaceParams.map((k) => Object.keys(k));
+  const joined = Object.keys(replaceParams[0])
+    .map((key) => key)
+    .join("|");
+  const regex = new RegExp(`${joined}`, "g");
+  console.log("dataToReplace", dataToReplace);
   template.forEach((temp) => {
-    console.log(Object.keys(replaceParams), temp);
-    if (Object.keys(temp).includes(replaceParams)) {
-      console.log("existe", temp, replaceParams[temp], dataToReplace[replaceParams[temp]]);
+    if (temp.includes(`{{minItems}}`)) {
+      itemList.forEach((element) => {
+        stringReturn.push([`${element.producto} - ${element.totale} - ${element.cantida}`, "left"]);
+      });
+      return;
     }
 
-    // if (temp.includes(`{{minItems}}`)) {
-    //   itemList.forEach((element) => {
-    //     stringReturn.push(`${element.producto} - ${element.totale} - ${element.cantida}`);
-    //   });
-    //   return;
-    // }
-
+    const replaced = temp.replace(regex, (matched) => dataToReplace[0][replaceParams[0][matched]]);
+    if (replaced !== undefined) {
+      stringReturn.push([replaced, "center"]);
+      return;
+    }
     // if (temp.includes(`{{minBusiness}}`)) {
     //   console.log(dataBusiness);
     //   console.log(dataTransaction);
@@ -36,7 +39,7 @@ export default function replaceTemplate({ template, itemList, dataTransaction, d
     //   return;
     // }
 
-    stringReturn.push(temp);
+    stringReturn.push([temp, "center"]);
   });
 
   return stringReturn;

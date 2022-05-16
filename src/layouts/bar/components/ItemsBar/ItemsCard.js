@@ -19,6 +19,7 @@ export default function ItemsCard({ data, onclickItem }) {
       style={{ marginTop: "1rem", padding: 0 }}
       onClick={() => onclickItem(data)}
     >
+      <br />
       <div className="cardContainerStyle">
         <div className="content-img-card">
           <Card sx={cardImageStyle({ background })} key={`childItem${id}`} />

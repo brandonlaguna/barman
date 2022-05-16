@@ -3,7 +3,7 @@ import { Grid, Box, Card } from "@mui/material";
 import MDTypography from "components/MDTypography";
 
 export default function CardTransactionType({ data, onClickTransactionType }) {
-  const { id, title, detail, image, guardarVender, tipoTransaccion } = data;
+  const { id, title, detail, image, guardarVender, tipoTransaccion, printPrinter } = data;
   return (
     <Grid
       role="button"
@@ -16,6 +16,7 @@ export default function CardTransactionType({ data, onClickTransactionType }) {
         onClickTransactionType({
           guardar_vender: guardarVender,
           tipo_transaccion: tipoTransaccion,
+          printPrinter,
         })
       }
       style={{ justifyContent: "center", alignItems: "center" }}
