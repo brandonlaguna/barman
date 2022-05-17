@@ -5,7 +5,13 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+// import calculateTotal from "functions/calculateTotal";
 import colors from "assets/theme/base/colors";
+
+function RenderTotal({ total }) {
+  const calcTotal = Number.parseInt(total, 10).toFixed(0);
+  return <Typography variant="h6" style={{ color: "white" }}>{`$${calcTotal}`}</Typography>;
+}
 
 export default function TablesCard({ data, onClickTable, busyTables }) {
   const { id } = data;
@@ -53,6 +59,7 @@ export default function TablesCard({ data, onClickTable, busyTables }) {
           image={process.env.PUBLIC_URL + imgStatus}
           alt={altStatus}
         />
+        <RenderTotal total={tableData.length > 0 ? tableData[0].total_factura : 0} />
       </Card>
     </Grid>
   );
@@ -62,4 +69,12 @@ TablesCard.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
   busyTables: PropTypes.instanceOf(Array).isRequired,
   onClickTable: PropTypes.func.isRequired,
+};
+
+RenderTotal.defaultProps = {
+  total: "0",
+};
+
+RenderTotal.propTypes = {
+  total: PropTypes.string,
 };

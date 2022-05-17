@@ -1,8 +1,10 @@
 import React from "react";
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
+import { getCategories } from "model/categoryModel";
 import Grid from "@mui/material/Grid";
 import PropTypes from "prop-types";
 import ItemsCard from "./ItemsCard";
+import "./styles.css";
 
 function Card({
   onClick,
@@ -27,8 +29,15 @@ function Card({
       }}
       tabIndex={0}
     >
-      <div className="card" selected={selected} id={title}>
-        <Grid container spacing={1} py={3} px={3}>
+      <div
+        className="card"
+        selected={selected}
+        style={{
+          margin: "6px",
+        }}
+      >
+        <p>{title.categoria}</p>
+        <Grid container spacing={1} py={3} px={3} title={title} className="horizontalCard">
           {Object.entries(listItems[itemId].items).map((element) => (
             <ItemsCard rol="button" data={element[1]} onclickItem={onClickItem} />
           ))}
@@ -41,11 +50,13 @@ function Card({
 function ScrollMenuItem({ parentWidth, listItems, onClickItem }) {
   const [selected, setSelected] = React.useState([]);
   const [position, setPosition] = React.useState(0);
+  const [categories, setCategories] = React.useState([]);
   const isItemSelected = (id) => !!selected.find((el) => el === id);
 
   React.useEffect(() => {
     console.log(position);
     setPosition(0);
+    getCategories().then((response) => setCategories(response));
   }, []);
 
   const handleClick = (id) => () => {
@@ -61,8 +72,10 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem }) {
       {Object.keys(listItems).map((id) => (
         <Card
           itemId={id}
-          title={id}
-          key={`cildCard${id}`}
+          title={
+            categories.filter((cat) => Number.parseInt(cat.id, 10) === Number.parseInt(id, 10))[0]
+          }
+          key={`clickCard${id}`}
           onClick={handleClick(id)}
           selected={isItemSelected(id)}
           onKeyPress={onKeyPressHandle}
@@ -79,7 +92,7 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem }) {
 Card.propTypes = {
   onClick: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.instanceOf(Array).isRequired,
   itemId: PropTypes.string.isRequired,
   onKeyPress: PropTypes.func.isRequired,
   childWidth: PropTypes.number.isRequired,
@@ -88,7 +101,6 @@ Card.propTypes = {
   key: PropTypes.string.isRequired,
 };
 
-console.log();
 ScrollMenuItem.defaultProps = {
   parentWidth: 1200,
   listItems: [],

@@ -33,7 +33,7 @@ function Bar() {
             <Grid item xs={12} md={3} lg={3}>
               <ItemCartBar />
             </Grid>
-            <Grid item xs={12} md={8} lg={8}>
+            <Grid item xs={12} md={9} lg={9}>
               <MDBox mb={1.5} sx={{ height: "300px" }}>
                 <ItemsBar />
               </MDBox>

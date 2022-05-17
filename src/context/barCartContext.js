@@ -19,7 +19,7 @@ const initialState = {
   sendTransaction: false,
   launchTransaction: false,
   launchPrinter: false,
-  printPrinter: false,
+  printPrinter: "",
 };
 
 function reducer(state, action) {

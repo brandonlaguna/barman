@@ -87,7 +87,13 @@ export default function ItemCartBar() {
   }, [responseTransaction]);
 
   useEffect(() => {
-    printTransaction(responseTransaction[2], transactionType, printPrinter);
+    printTransaction(
+      responseTransaction[2],
+      transactionType,
+      printPrinter,
+      clientSelected,
+      paymentMethods
+    );
     clean(dispatchBar, true);
   }, [printPrinter]);
 
