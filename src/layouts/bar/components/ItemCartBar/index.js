@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { Box, Typography } from "@mui/material";
+import PropTypes from "prop-types";
 import MDBox from "components/MDBox";
 import { useMaterialUIController } from "context";
 import {
@@ -18,6 +20,16 @@ import printTransaction from "transactions/printTransaction";
 import ItemCartCard from "./components/ItemCartCard";
 import PaymentButton from "./components/PaymentButton";
 import ItemCartBarStyle from "./style";
+
+function RenderIdTable({ tableSelected }) {
+  return (
+    <Box>
+      <Typography id="modal-modal-title" variant="h6" component="h2" style={{ color: "white" }}>
+        {tableSelected ? `Pedido Mesa #${tableSelected}` : ""}
+      </Typography>
+    </Box>
+  );
+}
 
 export default function ItemCartBar() {
   // context controllers
@@ -91,6 +103,7 @@ export default function ItemCartBar() {
         })
       }
     >
+      <RenderIdTable tableSelected={tableSelected} />
       <SwipeableList style={{ height: "90%" }}>
         {listItemCart.map((item) => (
           <ItemCartCard data={item} deleteItemCart={handleDeleteItemToCart} />
@@ -104,3 +117,7 @@ export default function ItemCartBar() {
     </MDBox>
   );
 }
+
+RenderIdTable.propTypes = {
+  tableSelected: PropTypes.instanceOf(Array).isRequired,
+};

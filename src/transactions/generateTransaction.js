@@ -43,7 +43,6 @@ function paymentMethodsCollection(paymentMethods) {
 
 function dataCollection(tableSelected, clientSelected, paymentMethods, listCarts, transactionType) {
   const arrayPayments = paymentMethodsCollection(paymentMethods);
-
   const hashToken = `${
     clientSelected.length > 0 ? clientSelected.documento : dataTransaction.cc_cliente
   }-${getDate().toString()}`;
@@ -85,7 +84,6 @@ const generateTransaction = async ({
   const dataResponse = [];
   try {
     const venta = itemsCollection(listCarts);
-
     const data = dataCollection(
       tableSelected,
       clientSelected,
