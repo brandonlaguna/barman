@@ -10,7 +10,7 @@ import { BarCartControllerProvider } from "context/barCartContext";
 import HeaderBarMenu from "./components/HeaderBarMenu";
 import ItemCartBar from "./components/ItemCartBar";
 import ItemsBar from "./components/ItemsBar";
-import CategoryButton from "./components/ItemsBar/components/CategoryButton";
+// import CategoryButton from "./components/ItemsBar/components/CategoryButton";
 
 function Bar() {
   const [controller, dispatch] = useMaterialUIController();
@@ -38,9 +38,9 @@ function Bar() {
                 <ItemsBar />
               </MDBox>
             </Grid>
-            <Grid item xs={1} md={1} lg={1}>
+            {/* <Grid item xs={1} md={1} lg={1}>
               <CategoryButton />
-            </Grid>
+            </Grid> */}
           </Grid>
         </MDBox>
       </DashboardLayout>
