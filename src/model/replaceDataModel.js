@@ -15,5 +15,5 @@ export default {
   totalTransaction: "total",
   totalPayed: "total",
   totalCambio: "",
-  totalItems: ""
+  totalItems: "",
 };
