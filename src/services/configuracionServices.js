@@ -1,10 +1,13 @@
-import { API_SILPOS_WEB, headers } from "../config/contants";
+import headerRequest from "functions/haderRequest";
+import { API_SILPOS_WEB } from "../config/contants";
 
 const DEFAULT_ERROR_DATA = {
   status: false,
   message: "Ha ocurrido un error al realizar la petición",
   data: [],
 };
+
+const headers = headerRequest();
 
 export const importConfiguracion = () =>
   fetch(`${API_SILPOS_WEB}/app/models/api_caja/administrador_api.php`, {
@@ -57,9 +60,9 @@ export const generateDefaultPrinters = () => [
       `Hora: transactionTime Fecha: transactionDate`,
       `DOCUMENTO: clientDocument`,
       `CLIENTE: clientName`,
-      `DIR: clientAddress`,
-      `CIUDAD: clientCity`,
-      `TEL: clientPhone`,
+      // `DIR: clientAddress`,
+      // `CIUDAD: clientCity`,
+      // `TEL: clientPhone`,
       `_____________________________`,
       `{{items}}`,
       `_____________________________`,
@@ -80,12 +83,6 @@ export const generateDefaultPrinters = () => [
     },
     printerRoute: "USB",
     printerState: true,
-    printerFormat: [
-      `Silpos Barman 2`,
-      `{{minBusiness}}`,
-      `***Bar***`,
-      `{{minItems}}`,
-      `{{minFooter}}`,
-    ],
+    printerFormat: [`Silpos Barman`, `businessName`, `***Cocina***`, `{{minItems}}`],
   },
 ];

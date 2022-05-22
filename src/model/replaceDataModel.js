@@ -1,5 +1,8 @@
 export default {
   businessName: "business_name",
+  businessAddress: "address",
+  businessDocument: "documento",
+  businessCity: "email",
   systemName: "system_name",
   clientName: "nombre",
   clientDocument: "cc_cliente",

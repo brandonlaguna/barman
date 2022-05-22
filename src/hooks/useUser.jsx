@@ -13,8 +13,8 @@ export default function useUser() {
     const { data } = response;
     if (data.status) {
       window.localStorage.setItem("accessToken", data.token);
-      window.localStorage.setItem("userData", data.data[0]);
-      window.localStorage.setItem("businessData", data.dataEmpresas[0]);
+      window.localStorage.setItem("userData", JSON.stringify(data.data[0]));
+      window.localStorage.setItem("businessData", JSON.stringify(data.dataEmpresas[0]));
       setAuthState({ token: data.token, user: data.data[0] });
       return Promise.resolve(true);
     }
