@@ -6,10 +6,10 @@ const headerRequest = () => {
     "Content-Type": "application/json",
     Accept: "application/json",
     authorization: token,
-    dbu: businessData.dbuser,
-    dbp: businessData.dbpass,
-    dbd: businessData.dbname,
-    Company: businessData.id,
+    dbu: businessData?.dbuser,
+    dbp: businessData?.dbpass,
+    dbd: businessData?.dbname,
+    Company: businessData?.id,
   };
 };
 
