@@ -31,7 +31,7 @@ export default function replaceTemplate({
     if (temp.includes(`{{minItems}}`)) {
       itemList.forEach((element) => {
         stringReturn.push([
-          `x${element.cantida} ${element.producto} \n - ${element.observacion}`,
+          `x${element.cantida} ${element.producto} - ${element.observacion}`,
           "left",
         ]);
       });
@@ -41,7 +41,7 @@ export default function replaceTemplate({
     if (temp.includes(`{{items}}`)) {
       itemList.forEach((element) => {
         stringReturn.push([
-          `x${element.cantida} ${element.producto} \n ${element.venta_uno} ${element.totale} `,
+          `x${element.cantida} ${element.producto} ${element.venta_uno} ${element.totale} `,
           "left",
         ]);
       });
