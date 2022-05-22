@@ -10,6 +10,7 @@ import Dashboard from "layouts/dashboard";
 import Bar from "layouts/bar";
 import SyncServer from "layouts/sync_server";
 import Printers from "layouts/printers";
+import Basic from "layouts/authentication/sign-in";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -22,6 +23,8 @@ const routes = [
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
     component: <Dashboard />,
+    auth: true,
+    restricted: true,
   },
   {
     type: "collapse",
@@ -30,6 +33,8 @@ const routes = [
     icon: <Icon fontSize="small">attach_money</Icon>,
     route: "/bar",
     component: <Bar />,
+    auth: true,
+    restricted: true,
   },
   {
     type: "collapse",
@@ -38,6 +43,8 @@ const routes = [
     icon: <Icon fontSize="small">cloud_sync</Icon>,
     route: "/sync_server",
     component: <SyncServer />,
+    auth: true,
+    restricted: true,
   },
   {
     type: "collapse",
@@ -46,6 +53,18 @@ const routes = [
     icon: <Icon fontSize="small">print_icon</Icon>,
     route: "/printers",
     component: <Printers />,
+    auth: true,
+    restricted: true,
+  },
+  {
+    type: "route",
+    name: "Inicio de sesion",
+    key: "login",
+    icon: <Icon fontSize="small">print_icon</Icon>,
+    route: "/login",
+    component: <Basic />,
+    auth: false,
+    restricted: false,
   },
 ];
 

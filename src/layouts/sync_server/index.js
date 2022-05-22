@@ -10,7 +10,6 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { ToastContainer, toast } from "react-toastify";
 
 // Consumir servicios API
-import { ACCESS } from "config/contants";
 import { importItems } from "services/itemsServices";
 import { importClientes } from "services/clientsServices";
 import { importCategorias } from "services/categoriasServices";
@@ -18,17 +17,13 @@ import { importComprobantes } from "services/comprobantesServices";
 import { importConfiguracion, generateDefaultPrinters } from "services/configuracionServices";
 import { importTipoTransacciones } from "services/tipoTransaccion.services";
 import { importMetodosPago } from "services/metodosPago.services";
-import { login } from "services/loginServices";
 
 function SyncServer() {
   const [statusSync, setStatusSyc] = useState("Conectando con el servidor");
   const [data, setData] = useState("Recopilando informacion");
 
   const notify = (message) => {
-    toast(message, {
-      type: "error",
-      position: "bottom-right",
-    });
+    toast.error(message);
   };
 
   const getPrintersConfig = () => {
@@ -108,6 +103,7 @@ function SyncServer() {
     importItems()
       .then((result) => {
         localStorage.setItem("items", JSON.stringify(result));
+        console.log("articulos", result);
         setStatusSyc("Obteniendo articulos");
         setData(`${Object.keys(result.data).length.toString()} Articulos obtenidas`);
         getClients();
@@ -115,19 +111,20 @@ function SyncServer() {
       .catch(notify);
   };
 
-  const getLogin = () => {
-    login(ACCESS)
-      .then((result) => {
-        localStorage.setItem("dataEmpresas", JSON.stringify(result.dataEmpresas[0]));
-        localStorage.setItem("accessToken", JSON.stringify(result.token));
-        localStorage.setItem("userData", JSON.stringify(result.data[0]));
-        getItems();
-      })
-      .catch(notify);
-  };
+  // const getLogin = () => {
+  //   login(ACCESS)
+  //     .then((result) => {
+  //       console.log("result", result);
+  //       localStorage.setItem("dataEmpresas", JSON.stringify(result.dataEmpresas[0]));
+  //       localStorage.setItem("accessToken", JSON.stringify(result.token));
+  //       localStorage.setItem("userData", JSON.stringify(result.data[0]));
+  //       getItems();
+  //     })
+  //     .catch(notify);
+  // };
 
   useEffect(() => {
-    getLogin();
+    getItems();
   }, []);
 
   return (

@@ -1,17 +1,21 @@
-import { useCallback, useContext } from "react";
-import Context from "../context/userContext";
-import * as loginService from "../services/loginService";
+import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { LOCAL_STORAGE_USAGE } from "config/contants";
+import { useUserContext } from "context/userContext";
+import * as loginService from "services/loginServices";
 
 export default function useUser() {
-  const { authState, setAuthState } = useContext(Context);
+  const [authState, setAuthState] = useUserContext();
+  const navigate = useNavigate();
 
-  const login = async ({ email, password }) => {
-    const response = await loginService.login({ email, password });
-
-    if (response.status) {
-      const token = response.data.accessToken;
-      setAuthState({ token, user: response.data });
-      window.localStorage.setItem("accessToken", token);
+  const login = async ({ user, password }) => {
+    const response = await loginService.login({ user, password });
+    const { data } = response;
+    if (data.status) {
+      window.localStorage.setItem("accessToken", data.token);
+      window.localStorage.setItem("userData", data.data[0]);
+      window.localStorage.setItem("businessData", data.dataEmpresas[0]);
+      setAuthState({ token: data.token, user: data.data[0] });
       return Promise.resolve(true);
     }
 
@@ -19,18 +23,20 @@ export default function useUser() {
   };
 
   const logout = () => {
+    console.log("ahora si a deslogear");
     setAuthState({ token: null, user: null });
-    window.localStorage.removeItem("accessToken");
+    LOCAL_STORAGE_USAGE.forEach((k) => localStorage.removeItem(k));
+    navigate("/login");
   };
 
-  const getAccessToken = useCallback(() => authState.token, [authState.token]);
-  const getUserData = useCallback(() => authState.user, [authState.user]);
+  const getAccessToken = useCallback(() => authState?.token, [authState?.token]);
+  const getUserData = useCallback(() => authState?.user, [authState?.user]);
 
   return {
-    isLoggedIn: Boolean(authState.token),
+    isLoggedIn: Boolean(authState?.token),
     login,
     logout,
     getAccessToken,
-    getUserData
+    getUserData,
   };
 }

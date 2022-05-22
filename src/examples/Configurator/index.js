@@ -16,8 +16,7 @@ import MDButton from "components/MDButton";
 import ConfiguratorRoot from "examples/Configurator/ConfiguratorRoot";
 
 // Auth0 Logout
-import { useAuth0 } from "@auth0/auth0-react";
-
+import useUser from "hooks/useUser";
 // Silpos Barman React context
 import {
   useMaterialUIController,
@@ -40,7 +39,7 @@ function Configurator() {
   const handleDarkMode = () => setDarkMode(dispatch, !darkMode);
 
   // Logout Action
-  const { logout } = useAuth0();
+  const { logout } = useUser();
   return (
     <ConfiguratorRoot variant="permanent" ownerState={{ openConfigurator }}>
       <MDBox
@@ -143,7 +142,7 @@ function Configurator() {
             color={darkMode ? "light" : "dark"}
             variant="outlined"
             fullWidth
-            onClick={() => logout({ returnTo: window.location.origin })}
+            onClick={() => logout()}
           >
             Desconectar
           </MDButton>

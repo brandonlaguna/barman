@@ -1,4 +1,5 @@
 import React from "react";
+import useWindowDimensions from "functions/windowDimension";
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import { getCategories } from "model/categoryModel";
 import Grid from "@mui/material/Grid";
@@ -17,6 +18,7 @@ function Card({
   onClickItem,
   key,
 }) {
+  const { height } = useWindowDimensions();
   const visibility = React.useContext(VisibilityContext);
   return (
     <div
@@ -25,7 +27,10 @@ function Card({
       onClick={() => onClick(visibility)}
       onKeyPress={() => onKeyPress(visibility)}
       style={{
+        position: "relative",
+        height: height - 145,
         width: `${childWidth}px`,
+        overflowY: "scroll",
       }}
       tabIndex={0}
     >
@@ -37,7 +42,17 @@ function Card({
         }}
       >
         <p>{title.categoria}</p>
-        <Grid container spacing={1} py={3} px={3} title={title} className="horizontalCard">
+        <Grid
+          container
+          spacing={1}
+          py={3}
+          px={3}
+          title={title}
+          className="horizontalCard"
+          style={{
+            position: "absolute",
+          }}
+        >
           {Object.entries(listItems[itemId].items).map((element) => (
             <ItemsCard rol="button" data={element[1]} onclickItem={onClickItem} />
           ))}
@@ -68,7 +83,7 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem }) {
   const onKeyPressHandle = (id) => console.log(id);
 
   return (
-    <ScrollMenu style={{ position: "relative" }}>
+    <ScrollMenu>
       {Object.keys(listItems).map((id) => (
         <Card
           itemId={id}
