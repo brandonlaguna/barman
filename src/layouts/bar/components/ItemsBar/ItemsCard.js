@@ -1,11 +1,14 @@
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import { BANK_ICONS } from "config/contants";
 import PropTypes from "prop-types";
 import { cardImageStyle } from "./style";
 import "./styles.css";
 
-export default function ItemsCard({ data, onclickItem }) {
-  const background = "https://pngimg.com/uploads/burger_sandwich/burger_sandwich_PNG96777.png";
+export default function ItemsCard({ data, onclickItem, categoryName }) {
+  // const background = "https://pngimg.com/uploads/burger_sandwich/burger_sandwich_PNG96777.png";
+  const imageName = categoryName.toLowerCase();
+  const background = `${BANK_ICONS}/categories/${imageName.replace(" ", "-")}.png`;
   // eslint-disable-next-line camelcase
   const { id, articulo, venta_uno } = data;
   return (
@@ -39,4 +42,5 @@ export default function ItemsCard({ data, onclickItem }) {
 ItemsCard.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
   onclickItem: PropTypes.func.isRequired,
+  categoryName: PropTypes.string.isRequired,
 };

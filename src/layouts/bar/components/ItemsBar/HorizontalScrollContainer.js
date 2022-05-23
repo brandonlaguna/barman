@@ -54,7 +54,12 @@ function Card({
           }}
         >
           {Object.entries(listItems[itemId].items).map((element) => (
-            <ItemsCard rol="button" data={element[1]} onclickItem={onClickItem} />
+            <ItemsCard
+              rol="button"
+              data={element[1]}
+              onclickItem={onClickItem}
+              categoryName={title.categoria}
+            />
           ))}
         </Grid>
       </div>
