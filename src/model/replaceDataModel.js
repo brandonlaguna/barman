@@ -19,4 +19,5 @@ export default {
   totalPayed: "total",
   totalCambio: "",
   totalItems: "",
+  tableNumber: "puesto",
 };
