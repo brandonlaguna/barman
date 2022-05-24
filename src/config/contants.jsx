@@ -2,9 +2,10 @@
 // -----------------------------------
 
 export const environment = "development";
-export const API_URL = "http://localhost:3001";
+export const API_URL =
+  environment === "development" ? "http://localhost:3001" : "https://api.silpos.com";
 export const API_SILPOS_WEB =
-  environment === "development" ? "http://localhost/silpos" : "http://localhost/silpos";
+  environment === "development" ? "http://localhost/silpos" : "https://pruebas.silpos.com"; // change
 export const API_TOKEN =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNpbHBvc3dlYkBnbWFpbC5jb20iLCJpYXQiOjE2NTMxNDg5MzAsImV4cCI6MTY1NTc0MDkzMH0.axvGeabMV5VA-24tCtcFhjILekWlLwXJlJ_O_KCXHfI";
 export const API_CAJA_SOURCE = "/app/models/api_caja";
