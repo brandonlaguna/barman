@@ -43,8 +43,8 @@ export default function replaceTemplate({
       itemList.forEach((element) => {
         stringReturn.push([
           `x${element.cantida} ${element.producto} ${currencyFormat(
-            element.venta_uno
-          )} ${currencyFormat(element.totale)} `,
+            Number.parseInt(element.venta_uno, 10)
+          )} ${currencyFormat(Number.parseInt(element.totale, 10))} `,
           "left",
         ]);
       });
@@ -52,7 +52,7 @@ export default function replaceTemplate({
     }
 
     if (temp.includes(`{{totalTransaction}}`)) {
-      stringReturn.push([`P. VOLUNTARIA ${currencyFormat(0)}`, "left"]);
+      stringReturn.push([`P. VOLUNTARIA ${0}`, "left"]);
       stringReturn.push([`TOTAL FACTURA ${currencyFormat(dataToReplace[0].total)}`, "left", true]);
       stringReturn.push([`CANCELO ${currencyFormat(dataToReplace[0].total)}`, "left"]);
       stringReturn.push([`CAMBIO ${currencyFormat(0)}`, "left"]);
