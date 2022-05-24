@@ -26,16 +26,17 @@ const printTransaction = (
     printerList.forEach((element) => {
       const content = replaceTemplate({
         template: element.printerFormat,
-        itemList: dataTransaction[0],
+        itemList: dataTransaction[0].data,
         clientSelected,
         paymentMethods,
         dataBusiness: [
           {
             system_name: "Silpos Barman",
-            ...dataTransaction[0][0],
+            ...dataTransaction[0].data[0],
             ...businessData,
             first_name: userData.first_name,
             surname: userData.surname,
+            consecutivo: dataTransaction[0].consecutivo,
           },
         ],
       });

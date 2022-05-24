@@ -14,7 +14,7 @@ export default {
   businessTypeDocument: "razon_social",
   businessPhone: "phone2",
   businessPBX: "phone",
-  numberTransaction: "idventa",
+  numberTransaction: "consecutivo",
   totalTransaction: "total",
   totalPayed: "total",
   totalCambio: "",

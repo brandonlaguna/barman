@@ -105,7 +105,7 @@ const generateTransaction = async ({
     }
 
     await sendIndividualTransaction({ data, venta }).then((response) => {
-      dataResponse.push(response[0].data);
+      dataResponse.push(response[0]);
       if (response[0].httpStatus === 200) {
         mensajeEstado = "mensaje cambiado";
         // throw new Error("Ocurrió un error al realizar la venta.");
