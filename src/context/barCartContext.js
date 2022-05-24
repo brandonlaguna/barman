@@ -10,7 +10,7 @@ BarCart.displayName = "BarCartContext";
 // Silpos Barman React Bar Cart reducer
 const initialState = {
   listCarts: [],
-  listTables: 60,
+  listTables: 30,
   tableSelected: false,
   clientSelected: [],
   paymentMethods: [],

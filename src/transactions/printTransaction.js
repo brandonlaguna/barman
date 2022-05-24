@@ -43,7 +43,7 @@ const printTransaction = (
       const impresora = new Impresora();
       content.forEach((res) => {
         if (res[2] !== undefined) {
-          impresora.setFontSize(4, 1);
+          impresora.setFontSize(2, 1);
         } else {
           impresora.setFontSize(1, 1);
         }
@@ -51,8 +51,8 @@ const printTransaction = (
         impresora.setAlign(res[1]);
         impresora.write(`${res[0]} \n`);
       });
+      impresora.cash();
       impresora.cut();
-      impresora.cutPartial();
       impresora.imprimirEnImpresora(element.printerName).then((valor) => {
         console.log(`Al imprimir: ${valor}`);
       });

@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import { LoadingButton } from "@mui/lab";
 // import SendIcon from "@mui/icons-material/Send";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { currencyFormat } from "functions/numberFormat";
 
 export default function PaymentButton({ value, onclickTransaction, isLoading }) {
   return (
@@ -15,7 +14,7 @@ export default function PaymentButton({ value, onclickTransaction, isLoading }) 
       style={{ width: "100%" }}
       color="success"
     >
-      {` Enviar ${currencyFormat(value)}`}
+      {` Enviar ${value}`}
     </LoadingButton>
   );
 }

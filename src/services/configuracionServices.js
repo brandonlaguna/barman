@@ -40,7 +40,7 @@ export const importPrinterConfiguracion = () =>
 export const generateDefaultPrinters = () => [
   {
     printerId: 1,
-    printerName: "SAT15TUS(USB)",
+    printerName: "EPSON TM-T20 Receipt",
     printerType: {
       type: "POS",
       format: "80mm",
@@ -76,13 +76,19 @@ export const generateDefaultPrinters = () => [
   },
   {
     printerId: 2,
-    printerName: "SAT15TUS(USB)",
+    printerName: "EPSON TM-T20 Receipt",
     printerType: {
       type: "POS",
       format: "80mm",
     },
     printerRoute: "USB",
     printerState: true,
-    printerFormat: [`Silpos Barman`, `businessName`, `***Cocina***`, `{{minItems}}`],
+    printerFormat: [
+      `Silpos Barman`,
+      `businessName`,
+      `***Cocina***`,
+      `MESA# tableNumber`,
+      `{{minItems}}`,
+    ],
   },
 ];

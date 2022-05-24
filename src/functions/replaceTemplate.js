@@ -42,7 +42,7 @@ export default function replaceTemplate({
     if (temp.includes(`{{items}}`)) {
       itemList.forEach((element) => {
         stringReturn.push([
-          `x${element.cantida} ${element.producto} \n ${currencyFormat(
+          `x${element.cantida} ${element.producto} ${currencyFormat(
             element.venta_uno
           )} ${currencyFormat(element.totale)} `,
           "left",
