@@ -41,9 +41,13 @@ const printTransaction = (
         ],
       });
       const impresora = new Impresora();
-      impresora.setFontSize(1, 1);
-      impresora.setEmphasize(0);
       content.forEach((res) => {
+        if (res[2] !== undefined) {
+          impresora.setFontSize(4, 1);
+        } else {
+          impresora.setFontSize(1, 1);
+        }
+        impresora.setEmphasize(2);
         impresora.setAlign(res[1]);
         impresora.write(`${res[0]} \n`);
       });

@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import replaceDataModel from "model/replaceDataModel";
+import { currencyFormat } from "./numberFormat";
 
 export default function replaceTemplate({
   template,
@@ -41,7 +42,9 @@ export default function replaceTemplate({
     if (temp.includes(`{{items}}`)) {
       itemList.forEach((element) => {
         stringReturn.push([
-          `x${element.cantida} ${element.producto} ${element.venta_uno} ${element.totale} `,
+          `x${element.cantida} ${element.producto} \n ${currencyFormat(
+            element.venta_uno
+          )} ${currencyFormat(element.totale)} `,
           "left",
         ]);
       });
@@ -49,10 +52,10 @@ export default function replaceTemplate({
     }
 
     if (temp.includes(`{{totalTransaction}}`)) {
-      stringReturn.push([`P. VOLUNTARIA 0`, "left"]);
-      stringReturn.push([`TOTAL FACTURA ${dataToReplace[0].total}`, "left"]);
-      stringReturn.push([`CANCELO ${dataToReplace[0].total}`, "left"]);
-      stringReturn.push([`CAMBIO 0`, "left"]);
+      stringReturn.push([`P. VOLUNTARIA ${currencyFormat(0)}`, "left"]);
+      stringReturn.push([`TOTAL FACTURA ${currencyFormat(dataToReplace[0].total)}`, "left", true]);
+      stringReturn.push([`CANCELO ${currencyFormat(dataToReplace[0].total)}`, "left"]);
+      stringReturn.push([`CAMBIO ${currencyFormat(0)}`, "left"]);
       stringReturn.push([`TOTAL PRODUCTOS ${itemList.length}`, "left"]);
       stringReturn.push([`ESTADO Aceptado`, "left"]);
       return;
@@ -81,7 +84,7 @@ export default function replaceTemplate({
       stringReturn.push([`______________________`, "left"]);
       stringReturn.push([`Recibi`, "left"]);
       stringReturn.push([`______________________`, "left"]);
-      stringReturn.push([`Software SILPOS 'Barman' 316-6266662 http//www.silpos.com`, "center"]);
+      stringReturn.push([`Software SILPOS 316-6266662 http//www.silpos.com`, "center"]);
 
       return;
     }
