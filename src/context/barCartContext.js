@@ -130,6 +130,12 @@ function reducer(state, action) {
         listCarts: [],
       };
     }
+    case "UPDATE_ITEM_CART": {
+      return {
+        ...state,
+        listCarts: state.listCarts.map((item) => (item.id === value.id ? value : item)),
+      };
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -178,6 +184,7 @@ const setLaunchPrinter = (dispatchBar, value) => dispatchBar({ type: "LAUNCH_PRI
 const setPrintPrinter = (dispatchBar, value) => dispatchBar({ type: "SET_PRINT_PRINTER", value });
 const clean = (dispatchBar, value) => dispatchBar({ type: "RESET_CART", value });
 const resetItemsCart = (dispatchBar, value) => dispatchBar({ type: "RESET_ITEMS_CART", value });
+const updateItemCart = (dispatchBar, value) => dispatchBar({ type: "UPDATE_ITEM_CART", value });
 
 export {
   BarCartControllerProvider,
@@ -195,4 +202,5 @@ export {
   setPrintPrinter,
   clean,
   resetItemsCart,
+  updateItemCart,
 };

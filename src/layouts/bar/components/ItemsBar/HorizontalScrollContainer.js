@@ -7,6 +7,22 @@ import PropTypes from "prop-types";
 import ItemsCard from "./ItemsCard";
 import "./styles.css";
 
+const apiRef = React.useRef(VisibilityContext);
+
+function onWheel(apiObj, ev) {
+  const isThouchpad = Math.abs(ev.deltaX) !== 0 || Math.abs(ev.deltaY) < 15;
+  if (isThouchpad) {
+    ev.stopPropagation();
+    return;
+  }
+
+  if (ev.deltaY < 0) {
+    apiObj.scrollNext();
+  } else if (ev.deltaY > 0) {
+    apiObj.scrollPrev();
+  }
+}
+
 function Card({
   onClick,
   selected,
@@ -67,7 +83,7 @@ function Card({
   );
 }
 
-function ScrollMenuItem({ parentWidth, listItems, onClickItem }) {
+function ScrollMenuItem({ parentWidth, listItems, onClickItem, scrollToCategory}) {
   const [selected, setSelected] = React.useState([]);
   const [position, setPosition] = React.useState(0);
   const [categories, setCategories] = React.useState([]);
@@ -87,8 +103,12 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem }) {
   };
   const onKeyPressHandle = (id) => console.log(id);
 
+  const scrollToCard = (idCard) => {
+    apiRef.current?.scrollToItem?.(apiRef.current?.getItemElementById(idCard));
+  };
+
   return (
-    <ScrollMenu>
+    <ScrollMenu onWheel={onWheel} apiRef={apiRef}>
       {Object.keys(listItems).map((id) => (
         <Card
           itemId={id}

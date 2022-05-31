@@ -1,5 +1,5 @@
 import axios from "axios";
-import headerRequest from "functions/haderRequest";
+import headerRequest from "functions/headerRequest";
 import { API_URL } from "../config/contants";
 
 const DEFAULT_ERROR_DATA = {

@@ -1,4 +1,4 @@
-import headerRequest from "functions/haderRequest";
+import headerRequest from "functions/headerRequest";
 import { API_SILPOS_WEB } from "../config/contants";
 
 const DEFAULT_ERROR_DATA = {

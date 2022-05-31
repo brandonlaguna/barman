@@ -1,6 +1,6 @@
 import axios from "axios";
-import headerRequest from "functions/haderRequest";
-import { API_URL } from "../config/contants";
+import headerRequest from "functions/headerRequest";
+import { API_URL, API_SILPOS_WEB } from "../config/contants";
 
 const DEFAULT_ERROR_DATA = {
   status: false,
@@ -23,3 +23,12 @@ export const obtenerCliente = (idcliente) =>
     })
     .then((response) => response.data)
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+
+export const saveClient = (params) =>
+  axios
+    .post(`${API_SILPOS_WEB}/app/controller/clientsController.php`, {
+      headers,
+      params,
+    })
+    .then((response) => response)
+    .catch(({ response }) => response || DEFAULT_ERROR_DATA);

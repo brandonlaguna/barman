@@ -1,15 +1,15 @@
 import { SwipeableListItem } from "@sandstreamdev/react-swipeable-list";
 import { Typography, Grid, Box } from "@mui/material";
 import PropTypes from "prop-types";
-import { APP_COLORS } from "config/contants";
+import { APP_COLORS, SILPOS_LOCAL, SILPOS_WEB, BANK_ICONS } from "config/contants";
 import { useMaterialUIController } from "context";
 import MDBox from "components/MDBox";
 import { ItemCartCardStyle } from "../../style";
 import "./style.css";
 
-export default function ItemCartCard({ data, deleteItemCart }) {
+export default function ItemCartCard({ data, deleteItemCart, settingItemCart }) {
   // eslint-disable-next-line camelcase
-  const { id, articulo, cantidad, venta_uno } = data;
+  const { id, articulo, cantidad, venta_uno, url_foto, categoria } = data;
   const [controller] = useMaterialUIController();
   // context methods
   const { darkMode, sidenavColor } = controller;
@@ -26,7 +26,7 @@ export default function ItemCartCard({ data, deleteItemCart }) {
         }}
       />
     ),
-    action: () => console.info("swipe action triggered"),
+    action: () => settingItemCart(id),
   };
   const handleSwipeRight = {
     content: (
@@ -41,6 +41,27 @@ export default function ItemCartCard({ data, deleteItemCart }) {
     ),
     action: () => deleteItemCart(id),
   };
+
+  let background = "";
+
+  // eslint-disable-next-line camelcase
+  if (url_foto !== null) {
+    // eslint-disable-next-line camelcase
+    background = `${SILPOS_WEB}/img/productos/${url_foto}`;
+    if (true) {
+      // eslint-disable-next-line camelcase
+      background = `${SILPOS_LOCAL}/img/productos/${url_foto}`;
+    }
+  } else {
+    const listCategories = localStorage.getItem("categorias");
+    const categories = JSON.parse(listCategories).data;
+    const categoryName = categories.filter(
+      (cat) => Number.parseInt(cat.id, 10) === Number.parseInt(categoria, 10)
+    )[0];
+    console.log(categoryName.categoria);
+    const imageName = categoryName.categoria.toLowerCase();
+    background = `${BANK_ICONS}/categories/${imageName.replace(" ", "-")}.png`;
+  }
 
   return (
     <SwipeableListItem swipeLeft={handleSwipeLeft} swipeRight={handleSwipeRight}>
@@ -66,7 +87,7 @@ export default function ItemCartCard({ data, deleteItemCart }) {
                 borderRadius: "6px",
               }}
               alt="Image item"
-              src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
+              src={background}
             />
           </Grid>
           <Grid item xs={9} md={9} lg={9}>
@@ -104,4 +125,5 @@ export default function ItemCartCard({ data, deleteItemCart }) {
 ItemCartCard.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
   deleteItemCart: PropTypes.func.isRequired,
+  settingItemCart: PropTypes.func.isRequired,
 };

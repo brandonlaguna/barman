@@ -43,6 +43,7 @@ export function groupItems(itemsObject) {
       iva: x.iva,
       factor_venta: x.factor_venta,
       precio_costo: x.precio_costo,
+      descripcion: "",
     });
   });
   return nuevoObjeto;

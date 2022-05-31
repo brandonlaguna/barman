@@ -22,6 +22,7 @@
     "@emotion/cache": "11.7.1",
     "@emotion/react": "11.7.1",
     "@emotion/styled": "11.6.0",
+    "@hookform/resolvers": "^2.8.10",
     "@mui/icons-material": "5.4.1",
     "@mui/lab": "^5.0.0-alpha.77",
     "@mui/material": "5.4.1",

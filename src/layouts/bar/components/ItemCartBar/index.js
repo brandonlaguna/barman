@@ -8,6 +8,7 @@ import {
   deleteToCart,
   setLaunchPrinter,
   clean,
+  updateItemCart,
 } from "context/barCartContext";
 import { useSelectorController, setIsLoading } from "context/selectorContext";
 import { toast } from "react-toastify";
@@ -19,7 +20,8 @@ import calculateTotal from "functions/calculateTotal";
 import printTransaction from "transactions/printTransaction";
 import ItemCartCard from "./components/ItemCartCard";
 import PaymentButton from "./components/PaymentButton";
-import ItemCartBarStyle from "./style";
+import ModalItemSetting from "./components/Modals/ModalItemSetting";
+import { ItemCartBarStyle } from "./style";
 
 function RenderIdTable({ tableSelected }) {
   return (
@@ -54,6 +56,8 @@ export default function ItemCartBar() {
   const [listItemCart, setListItemCart] = useState([]);
   const [totalTransaction, setTotalTransaction] = useState([]);
   const [responseTransaction, setResponseTransaction] = useState([]);
+  const [dataItemSetting, setDataItemSetting] = useState([]);
+  const [isOpenModalItemCart, setIsOpenModalItemCart] = useState(false);
 
   useEffect(() => {
     setListItemCart(listCarts);
@@ -97,6 +101,18 @@ export default function ItemCartBar() {
     clean(dispatchBar, true);
   }, [printPrinter]);
 
+  const handleOnForceCloseItemCart = () => setIsOpenModalItemCart(false);
+  const handleSettingItemToCart = (idItem) => {
+    const dataItem = listCarts.find((item) => item.id === idItem);
+    console.log(dataItem);
+    setIsOpenModalItemCart(true);
+    setDataItemSetting(dataItem);
+  };
+  const handleSaveSetting = (data) => {
+    updateItemCart(dispatchBar, data);
+    setIsOpenModalItemCart(false);
+  };
+
   return (
     <MDBox
       mb={1.5}
@@ -112,13 +128,24 @@ export default function ItemCartBar() {
       <RenderIdTable tableSelected={tableSelected} />
       <SwipeableList style={{ height: "90%" }}>
         {listItemCart.map((item) => (
-          <ItemCartCard data={item} deleteItemCart={handleDeleteItemToCart} />
+          <ItemCartCard
+            data={item}
+            deleteItemCart={handleDeleteItemToCart}
+            settingItemCart={handleSettingItemToCart}
+          />
         ))}
       </SwipeableList>
       <PaymentButton
         value={totalTransaction ? totalTransaction.total : 0}
         onclickTransaction={handleSentTransaction}
         isLoading={isLoading}
+      />
+      {/** Modals */}
+      <ModalItemSetting
+        isOpen={isOpenModalItemCart}
+        handleOnForceClose={handleOnForceCloseItemCart}
+        dataItemSetting={dataItemSetting}
+        handleSaveSetting={handleSaveSetting}
       />
     </MDBox>
   );

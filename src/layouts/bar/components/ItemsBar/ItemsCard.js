@@ -1,16 +1,29 @@
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import { BANK_ICONS } from "config/contants";
+import { BANK_ICONS, SILPOS_LOCAL, SILPOS_WEB } from "config/contants";
 import PropTypes from "prop-types";
 import { cardImageStyle } from "./style";
 import "./styles.css";
 
 export default function ItemsCard({ data, onclickItem, categoryName }) {
   // const background = "https://pngimg.com/uploads/burger_sandwich/burger_sandwich_PNG96777.png";
-  const imageName = categoryName.toLowerCase();
-  const background = `${BANK_ICONS}/categories/${imageName.replace(" ", "-")}.png`;
+  let background = "";
   // eslint-disable-next-line camelcase
-  const { id, articulo, venta_uno } = data;
+  const { id, articulo, venta_uno, url_foto } = data;
+
+  // eslint-disable-next-line camelcase
+  if (url_foto !== null) {
+    // eslint-disable-next-line camelcase
+    background = `${SILPOS_WEB}/img/productos/${url_foto}`;
+    if (true) {
+      // eslint-disable-next-line camelcase
+      background = `${SILPOS_LOCAL}/img/productos/${url_foto}`;
+    }
+  } else {
+    const imageName = categoryName.toLowerCase();
+    background = `${BANK_ICONS}/categories/${imageName.replace(" ", "-")}.png`;
+  }
+
   return (
     <Grid
       role="button"
