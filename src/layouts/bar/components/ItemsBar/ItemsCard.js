@@ -1,6 +1,6 @@
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import { BANK_ICONS, SILPOS_LOCAL, SILPOS_WEB } from "config/contants";
+import { BANK_ICONS, SILPOS_LOCAL, SILPOS_WEB, server } from "config/contants";
 import PropTypes from "prop-types";
 import { cardImageStyle } from "./style";
 import "./styles.css";
@@ -14,10 +14,10 @@ export default function ItemsCard({ data, onclickItem, categoryName }) {
   // eslint-disable-next-line camelcase
   if (url_foto !== null) {
     // eslint-disable-next-line camelcase
-    background = `${SILPOS_WEB}/img/productos/${url_foto}`;
+    background = `${server === "online" ? SILPOS_WEB : SILPOS_LOCAL}/img/productos/${url_foto}`;
     if (true) {
       // eslint-disable-next-line camelcase
-      background = `${SILPOS_LOCAL}/img/productos/${url_foto}`;
+      background = `${server === "online" ? SILPOS_WEB : SILPOS_LOCAL}/img/productos/${url_foto}`;
     }
   } else {
     const imageName = categoryName.toLowerCase();

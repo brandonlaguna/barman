@@ -1,7 +1,7 @@
 import { SwipeableListItem } from "@sandstreamdev/react-swipeable-list";
 import { Typography, Grid, Box } from "@mui/material";
 import PropTypes from "prop-types";
-import { APP_COLORS, SILPOS_LOCAL, SILPOS_WEB, BANK_ICONS } from "config/contants";
+import { APP_COLORS, SILPOS_LOCAL, SILPOS_WEB, BANK_ICONS, server } from "config/contants";
 import { useMaterialUIController } from "context";
 import MDBox from "components/MDBox";
 import { ItemCartCardStyle } from "../../style";
@@ -47,10 +47,10 @@ export default function ItemCartCard({ data, deleteItemCart, settingItemCart }) 
   // eslint-disable-next-line camelcase
   if (url_foto !== null) {
     // eslint-disable-next-line camelcase
-    background = `${SILPOS_WEB}/img/productos/${url_foto}`;
+    background = `${server === "online" ? SILPOS_WEB : SILPOS_LOCAL}/img/productos/${url_foto}`;
     if (true) {
       // eslint-disable-next-line camelcase
-      background = `${SILPOS_LOCAL}/img/productos/${url_foto}`;
+      background = `${server === "online" ? SILPOS_WEB : SILPOS_LOCAL}/img/productos/${url_foto}`;
     }
   } else {
     const listCategories = localStorage.getItem("categorias");
