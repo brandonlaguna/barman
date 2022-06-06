@@ -3,6 +3,7 @@ import MainModal from "components/MDModales";
 import { InputLabel, Input, FormControl, TextareaAutosize, Grid, Button } from "@mui/material";
 import { useMaterialUIController } from "context";
 import SendIcon from "@mui/icons-material/Send";
+import NumPad from "react-numpad";
 import PropTypes from "prop-types";
 import { ModalItemSettingStyle } from "../../style";
 
@@ -71,26 +72,44 @@ export default function ModalItemSetting({
           </FormControl>
         </Grid>
         <Grid item xs={6}>
-          <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="component-simple">Precio</InputLabel>
-            <Input
-              id="itemPrice"
-              type="number"
-              value={itemPrice}
-              onChange={(event) => setItemPrice(event.target.value)}
-            />
-          </FormControl>
+          <NumPad.Number
+            key="itemPriceNumPad"
+            onChange={(value) => {
+              setItemPrice(value);
+            }}
+            decimal={2}
+            value={itemPrice}
+          >
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <InputLabel htmlFor="component-simple">Precio</InputLabel>
+              <Input
+                id="itemPrice"
+                type="number"
+                value={itemPrice}
+                onChange={(event) => setItemPrice(event.target.value)}
+              />
+            </FormControl>
+          </NumPad.Number>
         </Grid>
         <Grid item xs={6}>
-          <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="component-simple">Cantidad</InputLabel>
-            <Input
-              id="itemQuantity"
-              type="number"
-              value={itemQuantity}
-              onChange={(event) => setItemQuantity(event.target.value)}
-            />
-          </FormControl>
+          <NumPad.Number
+            key="itemQuantityNumPad"
+            onChange={(value) => {
+              setItemQuantity(value);
+            }}
+            decimal={2}
+            value={itemQuantity}
+          >
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <InputLabel htmlFor="component-simple">Cantidad</InputLabel>
+              <Input
+                id="itemQuantity"
+                type="number"
+                value={itemQuantity}
+                onChange={(event) => setItemQuantity(event.target.value)}
+              />
+            </FormControl>
+          </NumPad.Number>
         </Grid>
         <Grid item xs={12}>
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
