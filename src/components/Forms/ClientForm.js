@@ -7,6 +7,7 @@ import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
+// import { dataClients } from "model/clientsModel";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -21,6 +22,7 @@ const schema = yup
     telefonos: yup.number().positive().integer().required(),
     direccion: yup.string().notRequired(),
     observaciones: yup.string().notRequired(),
+    trade_name: yup.string().notRequired(),
   })
   .required();
 
@@ -42,12 +44,9 @@ export default function ClientForm({ dataClient, isSend, clearForm }) {
     if (isSend) {
       setIsLoadingForm(false);
     }
-    console.log(`es enviado? ${isSend} carga? ${isSend}`);
   }, [isSend]);
 
-  useEffect(() => {
-    console.log("limpiar");
-  }, [clearForm]);
+  useEffect(() => {}, [clearForm]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -126,6 +125,25 @@ export default function ClientForm({ dataClient, isSend, clearForm }) {
           />
           <Typography variant="caption" display="block" gutterBottom style={{ color: "red" }}>
             {errors.razon_social?.message}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={6} md={6} lg={6}>
+          <TextField
+            id="inputTradeName"
+            label="Nombre Comercial"
+            fullWidth
+            InputProps={{
+              ...register("trade_name"),
+              startAdornment: (
+                <InputAdornment position="start">
+                  <DomainAddIcon />
+                </InputAdornment>
+              ),
+            }}
+            variant="standard"
+          />
+          <Typography variant="caption" display="block" gutterBottom style={{ color: "red" }}>
+            {errors.trade_name?.message}
           </Typography>
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6}>

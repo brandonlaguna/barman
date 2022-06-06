@@ -11,6 +11,7 @@ import Bar from "layouts/bar";
 import SyncServer from "layouts/sync_server";
 import Printers from "layouts/printers";
 import Basic from "layouts/authentication/sign-in";
+import Products from "layouts/products";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -43,6 +44,16 @@ const routes = [
     icon: <Icon fontSize="small">cloud_sync</Icon>,
     route: "/sync_server",
     component: <SyncServer />,
+    auth: true,
+    restricted: true,
+  },
+  {
+    type: "collapse",
+    name: "Productos",
+    key: "products",
+    icon: <Icon fontSize="small">print_icon</Icon>,
+    route: "/products",
+    component: <Products />,
     auth: true,
     restricted: true,
   },

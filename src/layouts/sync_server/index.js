@@ -14,7 +14,7 @@ import { importItems } from "services/itemsServices";
 import { importClientes } from "services/clientsServices";
 import { importCategorias } from "services/categoriasServices";
 import { importComprobantes } from "services/comprobantesServices";
-import { importConfiguracion, generateDefaultPrinters } from "services/configuracionServices";
+import { importConfiguracion, importPrinterConfiguracion } from "services/configuracionServices";
 import { importTipoTransacciones } from "services/tipoTransaccion.services";
 import { importMetodosPago } from "services/metodosPago.services";
 
@@ -27,10 +27,13 @@ function SyncServer() {
   };
 
   const getPrintersConfig = () => {
-    setStatusSyc("Obteniendo informacion de impresoras");
-    const printers = generateDefaultPrinters();
-    localStorage.setItem("printersConfig", JSON.stringify(printers));
-    setData(`${Object.keys(printers).length.toString()} Impresoras configuradas`);
+    importPrinterConfiguracion()
+      .then((printers) => {
+        setStatusSyc("Obteniendo informacion de impresoras");
+        localStorage.setItem("printersConfig", JSON.stringify(printers));
+        setData(`${Object.keys(printers.data).length.toString()} Metodos de pago obtenidos`);
+      })
+      .catch(notify);
   };
 
   const getMetodosPago = () => {

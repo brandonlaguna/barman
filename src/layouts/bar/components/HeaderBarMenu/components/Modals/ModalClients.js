@@ -54,6 +54,7 @@ export default function ModalClient({ isOpen, handleOnForceClose, data, handleSe
   const handleResponseDataClient = (client) => {
     setIsSend(false);
     saveClient(client).then((response) => {
+      console.log("respuesta", response);
       if (response.status) {
         toast.success(response.message);
       } else {

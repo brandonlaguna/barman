@@ -7,7 +7,7 @@ import { getAllPrinters } from "model/printersModel";
 // Images
 import team2 from "assets/images/icons/hardware/printer.png";
 
-function Printer({ image, name }) {
+function Product({ image, name }) {
   return (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDAvatar src={image} name={name} size="sm" variant="rounded" />
@@ -63,7 +63,7 @@ const data = async () => {
   }
 };
 
-Printer.propTypes = {
+Product.propTypes = {
   name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
 };

@@ -25,7 +25,7 @@ const printTransaction = (
     const userData = JSON.parse(localStorage.getItem("userData"));
     printerList.forEach((element) => {
       const content = replaceTemplate({
-        template: element.printerFormat,
+        template: element.formato,
         itemList: dataTransaction[0].data,
         clientSelected,
         paymentMethods,
@@ -53,7 +53,7 @@ const printTransaction = (
       });
       impresora.cash();
       impresora.cut();
-      impresora.imprimirEnImpresora(element.printerName).then((valor) => {
+      impresora.imprimirEnImpresora(element.nombre).then((valor) => {
         console.log(`Al imprimir: ${valor}`);
       });
     });

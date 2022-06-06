@@ -26,9 +26,38 @@ export const obtenerCliente = (idcliente) =>
 
 export const saveClient = (params) =>
   axios
-    .post(`${API_SILPOS_WEB}/app/controller/clientsController.php`, {
+    .get(`${API_SILPOS_WEB}/api/cliente`, {
+      mode: "no-cors",
+      headers,
+      data: params,
+      withCredentials: true,
+      credentials: "same-origin",
+    })
+    .then((response) => response)
+    .catch(({ response }) => response || DEFAULT_ERROR_DATA);
+
+export const saveClientFetch = (params) =>
+  fetch(`${API_SILPOS_WEB}/api/cliente/store`, {
+    method: "POST",
+    headers,
+    data: params,
+  })
+    .then((response) => response.json())
+    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+
+export const updateClient = (params) =>
+  axios
+    .put(`${API_SILPOS_WEB}/api/cliente/update/${params.id}`, {
       headers,
       params,
+    })
+    .then((response) => response)
+    .catch(({ response }) => response || DEFAULT_ERROR_DATA);
+
+export const deleteClient = (id) =>
+  axios
+    .put(`${API_SILPOS_WEB}/api/cliente/update/${id}`, {
+      headers,
     })
     .then((response) => response)
     .catch(({ response }) => response || DEFAULT_ERROR_DATA);

@@ -4,12 +4,16 @@ import { Box, Button, Grid } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
-import InputLabel from "@mui/material/InputLabel";
+// import InputLabel from "@mui/material/InputLabel";
 import NativeSelect from "@mui/material/NativeSelect";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
 import { useMaterialUIController } from "context";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
-import MDTextEditor from "components/MDTextEditor";
+// import MDTextEditor from "components/MDTextEditor";
 import { ModalConfigPrinterStyle } from "../style";
 
 export default function ModalConfigPrinter({
@@ -19,6 +23,7 @@ export default function ModalConfigPrinter({
   handleSavePrinter,
 }) {
   const [listPrinter, setListPrinter] = useState([]);
+  const [selectedValue, setSelectedValue] = useState("a");
   const [controller] = useMaterialUIController();
   const { darkMode, sidenavColor } = controller;
   const active = true;
@@ -34,6 +39,10 @@ export default function ModalConfigPrinter({
     handleSavePrinter();
   };
 
+  const handleChangeCircleButton = (event) => {
+    setSelectedValue(event.target.value);
+  };
+
   useEffect(() => {
     setListPrinter(data);
   }, [data]);
@@ -45,6 +54,15 @@ export default function ModalConfigPrinter({
     });
     return options;
   }
+
+  const controlProps = (item) => ({
+    checked: selectedValue === item,
+    onChange: handleChangeCircleButton,
+    value: item,
+    name: "size-radio-button-demo",
+    inputProps: { "aria-label": item },
+  });
+
   return (
     <MainModal
       key={1}
@@ -105,9 +123,6 @@ export default function ModalConfigPrinter({
             <Grid xs={12} sm={6} md={6} lg={6}>
               <Box sx={{ minWidth: 120 }}>
                 <FormControl fullWidth>
-                  <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                    Impresora
-                  </InputLabel>
                   <NativeSelect
                     defaultValue={30}
                     inputProps={{
@@ -122,7 +137,31 @@ export default function ModalConfigPrinter({
               </Box>
             </Grid>
             <Grid xs={12} sm={12} md={12} lg={12} style={{ paddingTop: 5 }}>
-              <MDTextEditor />
+              <FormControl>
+                <FormLabel id="buttons-group-label" variant="standard">
+                  Formato
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="buttons-group-label"
+                  defaultValue="female"
+                  name="radio-buttons-group"
+                >
+                  <FormControlLabel
+                    value="1"
+                    {...controlProps("a")}
+                    size="small"
+                    control={<Radio />}
+                    label="Comanda"
+                  />
+                  <FormControlLabel
+                    value="2"
+                    {...controlProps("b")}
+                    size="small"
+                    control={<Radio />}
+                    label="Ticket"
+                  />
+                </RadioGroup>
+              </FormControl>
             </Grid>
             <Grid xs={12} sm={12} md={12} lg={12}>
               <FormControl fullWidth>

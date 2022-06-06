@@ -5,11 +5,13 @@ const headerRequest = () => {
   return {
     "Content-Type": "application/json",
     Accept: "application/json",
+    "Access-Control-Allow-Origin": "*",
     authorization: token,
     dbu: businessData?.dbuser,
     dbp: businessData?.dbpass,
     dbd: businessData?.dbname,
     Company: businessData?.id,
+    IDEMPRESA: businessData?.id,
   };
 };
 

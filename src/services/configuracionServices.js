@@ -1,3 +1,4 @@
+import axios from "axios";
 import headerRequest from "functions/headerRequest";
 import { API_SILPOS_WEB } from "../config/contants";
 
@@ -29,11 +30,37 @@ export const setConfiguracion = (data) =>
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
 
 export const importPrinterConfiguracion = () =>
-  fetch(`${API_SILPOS_WEB}/app/models/api_caja/printers.php`, {
+  fetch(`${API_SILPOS_WEB}/api/impresora`, {
     method: "GET",
     headers,
     type: "json",
   })
+    .then((response) => response.json())
+    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+
+export const savePrinter = (params) =>
+  axios
+    .post(`${API_SILPOS_WEB}/api/impresora/store`, {
+      headers,
+      params,
+    })
+    .then((response) => response.json())
+    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+
+export const updatePrinter = (params) =>
+  axios.put
+    .post(`${API_SILPOS_WEB}/api/impresora/update/${params.id}`, {
+      headers,
+      params,
+    })
+    .then((response) => response.json())
+    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+
+export const deletePrinter = (id) =>
+  axios.delete
+    .post(`${API_SILPOS_WEB}/api/impresora/delete/${id}`, {
+      headers,
+    })
     .then((response) => response.json())
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
 
