@@ -25,7 +25,7 @@ const printTransaction = (
     const userData = JSON.parse(localStorage.getItem("userData"));
     printerList.forEach((element) => {
       const content = replaceTemplate({
-        template: element.formato,
+        template: JSON.parse(element.formato),
         itemList: dataTransaction[0].data,
         clientSelected,
         paymentMethods,
