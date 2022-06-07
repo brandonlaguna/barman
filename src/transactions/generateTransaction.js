@@ -44,18 +44,18 @@ function paymentMethodsCollection(paymentMethods) {
 function dataCollection(tableSelected, clientSelected, paymentMethods, listCarts, transactionType) {
   const arrayPayments = paymentMethodsCollection(paymentMethods);
   const hashToken = `${
-    clientSelected.length > 0 ? clientSelected.documento : dataTransaction.cc_cliente
+    clientSelected.id > 0 ? clientSelected.documento : dataTransaction.cc_cliente
   }-${getDate().toString()}`;
 
   const totales = calculateTotal(listCarts);
-
+  console.log("clientSelected", clientSelected);
   const arrayData = {
     ...dataTransaction,
     ...totales,
-    cc_cliente: clientSelected.length > 0 ? clientSelected.documento : dataTransaction.cc_cliente, // client or default
-    cliente: clientSelected.length > 0 ? clientSelected.id : dataTransaction.cliente,
+    cc_cliente: clientSelected.id > 0 ? clientSelected.documento : dataTransaction.cc_cliente, // client or default
+    cliente: clientSelected.id > 0 ? clientSelected.id : dataTransaction.cliente,
     nombre:
-      clientSelected.length > 0
+      clientSelected.id > 0
         ? `${clientSelected.razon_social} ${clientSelected.nombres} ${clientSelected.apellidos}`
         : dataTransaction.nombre,
     puesto: tableSelected,

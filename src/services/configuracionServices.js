@@ -1,6 +1,6 @@
 import axios from "axios";
 import headerRequest from "functions/headerRequest";
-import { API_SILPOS_WEB } from "../config/contants";
+import { API_SILPOS_WEB, API_URL } from "../config/contants";
 
 const DEFAULT_ERROR_DATA = {
   status: false,
@@ -30,7 +30,7 @@ export const setConfiguracion = (data) =>
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
 
 export const importPrinterConfiguracion = () =>
-  fetch(`${API_SILPOS_WEB}/api/impresora`, {
+  fetch(`${API_URL}/printers`, {
     method: "GET",
     headers,
     type: "json",
@@ -40,10 +40,7 @@ export const importPrinterConfiguracion = () =>
 
 export const savePrinter = (params) =>
   axios
-    .post(`${API_SILPOS_WEB}/api/impresora/store`, {
-      headers,
-      params,
-    })
+    .post(`${API_URL}/printers/store`, params, { headers })
     .then((response) => response.json())
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
 

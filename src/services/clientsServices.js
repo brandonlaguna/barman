@@ -26,13 +26,7 @@ export const obtenerCliente = (idcliente) =>
 
 export const saveClient = (params) =>
   axios
-    .get(`${API_SILPOS_WEB}/api/cliente`, {
-      mode: "no-cors",
-      headers,
-      data: params,
-      withCredentials: true,
-      credentials: "same-origin",
-    })
+    .post(`${API_URL}/clients/store`, params, { headers })
     .then((response) => response)
     .catch(({ response }) => response || DEFAULT_ERROR_DATA);
 

@@ -7,7 +7,7 @@ import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
-// import { dataClients } from "model/clientsModel";
+import { dataClients } from "model/clientsModel";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -36,7 +36,10 @@ export default function ClientForm({ dataClient, isSend, clearForm }) {
     resolver: yupResolver(schema),
   });
   const onSubmit = (data) => {
-    dataClient(data);
+    dataClient({
+      ...dataClients,
+      ...data,
+    });
     setIsLoadingForm(true);
   };
 

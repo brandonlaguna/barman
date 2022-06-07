@@ -106,9 +106,15 @@ export default function HeaderBarMenu() {
     });
   };
 
+  const loadClients = () => {
+    console.log("recargando");
+    getClients().then((resClients) => setItemsClients(resClients));
+  };
+
   useEffect(() => {
     getListTables(listTables).then((resTables) => setItemsTables(resTables));
     getClients().then((resClients) => setItemsClients(resClients));
+    loadClients();
     getPaymentMethods().then((resPayments) => setItemsPaymentMethods(resPayments));
   }, []);
 
@@ -171,6 +177,7 @@ export default function HeaderBarMenu() {
         handleOnForceClose={handleOnForceCloseClient}
         data={itemsClient}
         handleSelectClient={handleSelectClient}
+        handleForceReload={(val) => loadClients(val)}
       />
       <ModalPaymentMethods
         isOpen={isOpenModalPayments}

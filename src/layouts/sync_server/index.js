@@ -31,7 +31,7 @@ function SyncServer() {
       .then((printers) => {
         setStatusSyc("Obteniendo informacion de impresoras");
         localStorage.setItem("printersConfig", JSON.stringify(printers));
-        setData(`${Object.keys(printers.data).length.toString()} Metodos de pago obtenidos`);
+        setData(`${Object.keys(printers).length.toString()} Impresoras obtenidas`);
       })
       .catch(notify);
   };
@@ -96,7 +96,7 @@ function SyncServer() {
       .then((result) => {
         localStorage.setItem("clientes", JSON.stringify(result));
         setStatusSyc("Obteniendo clientes");
-        setData(`${Object.keys(result.data).length.toString()} Clientes obtenidos`);
+        setData(`${Object.keys(result).length.toString()} Clientes obtenidos`);
         getCategorias();
       })
       .catch(notify);

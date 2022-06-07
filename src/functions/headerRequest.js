@@ -5,7 +5,6 @@ const headerRequest = () => {
   return {
     "Content-Type": "application/json",
     Accept: "application/json",
-    "Access-Control-Allow-Origin": "*",
     authorization: token,
     dbu: businessData?.dbuser,
     dbp: businessData?.dbpass,

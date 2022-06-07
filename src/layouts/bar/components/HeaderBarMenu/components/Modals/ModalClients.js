@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useMaterialUIController } from "context";
+import { useBarCartController, selectClientToCart } from "context/barCartContext";
 import { toast } from "react-toastify";
 import { saveClient, importClientes } from "services/clientsServices";
 import SearchBar from "components/MDSearchBar";
@@ -21,16 +22,25 @@ function AddClientButton({ onClickAddClient }) {
   );
 }
 
-export default function ModalClient({ isOpen, handleOnForceClose, data, handleSelectClient }) {
+export default function ModalClient({
+  isOpen,
+  handleOnForceClose,
+  data,
+  handleSelectClient,
+  handleForceReload,
+}) {
   const [controller] = useMaterialUIController();
+  const [controllerBar, dispatchBar] = useBarCartController();
   const [filteredDataSource, setFilteredDataSource] = useState(data);
   const [filterQuantity, setFilterQuantity] = useState(data.length);
   const [showForm, setShowForm] = useState(false);
   const [isSend, setIsSend] = useState(false);
   const [clearForm, setClearForm] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
 
   // context methods
   const { darkMode, sidenavColor } = controller;
+  const { clientSelected } = controllerBar;
   const active = true;
 
   const searchFilterFunction = (text) => {
@@ -42,8 +52,10 @@ export default function ModalClient({ isOpen, handleOnForceClose, data, handleSe
       });
       setFilterQuantity(newData.length);
       setFilteredDataSource(newData);
+      setIsSearch(true);
     } else {
       setFilteredDataSource(data);
+      setIsSearch(false);
     }
   };
 
@@ -54,11 +66,24 @@ export default function ModalClient({ isOpen, handleOnForceClose, data, handleSe
   const handleResponseDataClient = (client) => {
     setIsSend(false);
     saveClient(client).then((response) => {
-      console.log("respuesta", response);
-      if (response.status) {
-        toast.success(response.message);
+      console.log(response.data);
+      if (response.data.status) {
+        toast.success(response.data.message);
+        importClientes().then((result) => {
+          localStorage.removeItem("clientes");
+          localStorage.setItem("clientes", JSON.stringify(result));
+          setShowForm(false);
+          setFilteredDataSource(result);
+          setFilterQuantity(result.length);
+          handleForceReload(true);
+          selectClientToCart(dispatchBar, {
+            ...client,
+            id: response.data.data,
+          });
+        });
       } else {
-        toast.error(response.message);
+        selectClientToCart(clientSelected, client);
+        toast.error(response.data.message);
       }
       setClearForm(true);
       setIsSend(true);
@@ -66,15 +91,9 @@ export default function ModalClient({ isOpen, handleOnForceClose, data, handleSe
   };
 
   useEffect(() => {
-    importClientes().then((result) => {
-      console.log("obteniendo clientes");
-      localStorage.removeItem("clientes");
-      localStorage.setItem("clientes", JSON.stringify(result));
-      setShowForm(false);
-      setFilteredDataSource(data);
-      setFilterQuantity(data.length);
-    });
-  }, [clearForm]);
+    setFilteredDataSource(data);
+    setFilterQuantity(data.length);
+  }, []);
 
   return (
     <MainModal
@@ -93,7 +112,10 @@ export default function ModalClient({ isOpen, handleOnForceClose, data, handleSe
       <Grid container spacing={1} style={{ overflowY: "scroll", height: "100%", padding: "9px" }}>
         <div style={{ width: "100%" }} hidden={showForm}>
           <SearchBar handleSearch={handleSearchFilter} />
-          <CardClient data={filteredDataSource} onClickClient={onClickClient} />
+          <CardClient
+            data={filteredDataSource.length || isSearch > 0 ? filteredDataSource : data}
+            onClickClient={onClickClient}
+          />
           {filterQuantity === 0 ? <AddClientButton onClickAddClient={setShowForm} /> : null}
         </div>
         <div style={{ width: "100%" }} hidden={!showForm}>
@@ -117,6 +139,7 @@ ModalClient.propTypes = {
   handleOnForceClose: PropTypes.func.isRequired,
   data: PropTypes.instanceOf(Array).isRequired,
   handleSelectClient: PropTypes.func.isRequired,
+  handleForceReload: PropTypes.func.isRequired,
 };
 
 AddClientButton.propTypes = {
