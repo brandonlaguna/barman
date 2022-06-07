@@ -16,10 +16,10 @@ const printTransaction = (
       printerList = getAllPrinters();
     } else if (!printPrinter.isNaN || typeof printPrinter === "number") {
       const list = getAllPrinters();
-      printerList = list.filter((printer) => printer.printerId === printPrinter);
+      printerList = list.filter((printer) => printer.id === printPrinter);
     } else if (printPrinter.length > 0) {
       const list = getAllPrinters();
-      printerList = list.filter((printer) => printPrinter.includes(printer.printerId));
+      printerList = list.filter((printer) => printPrinter.includes(printer.id));
     }
     const businessData = JSON.parse(localStorage.getItem("businessData"));
     const userData = JSON.parse(localStorage.getItem("userData"));
