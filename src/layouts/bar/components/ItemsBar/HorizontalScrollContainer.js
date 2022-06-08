@@ -1,9 +1,10 @@
-import React from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import useWindowDimensions from "functions/windowDimension";
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import { getCategories } from "model/categoryModel";
 import Grid from "@mui/material/Grid";
 import PropTypes from "prop-types";
+import easingFunctions from "functions/easeFunctions";
 import ItemsCard from "./ItemsCard";
 import "./styles.css";
 
@@ -32,7 +33,7 @@ function Card({
   key,
 }) {
   const { height } = useWindowDimensions();
-  const visibility = React.useContext(VisibilityContext);
+  const visibility = useContext(VisibilityContext);
   return (
     <div
       key={key}
@@ -46,52 +47,55 @@ function Card({
         overflowY: "scroll",
       }}
       tabIndex={0}
+      selected={selected}
     >
-      <div
-        className="card"
-        selected={selected}
+      <p>{title.categoria}</p>
+      <Grid
+        container
+        spacing={1}
+        py={3}
+        px={3}
+        title={title}
+        className="horizontalCard"
         style={{
-          margin: "6px",
+          position: "absolute",
         }}
       >
-        <p>{title.categoria}</p>
-        <Grid
-          container
-          spacing={1}
-          py={3}
-          px={3}
-          title={title}
-          className="horizontalCard"
-          style={{
-            position: "absolute",
-          }}
-        >
-          {Object.entries(listItems[itemId].items).map((element) => (
-            <ItemsCard
-              rol="button"
-              data={element[1]}
-              onclickItem={onClickItem}
-              categoryName={title.categoria}
-            />
-          ))}
-        </Grid>
-      </div>
+        {Object.entries(listItems[itemId].items).map((element) => (
+          <ItemsCard
+            rol="button"
+            data={element[1]}
+            onclickItem={onClickItem}
+            categoryName={title.categoria}
+          />
+        ))}
+      </Grid>
     </div>
   );
 }
 
-function ScrollMenuItem({ parentWidth, listItems, onClickItem /* scrollToCategory */ }) {
-  const [selected, setSelected] = React.useState([]);
-  const [position, setPosition] = React.useState(0);
-  const [categories, setCategories] = React.useState([]);
+function ScrollMenuItem({ parentWidth, listItems, onClickItem, scrollToCategory }) {
+  const [selected, setSelected] = useState([]);
+  const [position, setPosition] = useState(0);
+  const [categories, setCategories] = useState([]);
   const isItemSelected = (id) => !!selected.find((el) => el === id);
-  const apiRef = React.useRef(VisibilityContext);
+  const apiRef = useRef(VisibilityContext);
 
-  React.useEffect(() => {
+  // configTransition
+  const [duration, setDuration] = useState(0);
+  const [ease, setEase] = useState("noEase");
+
+  useEffect(() => {
     console.log(position);
     setPosition(0);
     getCategories().then((response) => setCategories(response));
+    setDuration(500);
+    setEase("easeInOutQuad");
   }, []);
+
+  useEffect(() => {
+    apiRef.current?.scrollToItem?.(apiRef.current?.getItemElementById(scrollToCategory));
+  }, [scrollToCategory]);
 
   const handleClick = (id) => () => {
     const itemSelected = isItemSelected(id);
@@ -101,19 +105,20 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem /* scrollToCategor
   };
   const onKeyPressHandle = (id) => console.log(id);
 
-  // const scrollToCard = (idCard) => {
-  //   apiRef.current?.scrollToItem?.(apiRef.current?.getItemElementById(idCard));
-  // };
-
   return (
-    <ScrollMenu onWheel={onWheel} apiRef={apiRef}>
+    <ScrollMenu
+      onWheel={onWheel}
+      apiRef={apiRef}
+      transitionDuration={duration}
+      transitionEase={easingFunctions[ease]}
+    >
       {Object.keys(listItems).map((id) => (
         <Card
           itemId={id}
           title={
             categories.filter((cat) => Number.parseInt(cat.id, 10) === Number.parseInt(id, 10))[0]
           }
-          key={`clickCard${id}`}
+          key={id}
           onClick={handleClick(id)}
           selected={isItemSelected(id)}
           onKeyPress={onKeyPressHandle}
@@ -148,6 +153,7 @@ ScrollMenuItem.propTypes = {
   parentWidth: PropTypes.number,
   listItems: PropTypes.instanceOf(Array),
   onClickItem: PropTypes.func.isRequired,
+  scrollToCategory: PropTypes.func.isRequired,
 };
 
 export default ScrollMenuItem;

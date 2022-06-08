@@ -5,6 +5,7 @@ import MDBox from "components/MDBox";
 import Grid from "@mui/material/Grid";
 // import Context for Bar Cart
 import { BarCartControllerProvider } from "context/barCartContext";
+import { getCategories } from "model/categoryModel";
 // Bar components
 import HeaderBarMenu from "./components/HeaderBarMenu";
 import ItemCartBar from "./components/ItemCartBar";
@@ -15,12 +16,17 @@ function Bar() {
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav } = controller;
   const [scrollToCategory, setScrollToCategory] = useState(0);
+  const [listCategories, setListCategories] = useState([]);
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, true);
 
   useEffect(() => {
     handleMiniSidenav();
   }, [miniSidenav]);
+
+  useEffect(() => {
+    getCategories().then((categories) => setListCategories(categories));
+  }, []);
 
   const handleScrollToCategory = (id) => setScrollToCategory(id);
 
@@ -41,7 +47,7 @@ function Bar() {
               </MDBox>
             </Grid>
             <Grid item xs={1} md={1} lg={1}>
-              <CategoryButton scrollTo={handleScrollToCategory} />
+              <CategoryButton scrollTo={handleScrollToCategory} listCategories={listCategories} />
             </Grid>
           </Grid>
         </MDBox>
