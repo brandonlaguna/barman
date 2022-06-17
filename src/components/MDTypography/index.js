@@ -18,11 +18,11 @@ import { forwardRef } from "react";
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
-// Custom styles for MDTypography
-import MDTypographyRoot from "components/MDTypography/MDTypographyRoot";
-
 // Silpos Barman React contexts
-import { useMaterialUIController } from "context";
+import { useMaterialUIController } from "../../context";
+
+// Custom styles for MDTypography
+import MDTypographyRoot from "./MDTypographyRoot";
 
 const MDTypography = forwardRef(
   (

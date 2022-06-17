@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 // Silpos Barman React Base Styles
-import colors from "assets/theme-dark/base/colors";
+import colors from "../base/colors";
 
 const { info, dark } = colors;
 

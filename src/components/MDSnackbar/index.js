@@ -24,11 +24,11 @@ import Divider from "@mui/material/Divider";
 import Fade from "@mui/material/Fade";
 
 // Silpos Barman React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
+import MDBox from "../MDBox";
+import MDTypography from "../MDTypography";
 
 // Custom styles for the MDSnackbar
-import MDSnackbarIconRoot from "components/MDSnackbar/MDSnackbarIconRoot";
+import MDSnackbarIconRoot from "./MDSnackbarIconRoot";
 
 // Silpos Barman React context
 import { useMaterialUIController } from "context";

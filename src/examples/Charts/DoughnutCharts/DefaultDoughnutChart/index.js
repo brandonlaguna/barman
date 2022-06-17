@@ -26,8 +26,8 @@ import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
 
 // Silpos Barman React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
+import MDBox from "../../../../components/MDBox";
+import MDTypography from "../../../../components/MDTypography";
 
 // DefaultDoughnutChart configurations
 import configs from "examples/Charts/DoughnutCharts/DefaultDoughnutChart/configs";

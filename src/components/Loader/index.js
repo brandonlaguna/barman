@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 import PropTypes from "prop-types";
 
 // Custom styles for MDInput
-import LoaderRoot from "components/Loader/LoaderRoot";
+import LoaderRoot from "./LoaderRoot";
 import { Modal, Box, Typography } from "@mui/material";
 
 const Loader = forwardRef(({ error, success, disabled, ...rest }, ref) => (

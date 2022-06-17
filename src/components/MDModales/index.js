@@ -1,8 +1,8 @@
 // import Backdrop from "@mui/material/Backdrop";
-import MDBox from "components/MDBox";
 import Modal from "@mui/material/Modal";
 // import Fade from "@mui/material/Fade";
 import PropTypes from "prop-types";
+import MDBox from "../MDBox";
 
 export default function MainModal({ children, isOpen, modalStyle, onForceClose }) {
   return (

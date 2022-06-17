@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 // Silpos Barman React base styles
-import typography from "assets/theme/base/typography";
+import typography from "../base/typography";
 
 function configs(labels, datasets) {
   return {

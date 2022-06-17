@@ -35,7 +35,7 @@ import DefaultNavbarLink from "examples/Navbars/DefaultNavbar/DefaultNavbarLink"
 import DefaultNavbarMobile from "examples/Navbars/DefaultNavbar/DefaultNavbarMobile";
 
 // Silpos Barman React base styles
-import breakpoints from "assets/theme/base/breakpoints";
+import breakpoints from "../base/breakpoints";
 
 // Silpos Barman React context
 import { useMaterialUIController } from "context";

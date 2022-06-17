@@ -18,8 +18,8 @@ Coded by www.creative-tim.com
  */
 
 // Silpos Barman React helper functions
-import rgba from "assets/theme-dark/functions/rgba";
-import pxToRem from "assets/theme-dark/functions/pxToRem";
+import rgba from "./rgba";
+import pxToRem from "./pxToRem";
 
 function boxShadow(offset = [], radius = [], color, opacity, inset = "") {
   const [x, y] = offset;

@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContextProvider } from "context/userContext";
 
-ReactDOM.render(
+ReactDOM.hydrate(
   <AuthContextProvider>
     <BrowserRouter>
       <SelectorProvider>

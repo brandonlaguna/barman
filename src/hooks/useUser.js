@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { LOCAL_STORAGE_USAGE } from "config/contants";
-import { useUserContext } from "context/userContext";
-import * as loginService from "services/loginServices";
+import { LOCAL_STORAGE_USAGE } from "../config/contants";
+import { useUserContext } from "../context/userContext";
+import * as loginService from "../services/loginServices";
 
 export default function useUser() {
   const [authState, setAuthState] = useUserContext();

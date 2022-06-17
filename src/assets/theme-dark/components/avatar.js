@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 // Silpos Barman React base styles
-import borders from "assets/theme-dark/base/borders";
+import borders from "../base/borders";
 
 const { borderRadius } = borders;
 

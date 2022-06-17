@@ -1,34 +1,27 @@
 import { useState, useEffect } from "react";
-import useUser from "hooks/useUser";
 // react-router components
 import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
-
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Icon from "@mui/material/Icon";
-
-// Silpos Barman React components
-import MDBox from "components/MDBox";
-
-// Silpos Barman React example components
-import Sidenav from "examples/Sidenav";
-import Configurator from "examples/Configurator";
-
-// Silpos Barman React themes
-import theme from "assets/theme";
-
-// Silpos Barman React Dark Mode themes
-import themeDark from "assets/theme-dark";
-
+import useUser from "./hooks/useUser";
 // Silpos Barman React routes
-import routes from "routes";
-
+import routes from "./routes";
+// Silpos Barman React example components
+import Sidenav from "./examples/Sidenav";
+import Configurator from "./examples/Configurator";
 // Silpos Barman React contexts
-import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
+import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "./context";
+// Silpos Barman React components
+import MDBox from "./components/MDBox";
+// Silpos Barman React themes
+import theme from "./assets/theme";
+// Silpos Barman React Dark Mode themes
+import themeDark from "./assets/theme-dark";
 // Images
-import brandWhite from "assets/images/logo-ct.png";
-import brandDark from "assets/images/logo-ct-dark.png";
+import brandWhite from "./assets/images/logo-ct.png";
+import brandDark from "./assets/images/logo-ct-dark.png";
 // Functions
 
 export default function App() {

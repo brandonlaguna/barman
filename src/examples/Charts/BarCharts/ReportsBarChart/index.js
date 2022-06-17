@@ -27,8 +27,8 @@ import Divider from "@mui/material/Divider";
 import Icon from "@mui/material/Icon";
 
 // Silpos Barman React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
+import MDBox from "../../../../components/MDBox";
+import MDTypography from "../../../../components/MDTypography";
 
 // ReportsBarChart configurations
 import configs from "examples/Charts/BarCharts/ReportsBarChart/configs";

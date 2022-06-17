@@ -22,8 +22,11 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Icon from "@mui/material/Icon";
 
+// Silpos Barman React context
+import { useMaterialUIController } from "../../context";
+
 // Silpos Barman React components
-import MDBox from "components/MDBox";
+import MDBox from "../../components/MDBox";
 
 // Custom styles for the SidenavCollapse
 import {
@@ -31,10 +34,7 @@ import {
   collapseIconBox,
   collapseIcon,
   collapseText,
-} from "examples/Sidenav/styles/sidenavCollapse";
-
-// Silpos Barman React context
-import { useMaterialUIController } from "context";
+} from "./styles/sidenavCollapse";
 
 function SidenavCollapse({ icon, name, active, ...rest }) {
   const [controller] = useMaterialUIController();

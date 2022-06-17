@@ -20,10 +20,10 @@ Coded by www.creative-tim.com
  */
 
 // Silpos Barman React Base Styles
-import colors from "assets/theme-dark/base/colors";
+import colors from "../base/colors";
 
 // Silpos Barman React Helper Functions
-import pxToRem from "assets/theme-dark/functions/pxToRem";
+import pxToRem from "../functions/pxToRem";
 
 const { white } = colors;
 

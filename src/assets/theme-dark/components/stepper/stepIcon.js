@@ -14,11 +14,11 @@ Coded by www.creative-tim.com
 */
 
 // Silpos Barman React base styles
-import colors from "assets/theme-dark/base/colors";
+import colors from "../../base/colors";
 
 // Silpos Barman React helper functions
-import pxToRem from "assets/theme-dark/functions/pxToRem";
-import boxShadow from "assets/theme-dark/functions/boxShadow";
+import pxToRem from "../../functions/pxToRem";
+import boxShadow from "../../functions/boxShadow";
 
 const { white } = colors;
 

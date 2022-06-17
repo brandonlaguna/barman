@@ -1,6 +1,6 @@
 import axios from "axios";
 import md5 from "md5";
-import { API_URL } from "config/contants";
+import { API_URL } from "../config/contants";
 
 const DEFAULT_ERROR_DATA = {
   status: false,

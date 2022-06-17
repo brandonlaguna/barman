@@ -18,11 +18,11 @@ import { forwardRef } from "react";
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
-// Custom styles for MDButton
-import MDButtonRoot from "components/MDButton/MDButtonRoot";
-
 // Silpos Barman React contexts
-import { useMaterialUIController } from "context";
+import { useMaterialUIController } from "../../context";
+
+// Custom styles for MDButton
+import MDButtonRoot from "./MDButtonRoot";
 
 const MDButton = forwardRef(
   ({ color, variant, size, circular, iconOnly, children, ...rest }, ref) => {

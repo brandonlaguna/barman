@@ -5,7 +5,7 @@ import MDBadge from "components/MDBadge";
 import PropTypes from "prop-types";
 import { getAllPrinters } from "model/printersModel";
 // Images
-import team2 from "assets/images/icons/hardware/printer.png";
+import team2 from "../../../assets/images/icons/hardware/printer.png";
 
 function Printer({ image, name }) {
   return (

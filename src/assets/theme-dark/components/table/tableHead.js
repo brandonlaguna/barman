@@ -14,10 +14,10 @@ Coded by www.creative-tim.com
 */
 
 // Silpos Barman React base styles
-import borders from "assets/theme-dark/base/borders";
+import borders from "../../base/borders";
 
 // Silpos Barman React helper functions
-import pxToRem from "assets/theme-dark/functions/pxToRem";
+import pxToRem from "../../functions/pxToRem";
 
 const { borderRadius } = borders;
 

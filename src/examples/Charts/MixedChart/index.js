@@ -26,17 +26,17 @@ import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
 
 // Silpos Barman React components
-import MDBox from "components/MDBox";
+import MDBox from "../../../../components/MDBox";
 import MDTypography from "components/MDTypography";
 
 // Silpos Barman React helper functions
-import gradientChartLine from "assets/theme/functions/gradientChartLine";
+import gradientChartLine from "../functions/gradientChartLine";
 
 // MixedChart configurations
 import configs from "examples/Charts/MixedChart/configs";
 
 // Silpos Barman React base styles
-import colors from "assets/theme/base/colors";
+import colors from "../base/colors";
 
 function MixedChart({ icon, title, description, height, chart }) {
   const chartRef = useRef(null);

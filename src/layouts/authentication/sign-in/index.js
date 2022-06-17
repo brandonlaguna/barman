@@ -26,7 +26,7 @@ import MDInput from "components/MDInput";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
-import bgImage from "assets/images/background/fabrizio-magoni-boaDpmC-_Xo-unsplash.jpg";
+import bgImage from "../../../assets/images/background/fabrizio-magoni-boaDpmC-_Xo-unsplash.jpg";
 
 function Basic() {
   const {

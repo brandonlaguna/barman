@@ -1,6 +1,6 @@
 import axios from "axios";
 import headerRequest from "functions/headerRequest";
-import { API_SILPOS_WEB, API_CAJA_SOURCE } from "../config/contants";
+import { API_SILPOS_WEB, API_CAJA_SOURCE } from "../../config/contants";
 
 const DEFAULT_ERROR_DATA = {
   status: false,

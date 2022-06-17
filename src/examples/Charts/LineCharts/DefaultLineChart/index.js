@@ -26,14 +26,14 @@ import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
 
 // Silpos Barman React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
+import MDBox from "../../../../components/MDBox";
+import MDTypography from "../../../../components/MDTypography";
 
 // DefaultLineChart configurations
 import configs from "examples/Charts/LineCharts/DefaultLineChart/configs";
 
 // Silpos Barman React base styles
-import colors from "assets/theme/base/colors";
+import colors from "../base/colors";
 
 function DefaultLineChart({ icon, title, description, height, chart }) {
   const chartDatasets = chart.datasets

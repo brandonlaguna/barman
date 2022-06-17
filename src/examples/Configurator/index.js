@@ -7,16 +7,9 @@ import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Icon from "@mui/material/Icon";
 
-// Silpos Barman React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
-import MDButton from "components/MDButton";
-
 // Custom styles for the Configurator
-import ConfiguratorRoot from "examples/Configurator/ConfiguratorRoot";
+import ConfiguratorRoot from "./ConfiguratorRoot";
 
-// Auth0 Logout
-import useUser from "hooks/useUser";
 // Silpos Barman React context
 import {
   useMaterialUIController,
@@ -24,7 +17,15 @@ import {
   setFixedNavbar,
   setSidenavColor,
   setDarkMode,
-} from "context";
+} from "../../context";
+
+// Auth0 Logout
+import useUser from "../../hooks/useUser";
+
+// Silpos Barman React components
+import MDBox from "../../components/MDBox";
+import MDTypography from "../../components/MDTypography";
+import MDButton from "../../components/MDButton";
 
 function Configurator() {
   const [controller, dispatch] = useMaterialUIController();

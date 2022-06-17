@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 // Silpos Barman React helper functions
-import pxToRem from "assets/theme-dark/functions/pxToRem";
+import pxToRem from "../functions/pxToRem";
 
 const svgIcon = {
   defaultProps: {

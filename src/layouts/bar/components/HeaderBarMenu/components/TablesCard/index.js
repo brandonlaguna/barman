@@ -6,7 +6,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 // import calculateTotal from "functions/calculateTotal";
-import colors from "assets/theme/base/colors";
+import colors from "../../../../../../assets/theme/base/colors";
 
 function RenderTotal({ total }) {
   const calcTotal = Number.parseInt(total, 10).toFixed(0);

@@ -21,12 +21,12 @@ import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
 
 // Silpos Barman React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
+import MDBox from "../../../components/MDBox";
+import MDTypography from "../../../components/MDTypography";
 
 // Images
-import pattern from "assets/images/illustrations/pattern-tree.svg";
-import masterCardLogo from "assets/images/logos/mastercard.png";
+import pattern from "../../../assets/images/illustrations/pattern-tree.svg";
+import masterCardLogo from "../../../assets/images/logos/mastercard.png";
 
 function MasterCard({ color, number, holder, expires }) {
   const numbers = [...`${number}`];

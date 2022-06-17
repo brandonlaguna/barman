@@ -27,24 +27,24 @@ import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
 import Icon from "@mui/material/Icon";
 
-// Silpos Barman React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
-
-// Silpos Barman React example components
-import SidenavCollapse from "examples/Sidenav/SidenavCollapse";
-
-// Custom styles for the Sidenav
-import SidenavRoot from "examples/Sidenav/SidenavRoot";
-import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
-
 // Silpos Barman React context
 import {
   useMaterialUIController,
   setMiniSidenav,
   setTransparentSidenav,
   setWhiteSidenav,
-} from "context";
+} from "../../context";
+
+// Silpos Barman React components
+import MDBox from "../../components/MDBox";
+import MDTypography from "../../components/MDTypography";
+
+// Silpos Barman React example ../../components
+import SidenavCollapse from "./SidenavCollapse";
+
+// Custom styles for the Sidenav
+import SidenavRoot from "./SidenavRoot";
+import sidenavLogoLabel from "./styles/sidenav";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatch] = useMaterialUIController();

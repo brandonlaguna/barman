@@ -33,10 +33,10 @@ import MDTypography from "components/MDTypography";
 import configs from "examples/Charts/RadarChart/configs";
 
 // Silpos Barman React base styles
-import colors from "assets/theme/base/colors";
+import colors from "../base/colors";
 
 // Silpos Barman React helper functions
-import rgba from "assets/theme/functions/rgba";
+import rgba from "../functions/rgba";
 
 function RadarChart({ icon, title, description, chart }) {
   const chartDatasets = chart.datasets

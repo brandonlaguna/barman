@@ -26,9 +26,9 @@ import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
 
 // Silpos Barman React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
-import MDProgress from "components/MDProgress";
+import MDBox from "../../../../components/MDBox";
+import MDTypography from "../../../../components/MDTypography";
+import MDProgress from "../../../../components/MDProgress";
 
 // ProgressLineChart configurations
 import configs from "examples/Charts/LineCharts/ProgressLineChart/config";

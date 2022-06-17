@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 // Silpos Barman React Helper Functions
-import pxToRem from "assets/theme-dark/functions/pxToRem";
+import pxToRem from "../../functions/pxToRem";
 
 const cardContent = {
   styleOverrides: {

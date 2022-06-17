@@ -14,10 +14,10 @@ Coded by www.creative-tim.com
 */
 
 // Silpos Barman React base styles
-import colors from "assets/theme/base/colors";
+import colors from "../../base/colors";
 
 // Silpos Barman React helper functions
-import pxToRem from "assets/theme/functions/pxToRem";
+import pxToRem from "../../functions/pxToRem";
 
 const { transparent } = colors;
 
