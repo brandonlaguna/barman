@@ -1,6 +1,6 @@
 import axios from "axios";
 import headerRequest from "functions/headerRequest";
-import { API_URL } from "../../config/contants";
+import { API_URL } from "../config/contants";
 
 const DEFAULT_ERROR_DATA = {
   status: false,
