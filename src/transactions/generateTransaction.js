@@ -76,7 +76,7 @@ function dataCollection(
       ? transactionType.tipo_transaccion
       : dataTransaction.tipo_transaccion,
     idventa,
-    vendedor: userData.id
+    vendedor: userData.id,
   };
   return arrayData;
 }

@@ -9,10 +9,14 @@ const DEFAULT_ERROR_DATA = {
 };
 const headers = headerRequest();
 
-const importBusyTables = () =>
+export const importBusyTables = () =>
   axios
     .post(`${API_SILPOS_WEB}/app/models/bar_mobil/index.php`, {}, { headers })
     .then((response) => response.data)
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
 
-export default importBusyTables;
+export const changeTable = (params) =>
+  axios
+    .post(`${API_SILPOS_WEB}/app/views/cajabar/php/cambioMesa.php`, params, { headers })
+    .then((response) => response)
+    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);

@@ -12,10 +12,11 @@ import {
   setPrintPrinter,
   resetItemsCart,
 } from "context/barCartContext";
+import { toast } from "react-toastify";
 import { getClients } from "model/clientsModel";
 import { getPaymentMethods } from "model/paymentMethodsModel";
 import { getListTables } from "model/tablesModel";
-import importBusyTables from "services/tableServices";
+import { importBusyTables, changeTable } from "services/tableServices";
 import CircleButton from "components/MDCircleButton";
 import ModalTables from "./components/Modals/ModalTables";
 import { HeaderStyle, buttonIconStyle } from "./style";
@@ -40,6 +41,8 @@ export default function HeaderBarMenu() {
   const [isOpenModalTypeTransaction, setIsOpenModalTypeTransaction] = useState(false);
   const [isOpenModalPrint, setIsOpenModalPrint] = useState(false);
   const [isOpenModalChange, setIsOpenModalChange] = useState(false);
+  const [isChangeTable, setIsChangeTable] = useState(false);
+  const [oldChangeTable, setOldChangeTable] = useState(0);
 
   // to data in modals
   const [itemsTables, setItemsTables] = useState([]);
@@ -72,9 +75,22 @@ export default function HeaderBarMenu() {
   };
 
   const handleSelectTable = (tableId, tableData) => {
-    setTableToCart(dispatchBar, tableId);
-    setIsOpenModalTables(false);
-    insertTablesToCard(tableData);
+    if (isChangeTable) {
+      changeTable({
+        oldpuesto: oldChangeTable,
+        newpuesto: tableId,
+      }).then(() => {
+        // resetItemsCart(dispatchBar, []);
+        setTableToCart(dispatchBar, tableId);
+        setIsChangeTable(false);
+        setIsOpenModalTables(false);
+      });
+    } else {
+      setTableToCart(dispatchBar, tableId);
+      resetItemsCart(dispatchBar, []);
+      setIsOpenModalTables(false);
+      insertTablesToCard(tableData);
+    }
   };
 
   const handleSelectClient = (client) => {
@@ -92,6 +108,17 @@ export default function HeaderBarMenu() {
     setLaunchPrinter(dispatchBar, false);
   };
 
+  const handleHoldTable = () => {
+    if (!tableSelected) {
+      toast.warn("No hay mesas seleccionadas para ésta accion.");
+    } else {
+      setOldChangeTable(tableSelected);
+      setIsOpenModalTables(true);
+      setIsChangeTable(true);
+    }
+    return true;
+  };
+
   const handleOnForceCloseTables = () => setIsOpenModalTables(false);
   const handleOnForceCloseClient = () => setIsOpenModalClients(false);
   const handleOnForceClosePayment = () => setIsOpenModalPayments(false);
@@ -103,11 +130,12 @@ export default function HeaderBarMenu() {
     importBusyTables().then((result) => {
       setBusyTables(result);
       setIsOpenModalTables(true);
+      setIsChangeTable(false);
+      setOldChangeTable(0);
     });
   };
 
   const loadClients = () => {
-    console.log("recargando");
     getClients().then((resClients) => setItemsClients(resClients));
   };
 
@@ -147,6 +175,7 @@ export default function HeaderBarMenu() {
         sxIcon={buttonIconStyle}
         onClick={() => initBusyTables()}
         badgeAlert={tableSelected ?? true}
+        onHold={() => handleHoldTable()}
       />
       <CircleButton
         rol="button"
@@ -171,6 +200,7 @@ export default function HeaderBarMenu() {
         data={itemsTables}
         handleSelectTable={handleSelectTable}
         busyTables={busyTables}
+        isChangeTable={isChangeTable}
       />
       <ModalClient
         isOpen={isOpenModalClients}
