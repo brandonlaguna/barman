@@ -34,12 +34,9 @@ const data = async () => {
     const rows = [];
     const printerList = getAllPrinters();
     printerList.forEach((printer) => {
-      console.log("impresoras", printer);
       rows.push({
-        printer: <Printer image={team2} name={printer.printerName} email="" />,
-        function: (
-          <Type title={printer.printerType.type} description={printer.printerType.format} />
-        ),
+        printer: <Printer image={team2} name={printer.nombre} email="" />,
+        function: <Type title={printer.tipo} description="80mm" />,
         status: (
           <MDBox ml={-1}>
             <MDBadge badgeContent="online" color="success" variant="gradient" size="sm" />
@@ -47,7 +44,7 @@ const data = async () => {
         ),
         route: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            {printer.printerRoute}
+            {printer.ruta}
           </MDTypography>
         ),
         action: (

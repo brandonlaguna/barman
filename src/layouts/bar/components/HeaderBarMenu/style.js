@@ -170,7 +170,7 @@ export function ModalTypeTransactionStyle(theme, ownerState) {
     top: "50%",
     left: "50%",
     width: "40%",
-    height: "90%",
+    height: "40%",
     transform: "translate(-50%, -50%)",
     bgcolor: "background.paper",
     padding: `${pxToRem(10)} ${pxToRem(10)}`,

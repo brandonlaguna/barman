@@ -4,6 +4,7 @@ import { sendIndividualTransaction } from "services/transactionServices";
 import md5 from "md5";
 import { getDate } from "functions/getTime";
 import calculateTotal from "functions/calculateTotal";
+import { getUserData } from "model/userModel";
 
 const idventa = Math.floor(Math.random() * 1000);
 
@@ -26,6 +27,7 @@ function itemsCollection(listCarts) {
       venta_tres: element.venta_tres,
       idventa,
       valor: element.venta_uno,
+      observacion: element.descripcion,
     });
   });
   return arrayItems;
@@ -41,22 +43,27 @@ function paymentMethodsCollection(paymentMethods) {
   return arrayPayments;
 }
 
-function dataCollection(tableSelected, clientSelected, paymentMethods, listCarts, transactionType) {
+function dataCollection(
+  tableSelected,
+  clientSelected,
+  paymentMethods,
+  listCarts,
+  transactionType,
+  userData
+) {
   const arrayPayments = paymentMethodsCollection(paymentMethods);
-
   const hashToken = `${
-    clientSelected.length > 0 ? clientSelected.documento : dataTransaction.cc_cliente
+    clientSelected.id > 0 ? clientSelected.documento : dataTransaction.cc_cliente
   }-${getDate().toString()}`;
 
   const totales = calculateTotal(listCarts);
-
   const arrayData = {
     ...dataTransaction,
     ...totales,
-    cc_cliente: clientSelected.length > 0 ? clientSelected.documento : dataTransaction.cc_cliente, // client or default
-    cliente: clientSelected.length > 0 ? clientSelected.id : dataTransaction.cliente,
+    cc_cliente: clientSelected.id > 0 ? clientSelected.documento : dataTransaction.cc_cliente, // client or default
+    cliente: clientSelected.id > 0 ? clientSelected.id : dataTransaction.cliente,
     nombre:
-      clientSelected.length > 0
+      clientSelected.id > 0
         ? `${clientSelected.razon_social} ${clientSelected.nombres} ${clientSelected.apellidos}`
         : dataTransaction.nombre,
     puesto: tableSelected,
@@ -69,6 +76,7 @@ function dataCollection(tableSelected, clientSelected, paymentMethods, listCarts
       ? transactionType.tipo_transaccion
       : dataTransaction.tipo_transaccion,
     idventa,
+    vendedor: userData.id,
   };
   return arrayData;
 }
@@ -83,15 +91,16 @@ const generateTransaction = async ({
   let estado = false;
   let mensajeEstado = "Transaccion realizada correctamente.";
   const dataResponse = [];
+  const userData = getUserData();
   try {
     const venta = itemsCollection(listCarts);
-
     const data = dataCollection(
       tableSelected,
       clientSelected,
       paymentMethods,
       listCarts,
-      transactionType
+      transactionType,
+      userData
     );
     if (listCarts.length === 0) {
       // excepcion en guardar vender = 0
@@ -107,7 +116,7 @@ const generateTransaction = async ({
     }
 
     await sendIndividualTransaction({ data, venta }).then((response) => {
-      dataResponse.push(response[0].data);
+      dataResponse.push(response[0]);
       if (response[0].httpStatus === 200) {
         mensajeEstado = "mensaje cambiado";
         // throw new Error("Ocurrió un error al realizar la venta.");

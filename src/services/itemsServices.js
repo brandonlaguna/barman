@@ -1,11 +1,13 @@
 import axios from "axios";
-import { API_URL, headers } from "../config/contants";
+import headerRequest from "functions/headerRequest";
+import { API_URL } from "../config/contants";
 
 const DEFAULT_ERROR_DATA = {
   status: false,
   message: "Ha ocurrido un error al realizar la petición",
   data: [],
 };
+const headers = headerRequest();
 
 export const importItems = () =>
   axios

@@ -14,7 +14,7 @@ export default function PaymentButton({ value, onclickTransaction, isLoading }) 
       style={{ width: "100%" }}
       color="success"
     >
-      {` Enviar $${value}`}
+      {` Enviar ${value}`}
     </LoadingButton>
   );
 }

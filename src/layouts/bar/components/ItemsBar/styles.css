@@ -28,3 +28,7 @@
   .cardContainerStyle:active{
     box-shadow: 0 0 12px white;
   }
+  .horizontalCard{
+    padding-top: 0px !important;
+    margin-top: -29px !important;
+  }

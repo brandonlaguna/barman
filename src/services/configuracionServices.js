@@ -1,10 +1,14 @@
-import { API_SILPOS_WEB, headers } from "../config/contants";
+import axios from "axios";
+import headerRequest from "functions/headerRequest";
+import { API_SILPOS_WEB, API_URL } from "../config/contants";
 
 const DEFAULT_ERROR_DATA = {
   status: false,
   message: "Ha ocurrido un error al realizar la petición",
   data: [],
 };
+
+const headers = headerRequest();
 
 export const importConfiguracion = () =>
   fetch(`${API_SILPOS_WEB}/app/models/api_caja/administrador_api.php`, {
@@ -26,7 +30,7 @@ export const setConfiguracion = (data) =>
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
 
 export const importPrinterConfiguracion = () =>
-  fetch(`${API_SILPOS_WEB}/app/models/api_caja/printers.php`, {
+  fetch(`${API_URL}/printers`, {
     method: "GET",
     headers,
     type: "json",
@@ -34,10 +38,33 @@ export const importPrinterConfiguracion = () =>
     .then((response) => response.json())
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
 
+export const savePrinter = (params) =>
+  axios
+    .post(`${API_URL}/printers/store`, params, { headers })
+    .then((response) => response.json())
+    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+
+export const updatePrinter = (params) =>
+  axios.put
+    .post(`${API_SILPOS_WEB}/api/impresora/update/${params.id}`, {
+      headers,
+      params,
+    })
+    .then((response) => response.json())
+    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+
+export const deletePrinter = (id) =>
+  axios.delete
+    .post(`${API_SILPOS_WEB}/api/impresora/delete/${id}`, {
+      headers,
+    })
+    .then((response) => response.json())
+    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+
 export const generateDefaultPrinters = () => [
   {
     printerId: 1,
-    printerName: "SAT15TUS(USB)",
+    printerName: "EPSON TM-T20 Receipt",
     printerType: {
       type: "POS",
       format: "80mm",
@@ -47,42 +74,33 @@ export const generateDefaultPrinters = () => [
     printerFormat: [
       `systemName`,
       `businessName`,
-      `businessTypeDocument businessDocument`,
-      // `{{businessAddress}}`,
-      // `{{businessCity}}`,
-      // `P.B.X: {{businessPBX}} Cel: {{businessPhone}}`,
-      // `_____________________________`,
-      // `{{typeTransaction}} {{numberTransaction}}`,
+      `NIT businessDocument`,
+      `businessAddress`,
+      `businessCity`,
+      `P.B.X: businessPBX Cel: businessPhone`,
+      `_____________________________`,
+      `Venta numberTransaction`,
       `_____________________________`,
       `Hora: transactionTime Fecha: transactionDate`,
       `DOCUMENTO: clientDocument`,
       `CLIENTE: clientName`,
-      `DIR: clientAddress`,
-      `CIUDAD: clientCity`,
-      `TEL: clientPhone`,
+      // `DIR: clientAddress`,
+      // `CIUDAD: clientCity`,
+      // `TEL: clientPhone`,
       `_____________________________`,
-      `{{minItems}}`,
-      // `_____________________________`,
-      // `P. VOLUNTARIA {{voluntaryTip}}`,
-      // `TOTAL FACTURA {{totalTransaction}}`,
-      // `CANCELO {{totalPayed}}`,
-      // `CAMBIO {{totalCambio}}`,
-      // `TOTAL PRODUCTOS {{totalItems}}`,
-      // `ESTADO {{transactionState}}
-      // F O R M A D E P A G O `,
-      // `_____________________________`,
-      // `{{paymentMethods}}`,
-      // `_____________________________`,
-      // `No responsable de IVA`,
-      // `RESOLUCION DE AUTORIZACION`,
-      // `No. 123456 DEL 2021-10-14 HASTA 2022-10-14`,
-      // `NUMERACION DESDE 1 HASTA 100000`,
-      // `{{footer}}`,
+      `{{items}}`,
+      `_____________________________`,
+      `{{totalTransaction}}`,
+      `F O R M A D E P A G O `,
+      `_____________________________`,
+      `{{paymentMethods}}`,
+      `_____________________________`,
+      `{{footer}}`,
     ],
   },
   {
     printerId: 2,
-    printerName: "SAT15TUS(USB)",
+    printerName: "EPSON TM-T20 Receipt",
     printerType: {
       type: "POS",
       format: "80mm",
@@ -90,11 +108,11 @@ export const generateDefaultPrinters = () => [
     printerRoute: "USB",
     printerState: true,
     printerFormat: [
-      `Silpos Barman 2`,
-      `{{minBusiness}}`,
-      `***Bar***`,
+      `Silpos Barman`,
+      `businessName`,
+      `***Cocina***`,
+      `MESA# tableNumber`,
       `{{minItems}}`,
-      `{{minFooter}}`,
     ],
   },
 ];

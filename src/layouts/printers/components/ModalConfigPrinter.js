@@ -1,16 +1,32 @@
 import { useState, useEffect } from "react";
 import MainModal from "components/MDModales";
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
-import InputLabel from "@mui/material/InputLabel";
 import NativeSelect from "@mui/material/NativeSelect";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
 import { useMaterialUIController } from "context";
+import formatoImpresion from "functions/formatosImpresion";
+import { savePrinter } from "services/configuracionServices";
+import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
-import MDTextEditor from "components/MDTextEditor";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import { ModalConfigPrinterStyle } from "../style";
+
+const schema = yup
+  .object({
+    nombre: yup.string().required("Debe seleccionar una impresora válida"),
+    ruta: yup.string().required("Debe ingresar una ruta"),
+    tipo: yup.string().required("Debe ingresar un tipo de impresora  ej: POS"),
+    formato: yup.string().required("Debe seleccionar un formato válido"),
+  })
+  .required();
 
 export default function ModalConfigPrinter({
   isOpen,
@@ -19,6 +35,7 @@ export default function ModalConfigPrinter({
   handleSavePrinter,
 }) {
   const [listPrinter, setListPrinter] = useState([]);
+  const [selectedValue, setSelectedValue] = useState("a");
   const [controller] = useMaterialUIController();
   const { darkMode, sidenavColor } = controller;
   const active = true;
@@ -27,11 +44,27 @@ export default function ModalConfigPrinter({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
   const onSubmit = (dataInput) => {
-    console.log("aqui");
-    console.log(dataInput);
+    savePrinter({
+      ...dataInput,
+      formato: formatoImpresion[dataInput.formato],
+      estado: 1,
+    }).then((response) => {
+      console.log(response);
+      if (response.status) {
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
+      }
+    });
     handleSavePrinter();
+  };
+
+  const handleChangeCircleButton = (event) => {
+    setSelectedValue(event.target.value);
   };
 
   useEffect(() => {
@@ -45,6 +78,15 @@ export default function ModalConfigPrinter({
     });
     return options;
   }
+
+  const controlProps = (item) => ({
+    checked: selectedValue === item,
+    onChange: handleChangeCircleButton,
+    value: item,
+    name: `formato`,
+    inputProps: { "aria-label": item },
+  });
+
   return (
     <MainModal
       key={1}
@@ -63,66 +105,73 @@ export default function ModalConfigPrinter({
         <Box sx={{ "& > :not(style)": { m: 1 } }} style={{ overflowY: "scroll", height: "100%" }}>
           <Grid container spacing={1} style={{ overflowY: "scroll", height: "100%" }}>
             {errors.exampleRequired && <span>This field is required</span>}
-            <Grid item xs={12} sm={6} md={6} lg={6}>
-              <Box sx={{}}>
-                <FormControl variant="standard">
-                  <TextField
-                    label="Nombre para la impresora"
-                    id="standard-size-normal"
-                    defaultValue=""
-                    variant="standard"
-                    {...register("printerName", { required: true, pattern: /^[A-Za-z]+$/i })}
-                  />
-                </FormControl>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6}>
-              <Box sx={{}}>
-                <FormControl variant="standard">
-                  <TextField
-                    label="Ruta"
-                    id="standard-size-normal"
-                    defaultValue=""
-                    variant="standard"
-                    {...register("printerRoute")}
-                  />
-                </FormControl>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6}>
-              <Box sx={{}}>
-                <FormControl variant="standard">
-                  <TextField
-                    label="Tipo de impresora"
-                    id="standard-size-normal"
-                    defaultValue=""
-                    variant="standard"
-                    {...register("printerType", { pattern: /^[A-Za-z]+$/i })}
-                  />
-                </FormControl>
-              </Box>
-            </Grid>
-            <Grid xs={12} sm={6} md={6} lg={6}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
               <Box sx={{ minWidth: 120 }}>
                 <FormControl fullWidth>
-                  <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                    Impresora
-                  </InputLabel>
-                  <NativeSelect
-                    defaultValue={30}
-                    inputProps={{
-                      name: "printer",
-                      id: "uncontrolled-native",
-                    }}
-                    {...register("printerSelected", { required: true })}
-                  >
+                  <NativeSelect {...register("nombre", { required: true })}>
                     <RenderPrintOption />
                   </NativeSelect>
                 </FormControl>
+                <Typography variant="caption" display="block" gutterBottom style={{ color: "red" }}>
+                  {errors.nombre?.message}
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={6} lg={6}>
+              <Box sx={{}}>
+                <FormControl variant="standard" fullWidth>
+                  <TextField
+                    label="Ruta"
+                    id="ruta"
+                    defaultValue=""
+                    variant="standard"
+                    {...register("ruta")}
+                  />
+                </FormControl>
+                <Typography variant="caption" display="block" gutterBottom style={{ color: "red" }}>
+                  {errors.ruta?.message}
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={6} lg={6}>
+              <Box sx={{}}>
+                <FormControl variant="standard" fullWidth>
+                  <TextField
+                    label="Tipo de impresora"
+                    id="tipo"
+                    defaultValue=""
+                    variant="standard"
+                    {...register("tipo", { pattern: /^[A-Za-z]+$/i })}
+                  />
+                </FormControl>
+                <Typography variant="caption" display="block" gutterBottom style={{ color: "red" }}>
+                  {errors.tipo?.message}
+                </Typography>
               </Box>
             </Grid>
             <Grid xs={12} sm={12} md={12} lg={12} style={{ paddingTop: 5 }}>
-              <MDTextEditor />
+              <FormControl>
+                <FormLabel id="buttons-group-label" variant="standard">
+                  Formato
+                </FormLabel>
+                <RadioGroup {...register("formato")}>
+                  <FormControlLabel
+                    {...controlProps("1")}
+                    size="small"
+                    control={<Radio />}
+                    label="Comanda"
+                  />
+                  <FormControlLabel
+                    {...controlProps("2")}
+                    size="small"
+                    control={<Radio />}
+                    label="Ticket"
+                  />
+                </RadioGroup>
+                <Typography variant="caption" display="block" gutterBottom style={{ color: "red" }}>
+                  {errors.formato?.message}
+                </Typography>
+              </FormControl>
             </Grid>
             <Grid xs={12} sm={12} md={12} lg={12}>
               <FormControl fullWidth>

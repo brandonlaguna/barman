@@ -256,11 +256,15 @@ const colors = {
   disponible: {
     background: "#4caf4f",
     text: "#339537",
+    textAlign: "center",
+    color: "white",
   },
 
   ocupado: {
     background: "#f44336",
     text: "#339537",
+    textAlign: "center",
+    color: "white",
   },
 
   inputBorderColor: "#d2d6da",

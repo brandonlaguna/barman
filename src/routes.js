@@ -1,15 +1,17 @@
 // Silpos Barman React layouts
 import Dashboard from "layouts/dashboard";
 // import Tables from "layouts/tables";
-import Billing from "layouts/billing";
-import RTL from "layouts/rtl";
-import Notifications from "layouts/notifications";
-import Profile from "layouts/profile";
-import SignIn from "layouts/authentication/sign-in";
-import SignUp from "layouts/authentication/sign-up";
+// import Billing from "layouts/billing";
+// import RTL from "layouts/rtl";
+// import Notifications from "layouts/notifications";
+// import Profile from "layouts/profile";
+// import SignIn from "layouts/authentication/sign-in";
+// import SignUp from "layouts/authentication/sign-up";
 import Bar from "layouts/bar";
 import SyncServer from "layouts/sync_server";
 import Printers from "layouts/printers";
+import Basic from "layouts/authentication/sign-in";
+import Products from "layouts/products";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -17,27 +19,43 @@ import Icon from "@mui/material/Icon";
 const routes = [
   {
     type: "collapse",
-    name: "Dashboard",
+    name: "Inicio",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
     component: <Dashboard />,
+    auth: true,
+    restricted: true,
   },
   {
     type: "collapse",
     name: "Bar",
     key: "bar",
-    icon: <Icon fontSize="small">dashboard</Icon>,
+    icon: <Icon fontSize="small">attach_money</Icon>,
     route: "/bar",
     component: <Bar />,
+    auth: true,
+    restricted: true,
   },
   {
     type: "collapse",
     name: "Sincronizar Servicios",
     key: "sync_server",
-    icon: <Icon fontSize="small">assignment</Icon>,
+    icon: <Icon fontSize="small">cloud_sync</Icon>,
     route: "/sync_server",
     component: <SyncServer />,
+    auth: true,
+    restricted: true,
+  },
+  {
+    type: "collapse",
+    name: "Productos",
+    key: "products",
+    icon: <Icon fontSize="small">print_icon</Icon>,
+    route: "/products",
+    component: <Products />,
+    auth: true,
+    restricted: true,
   },
   {
     type: "collapse",
@@ -46,54 +64,18 @@ const routes = [
     icon: <Icon fontSize="small">print_icon</Icon>,
     route: "/printers",
     component: <Printers />,
+    auth: true,
+    restricted: true,
   },
   {
-    type: "collapse",
-    name: "Billing",
-    key: "billing",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/billing",
-    component: <Billing />,
-  },
-  {
-    type: "collapse",
-    name: "RTL",
-    key: "rtl",
-    icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
-    route: "/rtl",
-    component: <RTL />,
-  },
-  {
-    type: "collapse",
-    name: "Notifications",
-    key: "notifications",
-    icon: <Icon fontSize="small">notifications</Icon>,
-    route: "/notifications",
-    component: <Notifications />,
-  },
-  {
-    type: "collapse",
-    name: "Profile",
-    key: "profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
-  },
-  {
-    type: "collapse",
-    name: "Sign In",
-    key: "sign-in",
-    icon: <Icon fontSize="small">login</Icon>,
-    route: "/authentication/sign-in",
-    component: <SignIn />,
-  },
-  {
-    type: "collapse",
-    name: "Sign Up",
-    key: "sign-up",
-    icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/authentication/sign-up",
-    component: <SignUp />,
+    type: "route",
+    name: "Inicio de sesion",
+    key: "login",
+    icon: <Icon fontSize="small">print_icon</Icon>,
+    route: "/login",
+    component: <Basic />,
+    auth: false,
+    restricted: false,
   },
 ];
 

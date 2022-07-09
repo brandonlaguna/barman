@@ -39,7 +39,7 @@ export const dataTransaction = {
   tipo_factura: "",
   agenda: "",
   ramdon: "",
-  puesto: "",
+  puesto: 0,
   numero_old: "",
   id_factura_old: "",
   mostrar_prefactura: "0",

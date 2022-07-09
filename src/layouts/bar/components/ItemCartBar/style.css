@@ -1,0 +1,10 @@
+.image-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.invalid-feedback{
+  color: red;
+  font-size: 9pt;
+}

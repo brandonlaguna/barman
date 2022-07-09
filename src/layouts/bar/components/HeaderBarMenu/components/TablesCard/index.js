@@ -5,9 +5,16 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import { toast } from "react-toastify";
+// import calculateTotal from "functions/calculateTotal";
 import colors from "assets/theme/base/colors";
 
-export default function TablesCard({ data, onClickTable, busyTables }) {
+function RenderTotal({ total }) {
+  const calcTotal = Number.parseInt(total, 10).toFixed(0);
+  return <Typography variant="h6" style={{ color: "white" }}>{`$${calcTotal}`}</Typography>;
+}
+
+export default function TablesCard({ data, onClickTable, busyTables, isChangeTable }) {
   const { id } = data;
   const { disponible, ocupado } = colors;
   const tableData = [];
@@ -23,6 +30,10 @@ export default function TablesCard({ data, onClickTable, busyTables }) {
   }
   const statusMesa = validateState(id);
   const colorStatus = statusMesa === false ? disponible : ocupado;
+  let disableMesa = false;
+  if (statusMesa && isChangeTable) {
+    disableMesa = true;
+  }
   const imgStatus =
     statusMesa === false
       ? "assets/Bankicon/icons/tables/mesa_libre.png"
@@ -37,7 +48,7 @@ export default function TablesCard({ data, onClickTable, busyTables }) {
       md={3}
       lg={2}
       key={id}
-      onClick={() => onClickTable(id, tableData)}
+      onClick={() => (disableMesa ? toast.warn("Mesa ocupada") : onClickTable(id, tableData))}
     >
       <Card style={colorStatus}>
         <Box>
@@ -49,17 +60,31 @@ export default function TablesCard({ data, onClickTable, busyTables }) {
         </Box>
         <CardMedia
           component="img"
-          sx={{ width: 60 }}
-          image="https://cdn-icons-png.flaticon.com/512/1209/1209474.png"
-          alt="Live from space album "
+          sx={{ width: "30%" }}
+          image={process.env.PUBLIC_URL + imgStatus}
+          alt={altStatus}
         />
+        <RenderTotal total={tableData.length > 0 ? tableData[0].total_factura : 0} />
       </Card>
     </Grid>
   );
 }
 
+TablesCard.defaultProps = {
+  isChangeTable: false,
+};
+
 TablesCard.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
   busyTables: PropTypes.instanceOf(Array).isRequired,
   onClickTable: PropTypes.func.isRequired,
+  isChangeTable: PropTypes.bool,
+};
+
+RenderTotal.defaultProps = {
+  total: "0",
+};
+
+RenderTotal.propTypes = {
+  total: PropTypes.string,
 };

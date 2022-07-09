@@ -25,6 +25,12 @@ export default function ModalPrint({ isOpen, handleOnForceClose, handleSelectPri
       icon: `${BANK_ICONS}/interface/bar.png`,
     },
     {
+      id: 2,
+      title: "Imprimir comanda",
+      value: 2,
+      icon: `${BANK_ICONS}/interface/frying-pan.png`,
+    },
+    {
       id: 3,
       title: "No imprimir",
       value: false,
@@ -36,7 +42,7 @@ export default function ModalPrint({ isOpen, handleOnForceClose, handleSelectPri
     const renderReturn = [];
     listPrintMode.map((printMode) =>
       renderReturn.push(
-        <Grid item xs={12} md={4} lg={4}>
+        <Grid item xs={12} md={3} lg={3}>
           <Card
             role="button"
             sx={{ justifyContent: "center" }}

@@ -1,7 +1,15 @@
 import PropTypes from "prop-types";
 import replaceDataModel from "model/replaceDataModel";
+import { currencyFormat } from "./numberFormat";
 
-export default function replaceTemplate({ template, itemList, dataTransaction, dataBusiness }) {
+export default function replaceTemplate({
+  template,
+  itemList,
+  dataTransaction,
+  dataBusiness,
+  clientSelected,
+  paymentMethods,
+}) {
   const stringReturn = [];
   const replaceParams = [replaceDataModel];
 
@@ -13,17 +21,71 @@ export default function replaceTemplate({ template, itemList, dataTransaction, d
   if (dataBusiness !== undefined) {
     dataToReplace = [...dataToReplace, ...dataBusiness];
   }
-  // const joined = replaceParams.map((k) => Object.keys(k));
+  if (clientSelected !== undefined) {
+    dataToReplace = [...dataToReplace, clientSelected];
+  }
   const joined = Object.keys(replaceParams[0])
     .map((key) => key)
     .join("|");
   const regex = new RegExp(`${joined}`, "g");
-  console.log("dataToReplace", dataToReplace);
   template.forEach((temp) => {
     if (temp.includes(`{{minItems}}`)) {
       itemList.forEach((element) => {
-        stringReturn.push([`${element.producto} - ${element.totale} - ${element.cantida}`, "left"]);
+        stringReturn.push([
+          `x${element.cantida} ${element.producto} - ${element.observacion}`,
+          "left",
+        ]);
       });
+      return;
+    }
+
+    if (temp.includes(`{{items}}`)) {
+      itemList.forEach((element) => {
+        stringReturn.push([
+          `x${element.cantida} ${element.producto} ${currencyFormat(
+            Number.parseInt(element.venta_uno, 10)
+          )} ${currencyFormat(Number.parseInt(element.totale, 10))} `,
+          "left",
+        ]);
+      });
+      return;
+    }
+
+    if (temp.includes(`{{totalTransaction}}`)) {
+      stringReturn.push([`P. VOLUNTARIA ${0}`, "left"]);
+      stringReturn.push([`TOTAL FACTURA ${currencyFormat(dataToReplace[0].total)}`, "left", true]);
+      stringReturn.push([`CANCELO ${currencyFormat(dataToReplace[0].total)}`, "left"]);
+      stringReturn.push([`CAMBIO ${currencyFormat(0)}`, "left"]);
+      stringReturn.push([`TOTAL PRODUCTOS ${itemList.length}`, "left"]);
+      stringReturn.push([`ESTADO Aceptado`, "left"]);
+      return;
+    }
+
+    if (temp.includes(`{{paymentMethods}}`)) {
+      console.log("paymentMethod", paymentMethods);
+      if (paymentMethods.length > 0) {
+        paymentMethods.forEach((payment) => {
+          if (payment.id > 0) {
+            stringReturn.push([`${payment.descripcion}: $${payment.value}`, "left"]);
+          }
+        });
+      } else {
+        stringReturn.push(["", "left"]);
+      }
+      return;
+    }
+
+    if (temp.includes(`{{footer}}`)) {
+      stringReturn.push([
+        `CAJERO ${dataToReplace[0].first_name} ${dataToReplace[0].surname}`,
+        "left",
+      ]);
+      stringReturn.push([`Observacion`, "left"]);
+      stringReturn.push([`______________________`, "left"]);
+      stringReturn.push([`Recibi`, "left"]);
+      stringReturn.push([`______________________`, "left"]);
+      stringReturn.push([`Software SILPOS 316-6266662 http//www.silpos.com`, "center"]);
+
       return;
     }
 
@@ -32,6 +94,7 @@ export default function replaceTemplate({ template, itemList, dataTransaction, d
       stringReturn.push([replaced, "center"]);
       return;
     }
+
     // if (temp.includes(`{{minBusiness}}`)) {
     //   console.log(dataBusiness);
     //   console.log(dataTransaction);
@@ -49,6 +112,8 @@ replaceTemplate.defaultProps = {
   itemList: [],
   dataTransaction: [],
   dataBusiness: [],
+  clientSelected: [],
+  paymentMethods: [],
 };
 
 replaceTemplate.propTypes = {
@@ -56,4 +121,6 @@ replaceTemplate.propTypes = {
   itemList: PropTypes.instanceOf(Array),
   dataTransaction: PropTypes.instanceOf(Array),
   dataBusiness: PropTypes.instanceOf(Array),
+  clientSelected: PropTypes.instanceOf(Array),
+  paymentMethods: PropTypes.instanceOf(Array),
 };

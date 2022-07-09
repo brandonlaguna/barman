@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import { useMaterialUIController, setMiniSidenav } from "context";
-// Design
 import MDBox from "components/MDBox";
 import Grid from "@mui/material/Grid";
 // import Context for Bar Cart
 import { BarCartControllerProvider } from "context/barCartContext";
-// Bar compoents
+import { getCategories } from "model/categoryModel";
+// Bar components
 import HeaderBarMenu from "./components/HeaderBarMenu";
 import ItemCartBar from "./components/ItemCartBar";
 import ItemsBar from "./components/ItemsBar";
@@ -15,12 +15,20 @@ import CategoryButton from "./components/ItemsBar/components/CategoryButton";
 function Bar() {
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav } = controller;
+  const [scrollToCategory, setScrollToCategory] = useState(0);
+  const [listCategories, setListCategories] = useState([]);
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, true);
 
   useEffect(() => {
     handleMiniSidenav();
   }, [miniSidenav]);
+
+  useEffect(() => {
+    getCategories().then((categories) => setListCategories(categories));
+  }, []);
+
+  const handleScrollToCategory = (id) => setScrollToCategory(id);
 
   return (
     <BarCartControllerProvider>
@@ -35,11 +43,11 @@ function Bar() {
             </Grid>
             <Grid item xs={12} md={8} lg={8}>
               <MDBox mb={1.5} sx={{ height: "300px" }}>
-                <ItemsBar />
+                <ItemsBar scrollToCategory={scrollToCategory} />
               </MDBox>
             </Grid>
             <Grid item xs={1} md={1} lg={1}>
-              <CategoryButton />
+              <CategoryButton scrollTo={handleScrollToCategory} listCategories={listCategories} />
             </Grid>
           </Grid>
         </MDBox>

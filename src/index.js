@@ -2,37 +2,32 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "App";
-import { Auth0Provider } from "@auth0/auth0-react";
-// Silpos Barman React Context Provider
 import { MaterialUIControllerProvider } from "context";
 import { SelectorProvider } from "context/selectorContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthContextProvider } from "context/userContext";
 
 ReactDOM.render(
-  <BrowserRouter>
-    <SelectorProvider>
-      <Auth0Provider
-        domain="silpos.us.auth0.com"
-        clientId="pGq9qahjQB40GcNNsWWakAUtMPTmnMAc"
-        redirectUri={window.location.origin}
-      >
+  <AuthContextProvider>
+    <BrowserRouter>
+      <SelectorProvider>
         <MaterialUIControllerProvider>
           <App />
+          <ToastContainer
+            position="bottom-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
         </MaterialUIControllerProvider>
-      </Auth0Provider>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-    </SelectorProvider>
-  </BrowserRouter>,
+      </SelectorProvider>
+    </BrowserRouter>
+  </AuthContextProvider>,
   document.getElementById("root")
 );

@@ -22,6 +22,7 @@
     "@emotion/cache": "11.7.1",
     "@emotion/react": "11.7.1",
     "@emotion/styled": "11.6.0",
+    "@hookform/resolvers": "^2.8.10",
     "@mui/icons-material": "5.4.1",
     "@mui/lab": "^5.0.0-alpha.77",
     "@mui/material": "5.4.1",
@@ -45,6 +46,7 @@
     "react": "^17.0.2",
     "react-anchor-link-smooth-scroll": "^1.0.12",
     "react-chartjs-2": "3.0.4",
+    "react-click-n-hold": "^1.0.7",
     "react-dom": "^17.0.2",
     "react-github-btn": "1.2.1",
     "react-hook-form": "^7.30.0",
@@ -62,7 +64,9 @@
     "web-vitals": "2.1.4",
     "yup": "0.32.11"
   },
+  "homepage": "https://barman.silpos.com/",
   "scripts": {
+    "dev": "react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

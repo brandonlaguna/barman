@@ -1,4 +1,5 @@
 import axios from "axios";
+import md5 from "md5";
 import { API_URL } from "config/contants";
 
 const DEFAULT_ERROR_DATA = {
@@ -13,7 +14,7 @@ export const login = async ({ user, password }) =>
       `${API_URL}/login`,
       {
         user,
-        password,
+        password: md5(password),
       },
       {
         headers: {
@@ -21,7 +22,7 @@ export const login = async ({ user, password }) =>
         },
       }
     )
-    .then((response) => response.data)
+    .then((response) => response)
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
 
 export const checkAuthStatus = ({ accessToken }) =>

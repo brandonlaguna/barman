@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-
+import useUser from "hooks/useUser";
 // react-router components
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -29,13 +29,6 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
-
-// Auth0 validation
-import { useAuth0 } from "@auth0/auth0-react";
-
-// Sign In Form
-import SignIn from "layouts/authentication/sign-in";
-
 // Functions
 
 export default function App() {
@@ -52,9 +45,16 @@ export default function App() {
   } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
-  // Auth0 States
-  const { isAuthenticated } = useAuth0();
+  // Auth States
+  const { isLoggedIn } = useUser();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
+  }, []);
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -125,34 +125,27 @@ export default function App() {
   return (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
-      {isAuthenticated ? (
-        <>
-          {layout === "dashboard" && (
-            <>
-              <Sidenav
-                color={sidenavColor}
-                brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-                brandName="Silpos Barman"
-                routes={routes}
-                onMouseEnter={handleOnMouseEnter}
-                onMouseLeave={handleOnMouseLeave}
-              />
-              <Configurator />
-              {configsButton}
-            </>
-          )}
-          {layout === "vr" && <Configurator />}
-          <Routes>
-            {getRoutes(routes)}
-            <Route path="*" element={<Navigate to="/dashboard" />} />
-          </Routes>
-        </>
-      ) : (
-        <>
-          <SignIn />
-          {layout === "vr" && <Configurator />}
-        </>
-      )}
+      <>
+        {layout === "dashboard" && (
+          <>
+            <Sidenav
+              color={sidenavColor}
+              brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+              brandName="Silpos Barman"
+              routes={routes}
+              onMouseEnter={handleOnMouseEnter}
+              onMouseLeave={handleOnMouseLeave}
+            />
+            <Configurator />
+            {configsButton}
+          </>
+        )}
+        {layout === "vr" && <Configurator />}
+        <Routes>
+          {getRoutes(routes)}
+          <Route path="*" element={<Navigate to="/dashboard" />} />
+        </Routes>
+      </>
     </ThemeProvider>
   );
 }

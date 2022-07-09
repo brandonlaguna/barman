@@ -2,11 +2,16 @@
 // -----------------------------------
 
 export const environment = "development";
-export const API_URL = "https://api.silpos.com";
-export const API_SILPOS_WEB =
-  environment === "development" ? "https://pruebas.silpos.com" : "https://sistema.silpos.com";
-export const API_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRlbW9iYXJAZ21haWwuY29tIiwiaWF0IjoxNjUxMTE5NTkzLCJleHAiOjE2NTM3MTE1OTN9.RV7mxpxyM75ui0ikIaefcslM7WqyXPJ8iwALQTmjzDQ";
+export const server = "offline";
+
+export const SILPOS_LOCAL = "http://localhost/silpos";
+export const SILPOS_WEB = "https://pruebas.silpos.com";
+
+export const API_URL =
+  environment === "development" ? "http://localhost:3001" : "https://api.silpos.com";
+
+export const API_SILPOS_WEB = environment === "development" ? SILPOS_LOCAL : SILPOS_WEB;
+
 export const API_CAJA_SOURCE = "/app/models/api_caja";
 
 export const APP_COLORS = {
@@ -34,22 +39,19 @@ export const APP_MEDIAQUERY = {
   tablet: 768,
   mobile: 480,
 };
-// solo para pruebas, falta inicio de sesion
-export const headers = {
-  "Content-Type": "application/json",
-  Accept: "application/json",
-  authorization: API_TOKEN,
-  dbu: "silposco_master",
-  dbp: "w4rH%I,75iID",
-  dbd: "silposco_demobarmaster",
-  Company: 71,
-};
-
 export const BANK_ICONS = "../../assets/BankIcon";
-
 export const DEFAULT_TIMEZONE = "Australia/Sydney";
 
-export const ACCESS = {
-  user: "demobar@gmail.com",
-  password: "827ccb0eea8a706c4c34a16891f84e7b",
-};
+export const LOCAL_STORAGE_USAGE = [
+  "accessToken",
+  "userData",
+  "businessData",
+  "clientes",
+  "printersConfig",
+  "metodosPago",
+  "categorias",
+  "comprobantes",
+  "items",
+  "configuracion",
+  "tipoTransacciones",
+];

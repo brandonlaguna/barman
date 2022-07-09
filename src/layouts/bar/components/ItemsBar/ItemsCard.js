@@ -1,13 +1,29 @@
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import { BANK_ICONS, SILPOS_LOCAL, SILPOS_WEB, server } from "config/contants";
 import PropTypes from "prop-types";
 import { cardImageStyle } from "./style";
 import "./styles.css";
 
-export default function ItemsCard({ data, onclickItem }) {
-  const background = "https://pngimg.com/uploads/burger_sandwich/burger_sandwich_PNG96777.png";
+export default function ItemsCard({ data, onclickItem, categoryName }) {
+  // const background = "https://pngimg.com/uploads/burger_sandwich/burger_sandwich_PNG96777.png";
+  let background = "";
   // eslint-disable-next-line camelcase
-  const { id, articulo, venta_uno } = data;
+  const { id, articulo, venta_uno, url_foto } = data;
+
+  // eslint-disable-next-line camelcase
+  if (url_foto !== null) {
+    // eslint-disable-next-line camelcase
+    background = `${server === "online" ? SILPOS_WEB : SILPOS_LOCAL}/img/productos/${url_foto}`;
+    if (true) {
+      // eslint-disable-next-line camelcase
+      background = `${server === "online" ? SILPOS_WEB : SILPOS_LOCAL}/img/productos/${url_foto}`;
+    }
+  } else {
+    const imageName = categoryName.toLowerCase();
+    background = `${BANK_ICONS}/categories/${imageName.replace(" ", "-")}.png`;
+  }
+
   return (
     <Grid
       role="button"
@@ -24,7 +40,7 @@ export default function ItemsCard({ data, onclickItem }) {
         <div className="content-img-card">
           <Card sx={cardImageStyle({ background })} key={`childItem${id}`} />
         </div>
-        <p style={{ fontSize: "12px" }}>
+        <p style={{ fontSize: "11px" }}>
           {articulo}
           <br />
           <small style={{ fontSize: "10px" }}>
@@ -39,4 +55,5 @@ export default function ItemsCard({ data, onclickItem }) {
 ItemsCard.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
   onclickItem: PropTypes.func.isRequired,
+  categoryName: PropTypes.string.isRequired,
 };

@@ -4,10 +4,11 @@ import MDBox from "components/MDBox";
 import CartContainerStyle from "assets/theme/carBarStyle";
 import { useMaterialUIController } from "context";
 import { getItems, groupItems } from "model/ItemsModel";
+import PropTypes from "prop-types";
 import useWindowDimensions from "functions/windowDimension";
 import ScrollMenuItem from "./HorizontalScrollContainer";
 
-export default function ItemsBar() {
+export default function ItemsBar({ scrollToCategory }) {
   const [controller] = useMaterialUIController();
   const [controllerBar, dispatchBar] = useBarCartController();
 
@@ -36,7 +37,15 @@ export default function ItemsBar() {
         })
       }
     >
-      <ScrollMenuItem listItems={listItems} onClickItem={handleAddItemToCart} />
+      <ScrollMenuItem
+        listItems={listItems}
+        onClickItem={handleAddItemToCart}
+        scrollToCategory={scrollToCategory}
+      />
     </MDBox>
   );
 }
+
+ItemsBar.propTypes = {
+  scrollToCategory: PropTypes.number.isRequired,
+};
