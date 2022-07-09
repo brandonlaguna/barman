@@ -27,3 +27,9 @@ export const sendMassiveTransactions = ({ data, venta }) =>
     )
     .then((response) => response.data)
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+
+export const cancelOrder = (params) =>
+  axios
+    .post(`${API_SILPOS_WEB}/app/views/cajabar/php/anular_pedido.php`, params, { headers })
+    .then((response) => response)
+    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);

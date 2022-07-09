@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import MDBox from "components/MDBox";
 import { useMaterialUIController } from "context";
@@ -18,17 +18,75 @@ import generateTransaction from "transactions/generateTransaction";
 import "@sandstreamdev/react-swipeable-list/dist/styles.css";
 import calculateTotal from "functions/calculateTotal";
 import printTransaction from "transactions/printTransaction";
+import { BANK_ICONS } from "config/contants";
+import { importAllUsers } from "services/userServices";
+import CircleButton from "components/MDCircleButton";
 import ItemCartCard from "./components/ItemCartCard";
 import PaymentButton from "./components/PaymentButton";
 import ModalItemSetting from "./components/Modals/ModalItemSetting";
+import ModalUserAuthorization from "./components/Modals/ModalUserAuthorization";
 import { ItemCartBarStyle } from "./style";
 
+const buttonIconStyle = {
+  width: "23px",
+  height: "23px",
+  color: "white",
+  filter: "invert(90%) sepia(21%) saturate(95%) hue-rotate(100deg) brightness(100%) contrast(100%)",
+};
+
 function RenderIdTable({ tableSelected }) {
+  const [controllerBar, dispatchBar] = useBarCartController();
+  const { listCarts } = controllerBar;
+  const [listUsers, setListUsers] = useState([]);
+  const [isOpenModalUserAuth, setIsOpenModalUserAuth] = useState(false);
+
+  const handleClickUserAuth = () => {
+    importAllUsers().then((response) => {
+      setListUsers(response.data);
+      setIsOpenModalUserAuth(true);
+    });
+  };
+
+  const handleOnForceCloseUserAuth = () => setIsOpenModalUserAuth(false);
   return (
-    <Box>
-      <Typography id="modal-modal-title" variant="h6" component="h2" style={{ color: "white" }}>
-        {tableSelected ? `Pedido Mesa #${tableSelected}` : ""}
-      </Typography>
+    <Box style={{ marginBottom: "6px" }}>
+      {tableSelected && (
+        <>
+          <Grid container>
+            <Grid item xs={10} sm={10} md={10}>
+              <Typography
+                id="modal-modal-title"
+                variant="h6"
+                component="h2"
+                style={{ color: "white" }}
+              >
+                Pedido Mesa # {tableSelected} {listCarts.length}
+              </Typography>
+            </Grid>
+            <Grid item xs={1} sm={1} md={1}>
+              <CircleButton
+                iconPath={`${BANK_ICONS}/interface/duster.svg`}
+                sx={{ width: "40px", height: "40px" }}
+                sxIcon={buttonIconStyle}
+                onClick={() => clean(dispatchBar, true)}
+              />
+            </Grid>
+            <Grid item xs={1} sm={1} md={1}>
+              <CircleButton
+                iconPath={`${BANK_ICONS}/interface/bin.svg`}
+                sx={{ width: "40px", height: "40px" }}
+                sxIcon={buttonIconStyle}
+                onClick={() => handleClickUserAuth()}
+              />
+            </Grid>
+          </Grid>
+          <ModalUserAuthorization
+            isOpen={isOpenModalUserAuth}
+            handleOnForceClose={handleOnForceCloseUserAuth}
+            dataUser={listUsers}
+          />
+        </>
+      )}
     </Box>
   );
 }
