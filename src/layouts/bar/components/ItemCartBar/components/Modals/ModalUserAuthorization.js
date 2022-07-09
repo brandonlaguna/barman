@@ -15,6 +15,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useMaterialUIController } from "context";
 import MainModal from "components/MDModales";
 import { ModalUserAuthorizationStyle } from "../../style";
+import "../../style.css";
 
 export default function ModalUserAuthorization({ isOpen, handleOnForceClose, dataUser }) {
   const {
@@ -52,7 +53,6 @@ export default function ModalUserAuthorization({ isOpen, handleOnForceClose, dat
       } else {
         toast.error(data.message);
       }
-      console.log(data);
     });
   };
 
@@ -63,7 +63,7 @@ export default function ModalUserAuthorization({ isOpen, handleOnForceClose, dat
   useEffect(() => {
     setIsOpenModal(isOpen);
   }, [isOpen]);
-
+  // ${BANK_ICONS}/interface/secure-access.png 210
   return (
     <MainModal
       key={2}
@@ -79,19 +79,17 @@ export default function ModalUserAuthorization({ isOpen, handleOnForceClose, dat
       }
     >
       <Grid container>
-        <Grid item xs={12} sm={12} md={12} style={{ alignItems: "center" }}>
-          <Box
-            display="flex"
-            component="img"
-            sx={{
-              width: 210,
-            }}
-            style={{
-              alignItems: "center",
-            }}
-            alt="secure access."
-            src={`${BANK_ICONS}/interface/secure-access.png`}
-          />
+        <Grid item xs={12} sm={12} md={12}>
+          <div className="image-container">
+            <img
+              src={`${BANK_ICONS}/interface/secure-access.png`}
+              alt="secure access"
+              width={210}
+              style={{
+                alignSelf: "center",
+              }}
+            />
+          </div>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
           <MDBox
@@ -108,7 +106,7 @@ export default function ModalUserAuthorization({ isOpen, handleOnForceClose, dat
                   <Controller
                     name="supervisor_anular"
                     control={control}
-                    rules={{ required: "El campo Email es requerido" }}
+                    rules={{ required: "El nombre de usuario es requerido" }}
                     render={({ field }) => (
                       <>
                         <InputLabel id="label-supervisor_anular">Administrador</InputLabel>
@@ -136,7 +134,7 @@ export default function ModalUserAuthorization({ isOpen, handleOnForceClose, dat
                     )}
                   />
                   {errors.supervisor_anular && (
-                    <span className="invalid-feedback">{errors.supervisor_anular.message}</span>
+                    <p className="invalid-feedback">{errors.supervisor_anular.message}</p>
                   )}
                 </Box>
               </Grid>
@@ -145,10 +143,10 @@ export default function ModalUserAuthorization({ isOpen, handleOnForceClose, dat
                   <Controller
                     name="contrase_anular"
                     control={control}
-                    rules={{ required: "El campo contraseña es requerido" }}
+                    rules={{ required: "La contraseña es requerida" }}
                     render={({ field }) => (
                       <MDInput
-                        type="contrase_anular"
+                        type="password"
                         label="Password"
                         fullWidth
                         invalid={
@@ -159,7 +157,7 @@ export default function ModalUserAuthorization({ isOpen, handleOnForceClose, dat
                     )}
                   />
                   {errors.contrase_anular && (
-                    <span className="invalid-feedback">{errors.contrase_anular.message}</span>
+                    <p className="invalid-feedback">{errors.contrase_anular.message}</p>
                   )}
                 </Box>
               </Grid>
