@@ -60,7 +60,7 @@ function RenderIdTable({ tableSelected }) {
                 component="h2"
                 style={{ color: "white" }}
               >
-                Pedido Mesa # {tableSelected} {listCarts.length}
+                Pedido Mesa # {tableSelected} ({listCarts.length} items)
               </Typography>
             </Grid>
             <Grid item xs={1} sm={1} md={1}>
