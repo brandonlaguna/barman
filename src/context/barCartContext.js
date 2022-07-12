@@ -31,12 +31,14 @@ function reducer(state, action) {
         ? {
             ...state,
             listCarts: state.listCarts.map((item) =>
-              item.id === value.id ? { ...item, cantidad: item.cantidad + 1 } : item
+              item.id === value.id
+                ? { ...item, observacion: "", cantidad: item.cantidad + 1 }
+                : item
             ),
           }
         : {
             ...state,
-            listCarts: [...state.listCarts, { ...value, cantidad: 1 }],
+            listCarts: [...state.listCarts, { ...value, observacion: "", cantidad: 1 }],
           };
     }
     case "REMOVE_ITEM_TO_CART": {

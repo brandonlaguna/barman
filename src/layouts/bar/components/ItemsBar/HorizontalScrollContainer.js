@@ -60,13 +60,16 @@ function Card({
         style={{
           position: "absolute",
         }}
+        xs={12}
+        md={12}
+        lg={12}
       >
         {Object.entries(listItems[itemId].items).map((element) => (
           <ItemsCard
             rol="button"
             data={element[1]}
             onclickItem={onClickItem}
-            categoryName={title.categoria}
+            categoryImg={title.url_image}
           />
         ))}
       </Grid>
@@ -90,7 +93,7 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem, scrollToCategory 
     setPosition(0);
     getCategories().then((response) => setCategories(response));
     setDuration(500);
-    setEase("easeInOutQuad");
+    setEase("easeInCubic");
   }, []);
 
   useEffect(() => {

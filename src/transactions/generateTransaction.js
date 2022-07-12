@@ -27,7 +27,7 @@ function itemsCollection(listCarts) {
       venta_tres: element.venta_tres,
       idventa,
       valor: element.venta_uno,
-      observacion: element.descripcion,
+      observacion: element.observacion,
     });
   });
   return arrayItems;

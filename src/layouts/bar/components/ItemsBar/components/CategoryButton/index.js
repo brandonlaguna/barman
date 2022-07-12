@@ -1,6 +1,6 @@
 import CircleButton from "components/MDCircleButton";
 import MDBox from "components/MDBox";
-import { BANK_ICONS } from "config/contants";
+import { SILPOS_LOCAL, SILPOS_WEB, server } from "config/contants";
 import { useMaterialUIController } from "context";
 import useWindowDimensions from "functions/windowDimension";
 import PropTypes from "prop-types";
@@ -29,9 +29,7 @@ function CategoryButton({ scrollTo, listCategories }) {
       <div style={{ height: height - 160, overflowY: "scroll", paddingBottom: 60 }}>
         {listCategories.map((category) => (
           <CircleButton
-            iconPath={`${BANK_ICONS}/${
-              category.url_icon != null ? category.url_icon : "silpos.png"
-            }`}
+            iconPath={`${server === "online" ? SILPOS_WEB : SILPOS_LOCAL}/img/${category.url_icon}`}
             onClick={() => scrollTo(category.id)}
           />
         ))}
