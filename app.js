@@ -1,17 +1,17 @@
-const path = require('path');
-const fs = require('fs');
+import path from 'path';
+import fs from 'fs';
 
-const React = require('react');
-const ReactDOMServer =require('react-dom/server');
-const express = require('express');
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+import express from 'express';
 
-const App = require('./src/App');
+import App from './src/App';
 
 const PORT = process.env.PORT || 3006;
 const app = express();
 
 app.get('*', (req, res) => {
-  const app = ReactDOMServer.renderToString(App);
+  const app = ReactDOMServer.renderToString(<App />);
   const indexFile = path.resolve('./build/index.html');
 
   fs.readFile(indexFile, 'utf8', (err, data) => {
