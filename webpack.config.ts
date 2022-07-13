@@ -2,13 +2,20 @@ module.exports = {
     module: {
       rules: [
         {
-          test: /\.(png|jpe?g|gif|svg)$/i,
-          use: ['@svgr/webpack', 'url-loader'],
-          loader: 'file-loader',
-          options: {
-            name: '[path][name].[ext]',
-          },
+          test: /\.(png|jpg|gif)$/i,
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 8192,
+              }
+            },
+          ],
+          type: 'javascript/auto'
         },
       ],
+    },
+    resolve: {
+      preferRelative: true,
     },
   };
