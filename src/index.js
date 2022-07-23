@@ -7,6 +7,13 @@ import { SelectorProvider } from "context/selectorContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContextProvider } from "context/userContext";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { firebaseConfig } from "config/contants";
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+console.log(analytics);
 
 ReactDOM.render(
   <AuthContextProvider>

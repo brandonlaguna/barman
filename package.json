@@ -35,6 +35,7 @@
     "axios": "^0.26.0",
     "chart.js": "3.4.1",
     "chroma-js": "2.4.2",
+    "firebase": "^9.9.1",
     "flatlist-react": "^1.5.0",
     "hammerjs": "^2.0.8",
     "jodit": "^3.17.1",

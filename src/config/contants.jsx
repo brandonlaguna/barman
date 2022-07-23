@@ -1,8 +1,8 @@
 // GLOBAL CONSTANTS
 // -----------------------------------
 
-export const environment = "development";
-export const server = "offline";
+export const environment = "production";
+export const server = "online";
 
 export const SILPOS_LOCAL = "http://localhost/silpos";
 export const SILPOS_WEB = "https://pruebas.silpos.com";
@@ -55,3 +55,13 @@ export const LOCAL_STORAGE_USAGE = [
   "configuracion",
   "tipoTransacciones",
 ];
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyCAXrj2RvUtXVTh24lA2pqYe7Sg_bp9pxw",
+  authDomain: "barman-pro.firebaseapp.com",
+  projectId: "barman-pro",
+  storageBucket: "barman-pro.appspot.com",
+  messagingSenderId: "496770787350",
+  appId: "1:496770787350:web:ca3be5f08e7a22738b6d37",
+  measurementId: "G-D4WKKEXWXV",
+};
