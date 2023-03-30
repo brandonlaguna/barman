@@ -1,11 +1,11 @@
 // GLOBAL CONSTANTS
 // -----------------------------------
 
-export const environment = "development";
+export const environment = "production";
 export const server = "offline";
 
 export const SILPOS_LOCAL = "http://localhost/silpos";
-export const SILPOS_WEB = "https://pruebas.silpos.com";
+export const SILPOS_WEB = "https://sistema.silpos.com";
 
 export const API_URL =
   environment === "development" ? "http://localhost:3001" : "https://api.silpos.com";

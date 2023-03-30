@@ -105,10 +105,14 @@ function Printers() {
               <MDBox pt={3}>
                 <DataTable
                   table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
+                  isSorted
+                  entriesPerPage
                   noEndBorder
+                  canSearch
+                  pagination={{
+                    variant: "gradient",
+                  }}
+                  selectRow={(e) => console.log("impresora", e)}
                 />
               </MDBox>
             </Card>
