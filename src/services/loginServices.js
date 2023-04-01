@@ -11,7 +11,7 @@ const DEFAULT_ERROR_DATA = {
 export const login = async ({ user, password }) =>
   axios
     .post(
-      `${API_URL}/loginv2`,
+      `${API_URL}/login`,
       {
         user,
         password: md5(password),
