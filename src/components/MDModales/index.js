@@ -13,7 +13,7 @@ export default function MainModal({ children, isOpen, modalStyle, onForceClose }
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <MDBox mb={1.5} sx={modalStyle}>
+        <MDBox mb={1.5} sx={modalStyle} style={{ overflowY: "auto" }}>
           {children}
         </MDBox>
       </Modal>

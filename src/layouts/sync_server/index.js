@@ -17,14 +17,28 @@ import { importComprobantes } from "services/comprobantesServices";
 import { importConfiguracion, importPrinterConfiguracion } from "services/configuracionServices";
 import { importTipoTransacciones } from "services/tipoTransaccion.services";
 import { importMetodosPago } from "services/metodosPago.services";
+import { getProductsAC } from "context/action-creator/productsAC";
+import { useProductController } from "context/productContext";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Avatar from "@mui/material/Avatar";
+import StatusIcon from "./components/StatusIcon";
 
 function SyncServer() {
   const [statusSync, setStatusSyc] = useState("Conectando con el servidor");
   const [data, setData] = useState("Recopilando informacion");
-
+  const [productController, productDispatch] = useProductController();
+  const { isLoadingProducts } = productController;
   const notify = (message) => {
     toast.error(message);
   };
+
+  useEffect(() => {
+    getProductsAC(productDispatch);
+  }, []);
 
   const getPrintersConfig = () => {
     importPrinterConfiguracion()
@@ -135,11 +149,36 @@ function SyncServer() {
       <DashboardNavbar />
       <MDBox py={3}>
         <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <p>{` ${isLoadingProducts}`}</p>
+            <p>{statusSync}</p>
+            <p>{data}</p>
+          </Grid>
           <Grid item xs={12} md={12} lg={12}>
             <MDBox mb={1.5} />
-            <h1>Sincronizando servicios</h1>
-            <h2>Estado: {statusSync}.</h2>
-            <h3>{data}</h3>
+            <List dense sx={{ width: "100%", maxWidth: 360 }}>
+              {[0, 1, 2, 3].map((value) => {
+                const labelId = `checkbox-list-secondary-label-${value}`;
+                return (
+                  <ListItem
+                    key={value}
+                    secondaryAction={<StatusIcon status={isLoadingProducts} />}
+                    disablePadding
+                  >
+                    <ListItemButton>
+                      <ListItemAvatar>
+                        <Avatar
+                          alt={`Avatar n°${value + 1}`}
+                          src={`/static/images/avatar/${value + 1}.jpg`}
+                        />
+                      </ListItemAvatar>
+                      <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
+                    </ListItemButton>
+                  </ListItem>
+                );
+              })}
+            </List>
+            <StatusIcon status={isLoadingProducts} />
           </Grid>
         </Grid>
         <ToastContainer />

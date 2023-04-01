@@ -10,12 +10,14 @@ export default function useUser() {
 
   const login = async ({ user, password }) => {
     const response = await loginService.login({ user, password });
-    const { data } = response;
-    if (data.status) {
-      window.localStorage.setItem("accessToken", data.token);
-      window.localStorage.setItem("userData", JSON.stringify(data.data[0]));
-      window.localStorage.setItem("businessData", JSON.stringify(data.dataEmpresas[0]));
-      setAuthState({ token: data.token, user: data.data[0] });
+    const { data, status, token, businessData } = response;
+    if (status) {
+      console.log("ruteando", data);
+      navigate("/sync_server");
+      window.localStorage.setItem("accessToken", token);
+      window.localStorage.setItem("userData", JSON.stringify(data));
+      window.localStorage.setItem("businessData", JSON.stringify(businessData));
+      setAuthState({ token, user: data });
       return Promise.resolve(true);
     }
 

@@ -14,14 +14,14 @@ import AddIcon from "@mui/icons-material/Add";
 
 // import modals
 import ModalItem from "./components/modals/ModalItem";
-// import ModalEditItem from "./components/modals/ModalEditItem";
+import ModalDeleteItem from "./components/modals/ModalDeleteItem";
 
 export default function Products() {
   const [rows, setRows] = useState([]);
-  const onClickEdit = () => console.log("onclick edit");
   const [openModalItem, setOpenModalItem] = useState(false);
   const [openModalEditItem, setOpenModalEditItem] = useState(false);
   const [dataItemSelected, setDataItemSelected] = useState([]);
+  const [openDeleteModalItem, setOpenDeleteModalItem] = useState(false);
 
   const columns = [
     { Header: "ID", accessor: "id", width: "5%", align: "left" },
@@ -42,6 +42,12 @@ export default function Products() {
     }
   };
 
+  const handleOnDeleteItem = () => {
+    if (dataItemSelected && dataItemSelected?.id) {
+      console.log("delete", dataItemSelected?.id);
+    }
+  };
+
   const buttons = [
     {
       name: "Nuevo",
@@ -59,7 +65,7 @@ export default function Products() {
     },
     {
       name: "Eliminar",
-      onClick: onClickEdit,
+      onClick: () => setOpenDeleteModalItem(true),
       inheritDisable: true,
       iconButton: <DeleteOutlineIcon />,
       color: "error",
@@ -139,11 +145,13 @@ export default function Products() {
           }
           data={openModalEditItem ? dataItemSelected : null}
         />
-        {/* <ModalEditItem
-          isOpen={openModalEditItem}
-          handleOnForceClose={() => setOpenModalEditItem(false)}
+        <ModalDeleteItem
+          isOpen={openDeleteModalItem}
+          handleOnForceClose={() => setOpenDeleteModalItem(false)}
           data={dataItemSelected}
-        /> */}
+          onSuccess={() => handleOnDeleteItem()}
+          onCancel={() => setOpenDeleteModalItem(false)}
+        />
       </DashboardLayout>
     </ProductControllerProvider>
   );

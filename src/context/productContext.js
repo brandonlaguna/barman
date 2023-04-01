@@ -10,15 +10,29 @@ BarCart.displayName = "ProductContext";
 // Silpos Barman React Bar Cart reducer
 const initialState = {
   productList: [],
+  products: [],
+  isLoadingProducts: 1,
 };
 
 function reducer(state, action) {
   const { value } = action;
   switch (action.type) {
-    case "SET_PRODUCTS": {
+    case "SET_PRODUCTS_LIST": {
       return {
         ...state,
         sendTransaction: value,
+      };
+    }
+    case "SET_PRODUCTS": {
+      return {
+        ...state,
+        products: value,
+      };
+    }
+    case "SET_LOADING": {
+      return {
+        ...state,
+        isLoadingProducts: value,
       };
     }
     default: {
@@ -29,22 +43,22 @@ function reducer(state, action) {
 
 // Silpos Barman React Bar Cart context provider
 function ProductControllerProvider({ children }) {
-  const [controllerProduct, dispatchProduct] = useReducer(reducer, initialState);
+  const [controllerProduct, productDispatch] = useReducer(reducer, initialState);
 
   const value = useMemo(
-    () => [controllerProduct, dispatchProduct],
-    [controllerProduct, dispatchProduct]
+    () => [controllerProduct, productDispatch],
+    [controllerProduct, productDispatch]
   );
 
   return <BarCart.Provider value={value}>{children}</BarCart.Provider>;
 }
 
 // Silpos Barman React custom hook for using context
-function useBarCartController() {
+function useProductController() {
   const context = useContext(BarCart);
 
   if (!context) {
-    throw new Error("useBarCartController should be used inside the ProductControllerProvider.");
+    throw new Error("useProductController should be used inside the ProductControllerProvider.");
   }
 
   return context;
@@ -55,6 +69,15 @@ ProductControllerProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-const setProducts = (dispatchProduct, value) => dispatchProduct({ type: "SET_PRODUCTS", value });
+const setProductsList = (productDispatch, value) =>
+  productDispatch({ type: "SET_PRODUCTS_LIST", value });
+const setProducts = (productDispatch, value) => productDispatch({ type: "SET_PRODUCTS", value });
+const setLoading = (productDispatch, value) => productDispatch({ type: "SET_LOADING", value });
 
-export { ProductControllerProvider, useBarCartController, setProducts };
+export {
+  ProductControllerProvider,
+  useProductController,
+  setProducts,
+  setProductsList,
+  setLoading,
+};

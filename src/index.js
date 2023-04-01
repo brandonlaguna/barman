@@ -7,24 +7,27 @@ import { SelectorProvider } from "context/selectorContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContextProvider } from "context/userContext";
+import { ProductControllerProvider } from "context/productContext";
 
 ReactDOM.render(
   <AuthContextProvider>
     <BrowserRouter>
       <SelectorProvider>
         <MaterialUIControllerProvider>
-          <App />
-          <ToastContainer
-            position="bottom-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
+          <ProductControllerProvider>
+            <App />
+            <ToastContainer
+              position="bottom-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+          </ProductControllerProvider>
         </MaterialUIControllerProvider>
       </SelectorProvider>
     </BrowserRouter>
