@@ -42,6 +42,7 @@ import MDPagination from "components/MDPagination";
 import DataTableHeadCell from "examples/Tables/DataTable/DataTableHeadCell";
 import DataTableBodyCell from "examples/Tables/DataTable/DataTableBodyCell";
 import { useMaterialUIController } from "context";
+import StatusIcon from "components/MDStatusIcon";
 
 function DataTable({
   entriesPerPage,
@@ -53,6 +54,7 @@ function DataTable({
   noEndBorder,
   selectRow,
   buttons,
+  isLoading,
 }) {
   const [controller] = useMaterialUIController();
   const { sidenavColor } = controller;
@@ -192,7 +194,7 @@ function DataTable({
           {canSearch && (
             <MDBox width="12rem" ml="auto">
               <MDInput
-                placeholder="Search..."
+                placeholder="Buscar..."
                 value={search}
                 size="small"
                 fullWidth
@@ -274,6 +276,11 @@ function DataTable({
             </MDTypography>
           </MDBox>
         )}
+        {isLoading > 0 && (
+          <MDBox mb={{ xs: 3, sm: 0 }}>
+            <StatusIcon status={isLoading} />
+          </MDBox>
+        )}
         {pageOptions.length > 1 && (
           <MDPagination
             variant={pagination.variant ? pagination.variant : "gradient"}
@@ -317,6 +324,7 @@ DataTable.defaultProps = {
   noEndBorder: false,
   buttons: [],
   selectRow: () => null,
+  isLoading: 0,
 };
 
 // Typechecking props for the DataTable
@@ -348,6 +356,7 @@ DataTable.propTypes = {
   noEndBorder: PropTypes.bool,
   selectRow: PropTypes.func,
   buttons: PropTypes.objectOf(PropTypes.array),
+  isLoading: PropTypes.number,
 };
 
 export default DataTable;

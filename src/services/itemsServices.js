@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import axios from "axios";
 import headerRequest from "functions/headerRequest";
 import instance from "config/instances";
@@ -31,11 +32,17 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export const importItems = () =>
-  instance
-    .get(`/productos`, { headers })
-    .then((response) => response.data)
-    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+export const importItems = async () => {
+  try {
+    const response = await instance
+      .get(`/productos`, { headers })
+      .then((res) => res.data)
+      .catch(({ res }) => res.data || DEFAULT_ERROR_DATA);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const obtenerItem = (idarticulo) =>
   axios
@@ -46,26 +53,35 @@ export const obtenerItem = (idarticulo) =>
     .then((response) => response.data)
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
 
-export const saveItem = (dataItem) => {
-  instance
-    .post(`/productos`, dataItem)
-    .then((response) => response.data)
-    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+export const saveItem = async (dataItem) => {
+  try {
+    const response = await instance
+      .post(`/productos`, dataItem)
+      .then((res) => res.data)
+      .catch(({ res }) => res.data || DEFAULT_ERROR_DATA);
+    return response;
+  } catch (error) {
+    throw error;
+  }
 };
 
-export const updateItem = (dataItem) => {
-  instance
-    .put(`${API_URL}/productos`, dataItem)
-    .then((response) => response.data)
-    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+export const updateItem = async (dataItem) => {
+  try {
+    const response = await instance.put(`${API_URL}/productos`, dataItem);
+    return response;
+  } catch (error) {
+    throw error;
+  }
 };
 
-export const deleteItem = (dataItem) => {
-  axios
-    .delete(`${API_URL}/product`, {
-      headers,
-      params: dataItem,
-    })
-    .then((response) => response.data)
-    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+export const deleteItem = async (dataItem) => {
+  try {
+    const response = await instance
+      .delete(`${API_URL}/productos`, { data: dataItem })
+      .then((red) => red.data)
+      .catch(({ red }) => red.data || DEFAULT_ERROR_DATA);
+    return response;
+  } catch (error) {
+    throw error;
+  }
 };

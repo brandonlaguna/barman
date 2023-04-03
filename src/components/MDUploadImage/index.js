@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactImagePickerEditor from "react-image-picker-editor";
 import PropTypes from "prop-types";
 import "react-image-picker-editor/dist/index.css";
 import "./style.css";
 
-export default function UploadImage({ onSelectImage }) {
-  const [imageSrc, setImageSrc] = useState("");
+export default function UploadImage({ onSelectImage, defaultImg }) {
+  const [imageSrc, setImageSrc] = useState(defaultImg);
 
+  useEffect(() => {
+    if (defaultImg) {
+      console.log("🚀 ~ file: index.js:12 ~ useEffect ~ defaultImg:", defaultImg);
+      setImageSrc(defaultImg);
+    }
+  }, [defaultImg]);
   const handleSetImage = (image) => {
     setImageSrc(image);
     onSelectImage(image);
@@ -17,7 +23,7 @@ export default function UploadImage({ onSelectImage }) {
     width: "100%",
     height: "160px",
     objectFit: "contain",
-    compressInitial: null,
+    compressInitial: 20,
     hideDownloadBtn: true,
   };
 
@@ -35,6 +41,11 @@ export default function UploadImage({ onSelectImage }) {
   );
 }
 
+UploadImage.defaultProps = {
+  defaultImg: "",
+};
+
 UploadImage.propTypes = {
   onSelectImage: PropTypes.func.isRequired,
+  defaultImg: PropTypes.string,
 };

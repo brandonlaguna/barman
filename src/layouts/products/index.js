@@ -6,8 +6,8 @@ import DataTable from "examples/Tables/DataTable";
 import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import { ProductControllerProvider } from "context/productContext";
-import { importItems } from "services/itemsServices";
+import { useProductController } from "context/productContext";
+import { getProductsAC, deleteProductAC } from "context/action-creator/productsAC";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddIcon from "@mui/icons-material/Add";
@@ -20,8 +20,10 @@ export default function Products() {
   const [rows, setRows] = useState([]);
   const [openModalItem, setOpenModalItem] = useState(false);
   const [openModalEditItem, setOpenModalEditItem] = useState(false);
-  const [dataItemSelected, setDataItemSelected] = useState([]);
+  const [dataItemSelected, setDataItemSelected] = useState(null);
   const [openDeleteModalItem, setOpenDeleteModalItem] = useState(false);
+  const [productController, productDispatch] = useProductController();
+  const { products, isLoadingProducts } = productController;
 
   const columns = [
     { Header: "ID", accessor: "id", width: "5%", align: "left" },
@@ -35,7 +37,6 @@ export default function Products() {
   const handleRowSelected = (dataSelected) => {
     if (dataSelected) {
       const itemFound = rows.find((itemRow) => itemRow.id === dataSelected.id);
-      console.log("found", itemFound);
       setDataItemSelected(itemFound);
     } else {
       setDataItemSelected(null);
@@ -44,14 +45,21 @@ export default function Products() {
 
   const handleOnDeleteItem = () => {
     if (dataItemSelected && dataItemSelected?.id) {
-      console.log("delete", dataItemSelected?.id);
+      deleteProductAC(productDispatch, { id: dataItemSelected?.id });
     }
+  };
+
+  const handleOnNewItem = (val) => {
+    setOpenModalEditItem(false);
+    console.log("limpiar");
+    // setDataItemSelected(null);
+    setOpenModalItem(val);
   };
 
   const buttons = [
     {
       name: "Nuevo",
-      onClick: () => setOpenModalItem(true),
+      onClick: () => handleOnNewItem(true),
       inheritDisable: false,
       iconButton: <AddIcon />,
       color: "success",
@@ -73,86 +81,78 @@ export default function Products() {
   ];
 
   useEffect(() => {
-    importItems().then((res) => {
-      if (res.status === true) {
-        const { data } = res;
-        const listItems = [];
-        data.forEach((item) => {
-          listItems.push({
-            ...item,
-            id: item.id,
-            articulo: item.articulo,
-            barras: item.barras,
-            precio_costo: item.precio_costo,
-            precio_venta: item.venta_uno,
-            total: item.total,
-          });
-        });
-        setRows(listItems);
-      }
-    });
+    getProductsAC(productDispatch);
   }, []);
 
+  useEffect(() => {
+    if (products) {
+      setRows(products);
+    }
+  }, [products]);
+
   return (
-    <ProductControllerProvider>
-      <DashboardLayout>
-        <DashboardNavbar />
-        <MDBox pt={6} pb={3}>
-          <Grid container spacing={6}>
-            <Grid item xs={12}>
-              <Card>
-                <MDBox
-                  mx={2}
-                  mt={-3}
-                  py={3}
-                  px={2}
-                  variant="gradient"
-                  bgColor="info"
-                  borderRadius="lg"
-                  coloredShadow="info"
-                >
-                  <Grid container>
-                    <Grid item xs={11}>
-                      <MDTypography variant="h6" color="white">
-                        Productos
-                      </MDTypography>
-                    </Grid>
-                    <Grid item xs={1} style={{ alignContent: "right", justifyContent: "right" }} />
+    <DashboardLayout>
+      <DashboardNavbar />
+      <MDBox pt={6} pb={3}>
+        <Grid container spacing={6}>
+          <Grid item xs={12}>
+            <Card>
+              <MDBox
+                mx={2}
+                mt={-3}
+                py={3}
+                px={2}
+                variant="gradient"
+                bgColor="info"
+                borderRadius="lg"
+                coloredShadow="info"
+              >
+                <Grid container>
+                  <Grid item xs={11}>
+                    <MDTypography variant="h6" color="white">
+                      Productos
+                    </MDTypography>
                   </Grid>
-                </MDBox>
-                <MDBox pt={3}>
-                  <DataTable
-                    table={{ columns, rows }}
-                    isSorted
-                    entriesPerPage
-                    noEndBorder
-                    canSearch
-                    pagination={{
-                      variant: "gradient",
-                    }}
-                    selectRow={handleRowSelected}
-                    buttons={buttons}
-                  />
-                </MDBox>
-              </Card>
-            </Grid>
+                  <Grid item xs={1} style={{ alignContent: "right", justifyContent: "right" }} />
+                </Grid>
+              </MDBox>
+              <MDBox pt={3}>
+                <DataTable
+                  table={{ columns, rows }}
+                  isSorted
+                  entriesPerPage
+                  noEndBorder
+                  canSearch
+                  pagination={{
+                    variant: "gradient",
+                  }}
+                  selectRow={handleRowSelected}
+                  buttons={buttons}
+                  isLoading={isLoadingProducts}
+                />
+              </MDBox>
+            </Card>
           </Grid>
-        </MDBox>
-        <ModalItem
-          isOpen={openModalItem || openModalEditItem}
-          handleOnForceClose={() =>
-            openModalItem ? setOpenModalItem(false) : setOpenModalEditItem(false)
-          }
-          data={openModalEditItem ? dataItemSelected : null}
-        />
-        <ModalDeleteItem
-          isOpen={openDeleteModalItem}
-          handleOnForceClose={() => setOpenDeleteModalItem(false)}
-          data={dataItemSelected}
-          onSuccess={() => handleOnDeleteItem()}
-          onCancel={() => setOpenDeleteModalItem(false)}
-        />
-      </DashboardLayout>
-    </ProductControllerProvider>
+        </Grid>
+      </MDBox>
+      <ModalItem
+        isOpen={openModalItem || openModalEditItem}
+        handleOnForceClose={() =>
+          openModalItem ? setOpenModalItem(false) : setOpenModalEditItem(false)
+        }
+        data={openModalEditItem ? dataItemSelected : null}
+        handleOnSubmit={() => {
+          setDataItemSelected(null);
+          getProductsAC(productDispatch);
+        }}
+      />
+      <ModalDeleteItem
+        isOpen={openDeleteModalItem}
+        handleOnForceClose={() => setOpenDeleteModalItem(false)}
+        data={dataItemSelected}
+        onSuccess={() => handleOnDeleteItem()}
+        onCancel={() => setOpenDeleteModalItem(false)}
+      />
+    </DashboardLayout>
   );
 }

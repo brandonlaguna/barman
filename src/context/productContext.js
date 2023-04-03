@@ -12,6 +12,7 @@ const initialState = {
   productList: [],
   products: [],
   isLoadingProducts: 1,
+  isEdited: 0,
 };
 
 function reducer(state, action) {
@@ -33,6 +34,18 @@ function reducer(state, action) {
       return {
         ...state,
         isLoadingProducts: value,
+      };
+    }
+    case "SET_IS_EDITED": {
+      return {
+        ...state,
+        isEdited: value,
+      };
+    }
+    case "REMOVE_ITEM": {
+      return {
+        ...state,
+        products: state.products.filter((item) => item.id !== value),
       };
     }
     default: {
@@ -73,6 +86,8 @@ const setProductsList = (productDispatch, value) =>
   productDispatch({ type: "SET_PRODUCTS_LIST", value });
 const setProducts = (productDispatch, value) => productDispatch({ type: "SET_PRODUCTS", value });
 const setLoading = (productDispatch, value) => productDispatch({ type: "SET_LOADING", value });
+const setIsEdited = (productDispatch, value) => productDispatch({ type: "SET_IS_EDITED", value });
+const removeItem = (productDispatch, value) => productDispatch({ type: "REMOVE_ITEM", value });
 
 export {
   ProductControllerProvider,
@@ -80,4 +95,6 @@ export {
   setProducts,
   setProductsList,
   setLoading,
+  setIsEdited,
+  removeItem,
 };

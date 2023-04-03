@@ -25,7 +25,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
-import StatusIcon from "./components/StatusIcon";
+import StatusIcon from "components/MDStatusIcon";
 
 function SyncServer() {
   const [statusSync, setStatusSyc] = useState("Conectando con el servidor");

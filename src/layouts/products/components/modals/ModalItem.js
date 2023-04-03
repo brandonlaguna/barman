@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import { useForm, Controller } from "react-hook-form";
@@ -6,6 +6,11 @@ import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardMedia from "@mui/material/CardMedia";
+import IconButton from "@mui/material/IconButton";
+import ReplayIcon from "@mui/icons-material/Replay";
 import { MenuItem, Select } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useMaterialUIController } from "context";
@@ -50,8 +55,8 @@ const schema = yup
     tipo_cantidad: yup.string().min(1, DEFAULTFORM.selectItem).required(DEFAULTFORM.selectItem),
     bonificacion: yup.number().typeError(DEFAULTFORM.onlyNumber),
     observaciones: yup.string().min(10, `${DEFAULTFORM.min} 10`),
-    url_foto: yup.string(),
-    usuario: yup.number(),
+    url_foto: yup.string().nullable(),
+    usuario: yup.string(),
     iva: yup.number(),
     precio_costo: yup.string(),
     type_item_identification_id: yup.number(),
@@ -66,12 +71,12 @@ const schema = yup
   })
   .required();
 
-export default function ModalItem({ isOpen, handleOnForceClose, data }) {
-  // const [defaultData, setDefaultData] = useState({});
+export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSubmit }) {
+  const [defaultImg, setDefaultImg] = useState(null);
 
   const [controller] = useMaterialUIController();
   const [productController, productDispatch] = useProductController();
-  const { isLoadingProducts } = productController;
+  const { isLoadingProducts, isEdited } = productController;
 
   // context methods
   const { darkMode, sidenavColor } = controller;
@@ -82,6 +87,7 @@ export default function ModalItem({ isOpen, handleOnForceClose, data }) {
     handleSubmit,
     setValue,
     formState: { errors, isValid },
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -89,12 +95,18 @@ export default function ModalItem({ isOpen, handleOnForceClose, data }) {
   const onSubmit = (handleData) => {
     if (handleData) {
       if (handleData.id) {
-        updateProductAC(productDispatch, handleData);
+        updateProductAC(productDispatch, handleData, isEdited + 1);
       } else {
         addProductAC(productDispatch, handleData);
       }
     }
   };
+
+  useEffect(() => {
+    if (isEdited > 0) {
+      handleOnSubmit();
+    }
+  }, [isEdited]);
 
   useEffect(() => {
     if (data) {
@@ -128,14 +140,15 @@ export default function ModalItem({ isOpen, handleOnForceClose, data }) {
       setValue("materia_prima", 1);
       setValue("reference_price_id", data.reference_price_id);
       setValue("activo", data.activo);
+      setValue("url_foto", data.url_foto);
+      setDefaultImg(data.url_foto);
       // setValue("fecha", data.fecha);
       // setValue("hora", data.hora);
+    } else {
+      reset();
+      setDefaultImg(null);
     }
   }, [data]);
-
-  useEffect(() => {
-    console.log(isLoadingProducts);
-  }, [isLoadingProducts]);
 
   return (
     <MainModal
@@ -165,7 +178,21 @@ export default function ModalItem({ isOpen, handleOnForceClose, data }) {
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Grid container spacing={1}>
               <Grid item xs={12} sm={3} md={3}>
-                <UploadImage onSelectImage={(e) => setValue("url_foto", e)} />
+                {defaultImg ? (
+                  <Card sx={{ maxWidth: 345 }}>
+                    <CardMedia sx={{ height: 140, width: "100%", margin: 0 }} image={defaultImg} />
+                    <CardActions>
+                      <IconButton aria-label="share" onClick={() => setDefaultImg(null)}>
+                        <ReplayIcon />
+                      </IconButton>
+                    </CardActions>
+                  </Card>
+                ) : (
+                  <UploadImage
+                    onSelectImage={(e) => setValue("url_foto", e)}
+                    defaultImg={defaultImg}
+                  />
+                )}
                 {errors.url_foto && (
                   <FormHelperText sx={{ color: "red" }}>{errors.url_foto.message}</FormHelperText>
                 )}
@@ -726,7 +753,7 @@ export default function ModalItem({ isOpen, handleOnForceClose, data }) {
                 type="submit"
                 variant="contained"
                 sx={{ mb: 2 }}
-                disabled={!isValid}
+                disabled={!!(!isValid || isLoadingProducts === 2)}
                 loading={false}
               >
                 <p style={{ color: "white" }}>Guardar</p>
@@ -739,8 +766,13 @@ export default function ModalItem({ isOpen, handleOnForceClose, data }) {
   );
 }
 
+ModalItem.defaultProps = {
+  handleOnSubmit: () => null,
+};
+
 ModalItem.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   data: PropTypes.number.isRequired,
   handleOnForceClose: PropTypes.func.isRequired,
+  handleOnSubmit: PropTypes.func,
 };
