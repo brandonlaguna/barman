@@ -16,8 +16,8 @@ import { getAnalytics } from "firebase/analytics";
 import { firebaseConfig } from "config/contants";
 
 const app = initializeApp(firebaseConfig);
+// eslint-disable-next-line no-unused-vars
 const analytics = getAnalytics(app);
-console.log(analytics);
 
 ReactDOM.render(
   <AuthContextProvider>
