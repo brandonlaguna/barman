@@ -52,7 +52,6 @@ export function groupItems(itemsObject) {
 export const getItems = async () => {
   try {
     const items = await localStorage.getItem("items");
-    console.log("🚀 ~ file: ItemsModel.js:55 ~ getItems ~ items:", items);
     return items;
   } catch (e) {
     return e;

@@ -14,12 +14,12 @@ export default function CardClient({ data, onClickClient }) {
 
   const handleSwipeLeft = {
     content: <div style={{ background: APP_COLORS.success, width: "100%", height: "100%" }} />,
-    action: () => console.info("swipe action triggered left"),
+    action: () => null,
   };
 
   const handleSwipeRight = {
     content: <div style={{ background: APP_COLORS.warning, width: "100%", height: "100%" }} />,
-    action: () => console.info("swipe action triggered right"),
+    action: () => null,
   };
 
   return (
@@ -29,7 +29,7 @@ export default function CardClient({ data, onClickClient }) {
           rol="button"
           swipeLeft={handleSwipeLeft}
           swipeRight={handleSwipeRight}
-          onSwipeProgress={(progress) => console.info(`Swipe progress: ${progress}%`)}
+          onSwipeProgress={() => null}
         >
           <>
             <ListItem

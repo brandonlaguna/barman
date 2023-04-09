@@ -73,7 +73,6 @@ export const deletePrinterAC = (dispatch, params, countEdit) => {
   deletePrinter(params)
     .then((res) => {
       const { data: resData } = res;
-      console.log(res);
       if (res.status === 200) {
         setLoadingPrinters(dispatch, 3);
         setEditPrinter(dispatch, countEdit);

@@ -81,9 +81,7 @@ function Printers() {
   };
 
   const refrescarNombreDeImpresoraSeleccionada = () => {
-    Impresora.getImpresora().then((nombreImpresora) => {
-      console.log(nombreImpresora);
-    });
+    Impresora.getImpresora().then(() => null);
   };
 
   const obtenerListaDeImpresoras = () => {

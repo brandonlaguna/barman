@@ -62,7 +62,6 @@ export default function replaceTemplate({
     }
 
     if (temp.includes(`{{paymentMethods}}`)) {
-      console.log("paymentMethod", paymentMethods);
       if (paymentMethods.length > 0) {
         paymentMethods.forEach((payment) => {
           if (payment.id > 0) {

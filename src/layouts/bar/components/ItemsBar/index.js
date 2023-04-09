@@ -13,6 +13,7 @@ export default function ItemsBar({ scrollToCategory }) {
   const [controller] = useMaterialUIController();
   const [controllerBar, dispatchBar] = useBarCartController();
 
+  // eslint-disable-next-line no-unused-vars
   const { listCarts } = controllerBar;
   const { darkMode, sidenavColor } = controller;
   const [listItems, setListItem] = useState([]);
@@ -23,7 +24,6 @@ export default function ItemsBar({ scrollToCategory }) {
 
   useEffect(() => {
     getItems().then((resItem) => setListItem(groupItems(resItem)));
-    console.log(listCarts);
   }, [getItems]);
 
   const handleAddItemToCart = (itemId) => addItemToCart(dispatchBar, itemId);

@@ -53,9 +53,7 @@ const printTransaction = (
       });
       impresora.cash();
       impresora.cut();
-      impresora.imprimirEnImpresora(element.nombre).then((valor) => {
-        console.log(`Al imprimir: ${valor}`);
-      });
+      impresora.imprimirEnImpresora(element.nombre).then(() => null);
     });
   }
 };

@@ -1,6 +1,6 @@
 import getTax from "functions/getTax";
 
-export default function (items) {
+export default function calculateTotal(items) {
   let total = 0;
   const totalMixto = 0;
   const totalCredito = 0;

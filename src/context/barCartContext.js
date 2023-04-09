@@ -66,7 +66,6 @@ function reducer(state, action) {
       };
     }
     case "SET_CLIENT_TO_CART": {
-      console.log("agregando cliente", value);
       return {
         ...state,
         clientSelected: value,
