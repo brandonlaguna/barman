@@ -2,7 +2,7 @@
 import axios from "axios";
 import headerRequest from "functions/headerRequest";
 import instance from "config/instances";
-import { API_URL } from "../config/contants";
+import { API_URL, API_SILPOS_WEB } from "../config/contants";
 
 const DEFAULT_ERROR_DATA = {
   status: false,
@@ -80,6 +80,33 @@ export const deleteItem = async (dataItem) => {
       .delete(`${API_URL}/productos`, { data: dataItem })
       .then((red) => red.data)
       .catch(({ red }) => red.data || DEFAULT_ERROR_DATA);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const importParameters = async () => {
+  try {
+    const response = await fetch(`${API_SILPOS_WEB}/app/models/api_caja/soenac_listings.php`, {
+      method: "GET",
+      headers,
+      type: "json",
+    })
+      .then((res) => res.json())
+      .catch(({ res }) => res.data || DEFAULT_ERROR_DATA);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const importLocations = async () => {
+  try {
+    const response = await instance
+      .get(`/productos/ubicacion`, { headers })
+      .then((res) => res.data.data)
+      .catch(({ res }) => res.data || DEFAULT_ERROR_DATA);
     return response;
   } catch (error) {
     throw error;

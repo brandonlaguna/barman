@@ -1,22 +1,19 @@
 import { useState, useEffect } from "react";
 import MainModal from "components/MDModales";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Button, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
-import NativeSelect from "@mui/material/NativeSelect";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormLabel from "@mui/material/FormLabel";
+import FormHelperText from "@mui/material/FormHelperText";
 import { useMaterialUIController } from "context";
-import formatoImpresion from "functions/formatosImpresion";
-import { savePrinter } from "services/configuracionServices";
-import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { validationIp } from "utils/mask";
+import { usePrintersController } from "context/printersContext";
+import { updatePrinterAC, createPrinterAC } from "context/action-creator/printersAC";
+import formatoImpresion from "functions/formatosImpresion";
 import { ModalConfigPrinterStyle } from "../style";
 
 const schema = yup
@@ -25,67 +22,77 @@ const schema = yup
     ruta: yup.string().required("Debe ingresar una ruta"),
     tipo: yup.string().required("Debe ingresar un tipo de impresora  ej: POS"),
     formato: yup.string().required("Debe seleccionar un formato válido"),
+    id: yup.number().nullable(),
+    estado: yup.number(),
   })
   .required();
 
 export default function ModalConfigPrinter({
   isOpen,
   handleOnForceClose,
-  data,
+  printerList,
   handleSavePrinter,
+  data,
 }) {
   const [listPrinter, setListPrinter] = useState([]);
-  const [selectedValue, setSelectedValue] = useState("a");
   const [controller] = useMaterialUIController();
+  // eslint-disable-next-line no-unused-vars
+  const [printersController, printerDispatch] = usePrintersController();
+  const { isEdited } = printersController;
   const { darkMode, sidenavColor } = controller;
   const active = true;
 
   const {
-    register,
+    control,
     handleSubmit,
+    setValue,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
   const onSubmit = (dataInput) => {
-    savePrinter({
-      ...dataInput,
-      formato: formatoImpresion[dataInput.formato],
-      estado: 1,
-    }).then((response) => {
-      console.log(response);
-      if (response.status) {
-        toast.success(response.message);
-      } else {
-        toast.error(response.message);
-      }
-    });
-    handleSavePrinter();
-  };
-
-  const handleChangeCircleButton = (event) => {
-    setSelectedValue(event.target.value);
+    if (dataInput && dataInput.id) {
+      updatePrinterAC(
+        printerDispatch,
+        { ...dataInput, formato: formatoImpresion[dataInput.formato] },
+        isEdited + 1
+      );
+    } else {
+      createPrinterAC(
+        printerDispatch,
+        {
+          ...dataInput,
+          formato: formatoImpresion[dataInput.formato],
+        },
+        isEdited + 1
+      );
+    }
   };
 
   useEffect(() => {
-    setListPrinter(data);
+    setListPrinter(printerList);
+  }, [printerList]);
+
+  useEffect(() => {
+    if (isEdited > 0) {
+      handleSavePrinter();
+    }
+  }, [isEdited]);
+
+  useEffect(() => {
+    if (data) {
+      setValue("id", data.id);
+      setValue("nombre", data.nombre);
+      setValue("ruta", data.ruta);
+      setValue("tipo", data.tipo);
+      setValue("formato", 1);
+      setValue("estado", data.estado);
+    } else {
+      reset();
+      setValue("estado", 1);
+    }
   }, [data]);
-
-  function RenderPrintOption() {
-    const options = [];
-    listPrinter.forEach((element) => {
-      options.push(<option value={element}>{element}</option>);
-    });
-    return options;
-  }
-
-  const controlProps = (item) => ({
-    checked: selectedValue === item,
-    onChange: handleChangeCircleButton,
-    value: item,
-    name: `formato`,
-    inputProps: { "aria-label": item },
-  });
 
   return (
     <MainModal
@@ -102,99 +109,153 @@ export default function ModalConfigPrinter({
       }
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box sx={{ "& > :not(style)": { m: 1 } }} style={{ overflowY: "scroll", height: "100%" }}>
-          <Grid container spacing={1} style={{ overflowY: "scroll", height: "100%" }}>
-            {errors.exampleRequired && <span>This field is required</span>}
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl fullWidth>
-                  <NativeSelect {...register("nombre", { required: true })}>
-                    <RenderPrintOption />
-                  </NativeSelect>
-                </FormControl>
-                <Typography variant="caption" display="block" gutterBottom style={{ color: "red" }}>
-                  {errors.nombre?.message}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6}>
-              <Box sx={{}}>
-                <FormControl variant="standard" fullWidth>
-                  <TextField
-                    label="Ruta"
-                    id="ruta"
-                    defaultValue=""
-                    variant="standard"
-                    {...register("ruta")}
-                  />
-                </FormControl>
-                <Typography variant="caption" display="block" gutterBottom style={{ color: "red" }}>
-                  {errors.ruta?.message}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6}>
-              <Box sx={{}}>
-                <FormControl variant="standard" fullWidth>
-                  <TextField
-                    label="Tipo de impresora"
-                    id="tipo"
-                    defaultValue=""
-                    variant="standard"
-                    {...register("tipo", { pattern: /^[A-Za-z]+$/i })}
-                  />
-                </FormControl>
-                <Typography variant="caption" display="block" gutterBottom style={{ color: "red" }}>
-                  {errors.tipo?.message}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid xs={12} sm={12} md={12} lg={12} style={{ paddingTop: 5 }}>
-              <FormControl>
-                <FormLabel id="buttons-group-label" variant="standard">
-                  Formato
-                </FormLabel>
-                <RadioGroup {...register("formato")}>
-                  <FormControlLabel
-                    {...controlProps("1")}
-                    size="small"
-                    control={<Radio />}
-                    label="Comanda"
-                  />
-                  <FormControlLabel
-                    {...controlProps("2")}
-                    size="small"
-                    control={<Radio />}
-                    label="Ticket"
-                  />
-                </RadioGroup>
-                <Typography variant="caption" display="block" gutterBottom style={{ color: "red" }}>
-                  {errors.formato?.message}
-                </Typography>
-              </FormControl>
-            </Grid>
-            <Grid xs={12} sm={12} md={12} lg={12}>
-              <FormControl fullWidth>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  endIcon={<SendIcon />}
-                  style={{ color: "white" }}
-                >
-                  Send
-                </Button>
-              </FormControl>
-            </Grid>
+        <Grid
+          container
+          spacing={1}
+          style={{
+            width: "100%",
+            padding: 6,
+            marginLeft: -2,
+            overflowY: "auto",
+          }}
+        >
+          <Grid item xs={12} sm={6} md={6} lg={6}>
+            <FormControl fullWidth sx={{ mb: 1, mt: 1 }}>
+              <Controller
+                name="nombre"
+                control={control}
+                rules={{ required: false }}
+                render={({ field }) => (
+                  <>
+                    <InputLabel id="nombre_label">Impresora</InputLabel>
+                    <Select
+                      {...field}
+                      label="Impresora"
+                      labelId="nombre_label"
+                      id="nombre"
+                      style={{
+                        height: 43,
+                      }}
+                    >
+                      {listPrinter &&
+                        listPrinter.map((sel) => <MenuItem value={sel.id}>{sel.name}</MenuItem>)}
+                    </Select>
+                  </>
+                )}
+              />
+              {errors.nombre && (
+                <FormHelperText sx={{ color: "red" }}>{errors.nombre.message}</FormHelperText>
+              )}
+            </FormControl>
           </Grid>
-        </Box>
+          <Grid item xs={12} sm={6} md={6} lg={6}>
+            <FormControl fullWidth sx={{ mb: 1, mt: 1 }}>
+              <Controller
+                name="ruta"
+                control={control}
+                rules={{ required: false }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Ruta*"
+                    placeholder=""
+                    error={Boolean(errors.ruta)}
+                    onChange={(e) => field.onChange(validationIp(e.target.value))}
+                  />
+                )}
+              />
+              {errors.ruta && (
+                <FormHelperText sx={{ color: "red" }}>{errors.ruta.message}</FormHelperText>
+              )}
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={6}>
+            <FormControl fullWidth sx={{ mb: 1, mt: 1 }}>
+              <Controller
+                name="tipo"
+                control={control}
+                rules={{ required: false }}
+                render={({ field }) => (
+                  <>
+                    <InputLabel id="tipo_label">Tipo de Impresora</InputLabel>
+                    <Select
+                      {...field}
+                      label="Tipo de Impresora"
+                      labelId="tipo_label"
+                      id="tipo"
+                      style={{
+                        height: 43,
+                      }}
+                    >
+                      <MenuItem value="USB">USB</MenuItem>
+                      <MenuItem value="Wi-Fi">Wi-Fi</MenuItem>
+                    </Select>
+                  </>
+                )}
+              />
+              {errors.tipo && (
+                <FormHelperText sx={{ color: "red" }}>{errors.tipo.message}</FormHelperText>
+              )}
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={6}>
+            <FormControl fullWidth sx={{ mb: 1, mt: 1 }}>
+              <Controller
+                name="formato"
+                control={control}
+                rules={{ required: false }}
+                render={({ field }) => (
+                  <>
+                    <InputLabel id="formato_label">Formato de Impresora</InputLabel>
+                    <Select
+                      {...field}
+                      label="Formato de Impresora"
+                      labelId="formato_label"
+                      id="formato"
+                      style={{
+                        height: 43,
+                      }}
+                    >
+                      <MenuItem value="1">Comanda</MenuItem>
+                      <MenuItem value="2">Ticket</MenuItem>
+                    </Select>
+                  </>
+                )}
+              />
+              {errors.tipo && (
+                <FormHelperText sx={{ color: "red" }}>{errors.tipo.message}</FormHelperText>
+              )}
+            </FormControl>
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={12}>
+            <FormControl fullWidth>
+              <Button
+                type="submit"
+                variant="contained"
+                endIcon={<SendIcon />}
+                style={{ color: "white" }}
+              >
+                Send
+              </Button>
+            </FormControl>
+          </Grid>
+        </Grid>
       </form>
     </MainModal>
   );
 }
 
+ModalConfigPrinter.defaultProps = {
+  printerList: [],
+  data: [],
+  handleSavePrinter: () => null,
+  handleOnForceClose: () => null,
+};
+
 ModalConfigPrinter.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  data: PropTypes.instanceOf(Array).isRequired,
-  handleSavePrinter: PropTypes.func.isRequired,
-  handleOnForceClose: PropTypes.func.isRequired,
+  printerList: PropTypes.instanceOf(Array),
+  data: PropTypes.instanceOf(Array),
+  handleSavePrinter: PropTypes.func,
+  handleOnForceClose: PropTypes.func,
 };

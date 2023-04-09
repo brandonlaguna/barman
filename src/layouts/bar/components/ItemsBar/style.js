@@ -43,7 +43,7 @@ export function CategoryContainerStyle(theme, ownerState) {
     alignItems: "center",
     width: "100%",
     height: height - 145,
-    padding: `${pxToRem(8)} ${pxToRem(10)}`,
+    // padding: `${pxToRem(8)} ${pxToRem(10)}`,
     margin: `${pxToRem(1.5)} ${pxToRem(16)}`,
     borderRadius: borderRadius.md,
     cursor: "pointer",

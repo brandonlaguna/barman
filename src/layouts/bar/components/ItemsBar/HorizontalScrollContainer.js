@@ -49,10 +49,10 @@ function Card({
       tabIndex={0}
       selected={selected}
     >
-      <p>{title.categoria}</p>
+      <p>{title?.categoria}</p>
       <Grid
         container
-        spacing={1}
+        spacing={2}
         py={3}
         px={3}
         title={title}
@@ -69,7 +69,7 @@ function Card({
             rol="button"
             data={element[1]}
             onclickItem={onClickItem}
-            categoryImg={title.url_image}
+            categoryImg={title?.url_image}
           />
         ))}
       </Grid>

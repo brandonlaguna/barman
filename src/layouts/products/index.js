@@ -30,7 +30,7 @@ export default function Products() {
     { Header: "Articulo", accessor: "articulo", width: "45%", align: "left" },
     { Header: "Barras", accessor: "barras", align: "left" },
     { Header: "Precio Costo", accessor: "precio_costo", align: "right" },
-    { Header: "Precio Venta uno", accessor: "precio_venta", align: "right" },
+    { Header: "Precio Venta uno", accessor: "venta_uno", align: "right" },
     { Header: "Total", accessor: "total", align: "center" },
   ];
 
@@ -51,8 +51,6 @@ export default function Products() {
 
   const handleOnNewItem = (val) => {
     setOpenModalEditItem(false);
-    console.log("limpiar");
-    // setDataItemSelected(null);
     setOpenModalItem(val);
   };
 

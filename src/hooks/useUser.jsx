@@ -12,11 +12,10 @@ export default function useUser() {
     const response = await loginService.login({ user, password });
     const { data, status, token, businessData } = response;
     if (status) {
-      console.log("ruteando", data);
-      navigate("/sync_server");
       window.localStorage.setItem("accessToken", token);
       window.localStorage.setItem("userData", JSON.stringify(data));
       window.localStorage.setItem("businessData", JSON.stringify(businessData));
+      navigate("/sync_server");
       setAuthState({ token, user: data });
       return Promise.resolve(true);
     }
@@ -25,7 +24,6 @@ export default function useUser() {
   };
 
   const logout = () => {
-    console.log("ahora si a deslogear");
     setAuthState({ token: null, user: null });
     LOCAL_STORAGE_USAGE.forEach((k) => localStorage.removeItem(k));
     navigate("/login");
@@ -36,6 +34,7 @@ export default function useUser() {
 
   return {
     isLoggedIn: Boolean(authState?.token),
+    userData: authState.user,
     login,
     logout,
     getAccessToken,

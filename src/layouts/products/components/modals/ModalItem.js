@@ -21,7 +21,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { onlyLetters, onlyNumbers } from "utils/mask";
 import UploadImage from "components/MDUploadImage";
 import { useProductController } from "context/productContext";
-import { addProductAC, updateProductAC } from "context/action-creator/productsAC";
+import {
+  addProductAC,
+  updateProductAC,
+  loadItemParametrizationAC,
+  loadCategoriasAC,
+  loadLocationsAC,
+} from "context/action-creator/productsAC";
+import useUser from "hooks/useUser";
 import { ModalItems } from "./style";
 
 const schema = yup
@@ -57,7 +64,7 @@ const schema = yup
     observaciones: yup.string().min(10, `${DEFAULTFORM.min} 10`),
     url_foto: yup.string().nullable(),
     usuario: yup.string(),
-    iva: yup.number(),
+    iva: yup.number().min(1, DEFAULTFORM.selectItem).required(DEFAULTFORM.selectItem),
     precio_costo: yup.string(),
     type_item_identification_id: yup.number(),
     unit_measures_unidad: yup.number(),
@@ -65,18 +72,19 @@ const schema = yup
     reference_price_id: yup.number(),
     materia_prima: yup.number(),
     id: yup.number(),
-    activo: yup.number().required(DEFAULTFORM.required),
+    activo: yup.number(),
     fecha: yup.date(),
     hora: yup.string(),
+    categoria: yup.number().min(1, DEFAULTFORM.selectItem).required(DEFAULTFORM.selectItem),
   })
   .required();
 
 export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSubmit }) {
   const [defaultImg, setDefaultImg] = useState(null);
-
   const [controller] = useMaterialUIController();
   const [productController, productDispatch] = useProductController();
-  const { isLoadingProducts, isEdited } = productController;
+  const { isLoadingProducts, isEdited, parameters, categories, locations } = productController;
+  const { userData } = useUser();
 
   // context methods
   const { darkMode, sidenavColor } = controller;
@@ -103,6 +111,12 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
   };
 
   useEffect(() => {
+    loadItemParametrizationAC(productDispatch);
+    loadCategoriasAC(productDispatch);
+    loadLocationsAC(productDispatch);
+  }, []);
+
+  useEffect(() => {
     if (isEdited > 0) {
       handleOnSubmit();
     }
@@ -110,6 +124,8 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
 
   useEffect(() => {
     if (data) {
+      const parseUserData = typeof userData === "string" ? JSON.parse(userData) : userData;
+      setValue("usuario", parseUserData.id);
       setValue("id", data.id);
       setValue("articulo", data.articulo);
       setValue("barras", data.barras);
@@ -131,9 +147,8 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
       setValue("tipo_cantidad", data.tipo_cantidad);
       setValue("bonificacion", data.bonificacion);
       setValue("observaciones", data.observaciones);
-      setValue("usuario", 2);
       setValue("iva", 1);
-      setValue("precio_costo", data.venta_uno);
+      setValue("precio_costo", data.precio_costo);
       setValue("type_item_identification_id", 1);
       setValue("unit_measures_unidad", 1);
       setValue("unit_measures_fraccion", 1);
@@ -146,9 +161,23 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
       // setValue("hora", data.hora);
     } else {
       reset();
-      setDefaultImg(null);
+      // setDefaultImg(null);
     }
   }, [data]);
+
+  useEffect(() => {
+    const parseUserData = typeof userData === "string" ? JSON.parse(userData) : userData;
+    if (parseUserData && parseUserData.id) {
+      setValue("usuario", parseUserData.id);
+      if (!data) {
+        setValue("type_item_identification_id", 1);
+        setValue("unit_measures_unidad", 1);
+        setValue("unit_measures_fraccion", 1);
+        setValue("materia_prima", 1);
+        setValue("reference_price_id", 1);
+      }
+    }
+  }, [userData]);
 
   return (
     <MainModal
@@ -176,6 +205,7 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
           }}
         >
           <Grid item xs={12} sm={12} md={12} lg={12}>
+            <p>{JSON.stringify(parameters.version)}</p>
             <Grid container spacing={1}>
               <Grid item xs={12} sm={3} md={3}>
                 {defaultImg ? (
@@ -333,7 +363,11 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
                                 height: 43,
                               }}
                             >
-                              <MenuItem value={642}>Cada</MenuItem>
+                              {parameters?.unit_measures &&
+                                // eslint-disable-next-line array-callback-return
+                                parameters.unit_measures.map((sel) => (
+                                  <MenuItem value={sel.id}>{sel.name}</MenuItem>
+                                ))}
                             </Select>
                           </>
                         )}
@@ -364,7 +398,11 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
                                 height: 43,
                               }}
                             >
-                              <MenuItem value={70}>Cada</MenuItem>
+                              {parameters?.unit_measures &&
+                                // eslint-disable-next-line array-callback-return
+                                parameters.unit_measures.map((sel) => (
+                                  <MenuItem value={sel.id}>{sel.name}</MenuItem>
+                                ))}
                             </Select>
                           </>
                         )}
@@ -397,7 +435,11 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
                                 height: 43,
                               }}
                             >
-                              <MenuItem value={1}>Cada</MenuItem>
+                              {parameters?.reference_prices &&
+                                // eslint-disable-next-line array-callback-return
+                                parameters.reference_prices.map((sel) => (
+                                  <MenuItem value={sel.id}>{sel.name}</MenuItem>
+                                ))}
                             </Select>
                           </>
                         )}
@@ -405,6 +447,29 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
                       {errors.precio_referencia && (
                         <FormHelperText sx={{ color: "red" }}>
                           {errors.precio_referencia.message}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} sm={4} md={4} lg={4}>
+                    <FormControl fullWidth sx={{ mb: 1, mt: 1 }}>
+                      <Controller
+                        name="precio_costo"
+                        control={control}
+                        rules={{ required: false }}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            label="Precio Costo*"
+                            placeholder=""
+                            error={Boolean(errors.precio_costo)}
+                            onChange={(e) => field.onChange(e.target.value)}
+                          />
+                        )}
+                      />
+                      {errors.precio_costo && (
+                        <FormHelperText sx={{ color: "red" }}>
+                          {errors.precio_costo.message}
                         </FormHelperText>
                       )}
                     </FormControl>
@@ -550,6 +615,40 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
           <Grid item xs={12} sm={3} md={3} lg={3}>
             <FormControl fullWidth sx={{ mb: 1, mt: 1 }}>
               <Controller
+                name="iva"
+                control={control}
+                rules={{ required: false }}
+                render={({ field }) => (
+                  <>
+                    <InputLabel id="iva_label">Impuesto*</InputLabel>
+                    <Select
+                      {...field}
+                      label="Impuesto"
+                      labelId="iva_label"
+                      id="iva"
+                      defaultValue=""
+                      style={{
+                        height: 43,
+                      }}
+                    >
+                      <MenuItem value={1}>0%</MenuItem>
+                      <MenuItem value={3}>19%</MenuItem>
+                      <MenuItem value={4}>5%</MenuItem>
+                      <MenuItem value={5}>8%</MenuItem>
+                    </Select>
+                  </>
+                )}
+              />
+              {errors.precio_referencia && (
+                <FormHelperText sx={{ color: "red" }}>
+                  {errors.precio_referencia.message}
+                </FormHelperText>
+              )}
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={3} md={3} lg={3}>
+            <FormControl fullWidth sx={{ mb: 1, mt: 1 }}>
+              <Controller
                 name="ubicacion"
                 control={control}
                 rules={{ required: false }}
@@ -566,13 +665,48 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
                         height: 43,
                       }}
                     >
-                      <MenuItem value={4}>Cada</MenuItem>
+                      {locations &&
+                        // eslint-disable-next-line array-callback-return
+                        locations.map((loc) => <MenuItem value={loc.id}>{loc.ubicacion}</MenuItem>)}
                     </Select>
                   </>
                 )}
               />
               {errors.ubicacion && (
                 <FormHelperText sx={{ color: "red" }}>{errors.ubicacion.message}</FormHelperText>
+              )}
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={3} md={3} lg={3}>
+            <FormControl fullWidth sx={{ mb: 1, mt: 1 }}>
+              <Controller
+                name="categoria"
+                control={control}
+                rules={{ required: false }}
+                render={({ field }) => (
+                  <>
+                    <InputLabel id="categoria_label">Categoria*</InputLabel>
+                    <Select
+                      {...field}
+                      label="Categoria"
+                      labelId="categoria_label"
+                      id="categoria"
+                      defaultValue=""
+                      style={{
+                        height: 43,
+                      }}
+                    >
+                      {categories &&
+                        // eslint-disable-next-line array-callback-return
+                        categories.map((cat) => (
+                          <MenuItem value={cat.id}>{cat.categoria}</MenuItem>
+                        ))}
+                    </Select>
+                  </>
+                )}
+              />
+              {errors.categoria && (
+                <FormHelperText sx={{ color: "red" }}>{errors.categoria.message}</FormHelperText>
               )}
             </FormControl>
           </Grid>
@@ -753,7 +887,7 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
                 type="submit"
                 variant="contained"
                 sx={{ mb: 2 }}
-                disabled={!!(!isValid || isLoadingProducts === 2)}
+                disabled={!!(!isValid || ![0, 1, 3, 4].includes(isLoadingProducts))}
                 loading={false}
               >
                 <p style={{ color: "white" }}>Guardar</p>
@@ -768,11 +902,12 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
 
 ModalItem.defaultProps = {
   handleOnSubmit: () => null,
+  data: {},
 };
 
 ModalItem.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  data: PropTypes.number.isRequired,
+  data: PropTypes.instanceOf(Array),
   handleOnForceClose: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func,
 };
