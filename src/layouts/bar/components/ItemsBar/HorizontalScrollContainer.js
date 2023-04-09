@@ -79,6 +79,7 @@ function Card({
 
 function ScrollMenuItem({ parentWidth, listItems, onClickItem, scrollToCategory }) {
   const [selected, setSelected] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [position, setPosition] = useState(0);
   const [categories, setCategories] = useState([]);
   const isItemSelected = (id) => !!selected.find((el) => el === id);
@@ -89,7 +90,6 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem, scrollToCategory 
   const [ease, setEase] = useState("noEase");
 
   useEffect(() => {
-    console.log(position);
     setPosition(0);
     getCategories().then((response) => setCategories(response));
     setDuration(500);
@@ -106,7 +106,7 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem, scrollToCategory 
       itemSelected ? currentSelected.filter((el) => el !== id) : currentSelected.concat(id)
     );
   };
-  const onKeyPressHandle = (id) => console.log(id);
+  const onKeyPressHandle = () => null;
 
   return (
     <ScrollMenu

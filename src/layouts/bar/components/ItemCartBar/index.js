@@ -162,7 +162,6 @@ export default function ItemCartBar() {
   const handleOnForceCloseItemCart = () => setIsOpenModalItemCart(false);
   const handleSettingItemToCart = (idItem) => {
     const dataItem = listCarts.find((item) => item.id === idItem);
-    console.log(dataItem);
     setIsOpenModalItemCart(true);
     setDataItemSetting(dataItem);
   };

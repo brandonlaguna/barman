@@ -20,7 +20,7 @@ export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }
   const [comisionPercent, setComisionPercent] = useState(null);
   // context methods
   const { darkMode, sidenavColor } = controller;
-  const { paymentMethods, listCarts } = controllerBar;
+  const { listCarts } = controllerBar;
   const active = true;
 
   useEffect(() => {
@@ -41,7 +41,6 @@ export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }
     ];
 
     setListMethods(dataPaymentMethod);
-    console.log(paymentMethods);
   }, [data]);
 
   useEffect(() => {
@@ -75,7 +74,6 @@ export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }
     listMethods?.map((payment) => {
       const currentValues = valueMethod.find((pm) => pm.id === payment.id);
       const [currentValueMethod, setCurrentValueMethod] = useState(currentValues.value);
-      console.log("current");
       render.push(
         <Grid container spacing={3} style={{ marginTop: "0px" }}>
           <Grid item xs={10} md={10} lg={10}>
@@ -108,7 +106,7 @@ export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }
                   iconPath={`${BANK_ICONS}/interface/broom.svg`}
                   sx={{ width: "45px", height: "45px" }}
                   sxIcon={buttonIconStyle}
-                  onClick={() => console.log(true)}
+                  onClick={() => null}
                 />
               </Grid>
               <Grid item xs={6} md={6} lg={6}>
@@ -116,7 +114,7 @@ export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }
                   iconPath={`${BANK_ICONS}/interface/keyboard.svg`}
                   sx={{ width: "45px", height: "45px" }}
                   sxIcon={buttonIconStyle}
-                  onClick={() => console.log(true)}
+                  onClick={() => null}
                 />
               </Grid>
             </Grid>

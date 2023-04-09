@@ -9,7 +9,6 @@ export default function UploadImage({ onSelectImage, defaultImg }) {
 
   useEffect(() => {
     if (defaultImg) {
-      console.log("🚀 ~ file: index.js:12 ~ useEffect ~ defaultImg:", defaultImg);
       setImageSrc(defaultImg);
     }
   }, [defaultImg]);

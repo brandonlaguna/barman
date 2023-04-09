@@ -1,4 +1,4 @@
-export const filterClients = async () => console.log("filtro");
+export const filterClients = async () => null;
 
 export const getClients = async () => {
   try {

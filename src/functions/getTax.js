@@ -1,4 +1,4 @@
-export default function (taxId = 1) {
+export default function getTax(taxId = 1) {
   const taxes = {
     1: 0,
     3: 19,
