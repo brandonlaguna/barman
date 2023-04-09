@@ -51,7 +51,7 @@ const routes = [
     type: "collapse",
     name: "Productos",
     key: "products",
-    icon: <Icon fontSize="small">print_icon</Icon>,
+    icon: <Icon fontSize="small">apps</Icon>,
     route: "/products",
     component: <Products />,
     auth: true,

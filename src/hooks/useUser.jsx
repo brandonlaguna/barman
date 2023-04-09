@@ -10,12 +10,13 @@ export default function useUser() {
 
   const login = async ({ user, password }) => {
     const response = await loginService.login({ user, password });
-    const { data } = response;
-    if (data.status) {
-      window.localStorage.setItem("accessToken", data.token);
-      window.localStorage.setItem("userData", JSON.stringify(data.data[0]));
-      window.localStorage.setItem("businessData", JSON.stringify(data.dataEmpresas[0]));
-      setAuthState({ token: data.token, user: data.data[0] });
+    const { data, status, token, businessData } = response;
+    if (status) {
+      window.localStorage.setItem("accessToken", token);
+      window.localStorage.setItem("userData", JSON.stringify(data));
+      window.localStorage.setItem("businessData", JSON.stringify(businessData));
+      navigate("/sync_server");
+      setAuthState({ token, user: data });
       return Promise.resolve(true);
     }
 
@@ -23,7 +24,6 @@ export default function useUser() {
   };
 
   const logout = () => {
-    console.log("ahora si a deslogear");
     setAuthState({ token: null, user: null });
     LOCAL_STORAGE_USAGE.forEach((k) => localStorage.removeItem(k));
     navigate("/login");
@@ -34,6 +34,7 @@ export default function useUser() {
 
   return {
     isLoggedIn: Boolean(authState?.token),
+    userData: authState.user,
     login,
     logout,
     getAccessToken,

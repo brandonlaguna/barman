@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import axios from "axios";
 import headerRequest from "functions/headerRequest";
 import { API_SILPOS_WEB } from "../config/contants";
@@ -10,14 +11,20 @@ const DEFAULT_ERROR_DATA = {
 
 const headers = headerRequest();
 
-export const importComprobantes = () =>
-  fetch(`${API_SILPOS_WEB}/app/models/api_caja/resolution_api.php`, {
-    method: "POST",
-    headers,
-    type: "json",
-  })
-    .then((response) => response.json())
-    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+export const importComprobantes = async () => {
+  try {
+    const response = await fetch(`${API_SILPOS_WEB}/app/models/api_caja/resolution_api.php`, {
+      method: "POST",
+      headers,
+      type: "json",
+    })
+      .then((res) => res.json())
+      .catch(({ res }) => res.data || DEFAULT_ERROR_DATA);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const obtenerComprobante = (idcategoria) =>
   axios

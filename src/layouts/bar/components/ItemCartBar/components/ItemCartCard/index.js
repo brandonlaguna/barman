@@ -9,7 +9,7 @@ import "./style.css";
 
 export default function ItemCartCard({ data, deleteItemCart, settingItemCart }) {
   // eslint-disable-next-line camelcase
-  const { id, articulo, cantidad, venta_uno, url_foto, categoria } = data;
+  const { id, articulo, cantidad, venta_uno, url_foto, observacion } = data;
   const [controller] = useMaterialUIController();
   // context methods
   const { darkMode, sidenavColor } = controller;
@@ -48,19 +48,13 @@ export default function ItemCartCard({ data, deleteItemCart, settingItemCart }) 
   if (url_foto !== null) {
     // eslint-disable-next-line camelcase
     background = `${server === "online" ? SILPOS_WEB : SILPOS_LOCAL}/img/productos/${url_foto}`;
-    if (true) {
+    // eslint-disable-next-line camelcase
+    if (url_foto.includes("data:image/")) {
       // eslint-disable-next-line camelcase
-      background = `${server === "online" ? SILPOS_WEB : SILPOS_LOCAL}/img/productos/${url_foto}`;
+      background = url_foto;
     }
   } else {
-    const listCategories = localStorage.getItem("categorias");
-    const categories = JSON.parse(listCategories).data;
-    const categoryName = categories.filter(
-      (cat) => Number.parseInt(cat.id, 10) === Number.parseInt(categoria, 10)
-    )[0];
-    console.log(categoryName.categoria);
-    const imageName = categoryName.categoria.toLowerCase();
-    background = `${BANK_ICONS}/categories/${imageName.replace(" ", "-")}.png`;
+    background = `${BANK_ICONS}/interface/menu.png`;
   }
 
   return (
@@ -76,14 +70,14 @@ export default function ItemCartCard({ data, deleteItemCart, settingItemCart }) 
         }
       >
         <Grid container>
-          <Grid item xs={3} md={3} lg={3} style={{ paddingTop: 4 }}>
+          <Grid item xs={3} md={3} lg={3} style={{ paddingTop: 7 }}>
             <Box
               component="img"
               sx={{
-                height: 60,
-                width: 60,
-                maxHeight: { xs: 60, md: 60 },
-                maxWidth: { xs: 60, md: 60 },
+                height: 50,
+                width: 50,
+                maxHeight: { xs: 50, md: 50 },
+                maxWidth: { xs: 50, md: 50 },
                 borderRadius: "6px",
               }}
               alt="Image item"
@@ -98,6 +92,7 @@ export default function ItemCartCard({ data, deleteItemCart, settingItemCart }) 
               textTransform="capitalize"
               color="dark"
               opacity={0.5}
+              sx={{ fontSize: 11 }}
             >
               {articulo}
             </Typography>
@@ -108,12 +103,24 @@ export default function ItemCartCard({ data, deleteItemCart, settingItemCart }) 
               textTransform="capitalize"
               color="gray"
               opacity={0.5}
+              sx={{ fontSize: 11 }}
             >
               x{cantidad}
               {" Precio: $"}
               {Intl.NumberFormat("en-US").format(
                 (Number.parseInt(cantidad, 10) * Number.parseInt(venta_uno, 10)).toFixed(2)
               )}
+            </Typography>
+            <Typography
+              component="p"
+              variant="button"
+              fontWeight="300"
+              textTransform="capitalize"
+              color="gray"
+              opacity={0.5}
+              sx={{ fontSize: 11, width: "100%" }}
+            >
+              {`${observacion ? `${observacion.slice(0, 20)}...` : ""}`}
             </Typography>
           </Grid>
         </Grid>

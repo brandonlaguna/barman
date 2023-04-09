@@ -11,7 +11,7 @@ const DEFAULT_ERROR_DATA = {
 export const login = async ({ user, password }) =>
   axios
     .post(
-      `${API_URL}/login`,
+      `${API_URL}/loginv2`,
       {
         user,
         password: md5(password),
@@ -22,7 +22,7 @@ export const login = async ({ user, password }) =>
         },
       }
     )
-    .then((response) => response)
+    .then((response) => response.data)
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
 
 export const checkAuthStatus = ({ accessToken }) =>

@@ -4,6 +4,7 @@ const headerRequest = () => {
   const token = window.localStorage.getItem("accessToken");
   return {
     "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
     Accept: "application/json",
     authorization: token,
     dbu: businessData?.dbuser,

@@ -18,7 +18,7 @@ export function getElementsObjectKey() {
 export function groupItems(itemsObject) {
   const nuevoObjeto = {};
   const items = JSON.parse(itemsObject);
-  items.data.forEach((x) => {
+  items.forEach((x) => {
     if (!Object.prototype.hasOwnProperty.call(nuevoObjeto, x.categoria)) {
       nuevoObjeto[x.categoria] = {
         items: [],
@@ -51,7 +51,8 @@ export function groupItems(itemsObject) {
 
 export const getItems = async () => {
   try {
-    const items = localStorage.getItem("items");
+    const items = await localStorage.getItem("items");
+    console.log("🚀 ~ file: ItemsModel.js:55 ~ getItems ~ items:", items);
     return items;
   } catch (e) {
     return e;
