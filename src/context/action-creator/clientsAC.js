@@ -7,6 +7,7 @@ export const getClientsAC = (dispatch) => {
   importClientes()
     .then((res) => {
       setClients(dispatch, res.data);
+      localStorage.setItem("clientes", JSON.stringify(res.data));
       setLoadingClients(dispatch, 3);
     })
     .catch((err) => {

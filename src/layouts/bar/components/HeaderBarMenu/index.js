@@ -136,7 +136,9 @@ export default function HeaderBarMenu() {
   };
 
   const loadClients = () => {
-    getClients().then((resClients) => setItemsClients(resClients));
+    getClients().then((resClients) => {
+      setItemsClients(resClients);
+    });
   };
 
   useEffect(() => {
