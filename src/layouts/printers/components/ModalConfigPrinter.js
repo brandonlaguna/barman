@@ -138,7 +138,7 @@ export default function ModalConfigPrinter({
                       }}
                     >
                       {listPrinter &&
-                        listPrinter.map((sel) => <MenuItem value={sel.id}>{sel.name}</MenuItem>)}
+                        listPrinter.map((sel) => <MenuItem value={sel}>{sel}</MenuItem>)}
                     </Select>
                   </>
                 )}
