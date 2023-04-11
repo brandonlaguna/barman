@@ -57,7 +57,7 @@
     "react-image-picker-editor": "^1.3.2",
     "react-js-loader": "^0.1.0",
     "react-numpad": "^5.1.3",
-    "react-resize-detector": "^7.1.2",
+    "react-resize-detector": "^9.1.0",
     "react-router-dom": "6.2.1",
     "react-scripts": "5.0.0",
     "react-swipe-card": "^0.1.4",

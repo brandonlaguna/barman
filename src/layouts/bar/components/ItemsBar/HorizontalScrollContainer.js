@@ -3,6 +3,7 @@ import useWindowDimensions from "functions/windowDimension";
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import { getCategories } from "model/categoryModel";
 import Grid from "@mui/material/Grid";
+import { Box } from "@mui/material";
 import PropTypes from "prop-types";
 import easingFunctions from "functions/easeFunctions";
 import ItemsCard from "./ItemsCard";
@@ -49,7 +50,9 @@ function Card({
       tabIndex={0}
       selected={selected}
     >
-      <p>{title?.categoria}</p>
+      <Box>
+        <p>{title?.categoria}</p>
+      </Box>
       <Grid
         container
         spacing={2}

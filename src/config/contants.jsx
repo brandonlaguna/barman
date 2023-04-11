@@ -1,8 +1,8 @@
 // GLOBAL CONSTANTS
 // -----------------------------------
 
-export const environment = "development";
-export const server = "offline";
+export const environment = "production";
+export const server = "online";
 
 export const SILPOS_LOCAL = "https://sistema.silpos.com";
 export const SILPOS_WEB = "https://sistema.silpos.com";
