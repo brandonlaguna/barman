@@ -53,12 +53,12 @@ function RenderIdTable({ tableSelected }) {
       {tableSelected && (
         <>
           <Grid container>
-            <Grid item xs={10} sm={10} md={10}>
+            <Grid item xs={9} sm={9} md={9}>
               <Typography
                 id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                style={{ color: "white" }}
+                variant="p"
+                component="div"
+                style={{ color: "white", fontSize: 13 }}
               >
                 Pedido Mesa # {tableSelected} ({listCarts.length} items)
               </Typography>
@@ -66,15 +66,15 @@ function RenderIdTable({ tableSelected }) {
             <Grid item xs={1} sm={1} md={1}>
               <CircleButton
                 iconPath={`${BANK_ICONS}/interface/duster.svg`}
-                sx={{ width: "40px", height: "40px" }}
+                sx={{ width: "35px", height: "35px" }}
                 sxIcon={buttonIconStyle}
                 onClick={() => clean(dispatchBar, true)}
               />
             </Grid>
-            <Grid item xs={1} sm={1} md={1}>
+            <Grid item xs={2} sm={2} md={2}>
               <CircleButton
                 iconPath={`${BANK_ICONS}/interface/bin.svg`}
-                sx={{ width: "40px", height: "40px" }}
+                sx={{ width: "35px", height: "35px" }}
                 sxIcon={buttonIconStyle}
                 onClick={() => handleClickUserAuth()}
               />
@@ -116,11 +116,30 @@ export default function ItemCartBar() {
   const [responseTransaction, setResponseTransaction] = useState([]);
   const [dataItemSetting, setDataItemSetting] = useState([]);
   const [isOpenModalItemCart, setIsOpenModalItemCart] = useState(false);
+  const [totalPaymentsMethod, setTotalPaymentsMethod] = useState(0);
+  const [disableSendButton, setDisableSendButton] = useState(false);
 
   useEffect(() => {
     setListItemCart(listCarts);
     setTotalTransaction(calculateTotal(listCarts));
   }, [listCarts]);
+
+  useEffect(() => {
+    if (paymentMethods) {
+      let subTotal = 0;
+      paymentMethods.forEach((payment) => {
+        subTotal += parseFloat(payment.value);
+      });
+      setTotalPaymentsMethod(subTotal);
+      if (totalTransaction.length > 0 && totalTransaction.total - subTotal >= 0) {
+        console.log(
+          "🚀 ~ file: index.js:120 ~ ItemCartBar ~ totalPaymentsMethod:",
+          totalPaymentsMethod
+        );
+        setDisableSendButton(true);
+      }
+    }
+  }, [paymentMethods]);
 
   const handleSentTransaction = () => {
     setIsLoading(dispatchSelector, true);
@@ -196,6 +215,7 @@ export default function ItemCartBar() {
         value={totalTransaction ? totalTransaction.total : 0}
         onclickTransaction={handleSentTransaction}
         isLoading={isLoading}
+        disabled={disableSendButton}
       />
       {/** Modals */}
       <ModalItemSetting

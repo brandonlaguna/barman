@@ -45,7 +45,7 @@ export default function ItemCartCard({ data, deleteItemCart, settingItemCart }) 
   let background = "";
 
   // eslint-disable-next-line camelcase
-  if (url_foto !== null) {
+  if (url_foto) {
     // eslint-disable-next-line camelcase
     background = `${server === "online" ? SILPOS_WEB : SILPOS_LOCAL}/img/productos/${url_foto}`;
     // eslint-disable-next-line camelcase

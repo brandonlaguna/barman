@@ -12,6 +12,7 @@ const headerRequest = () => {
     dbd: businessData?.dbname,
     Company: businessData?.id,
     IDEMPRESA: businessData?.id,
+    mode: "no-cors",
   };
 };
 

@@ -2,8 +2,9 @@ import PropTypes from "prop-types";
 import { LoadingButton } from "@mui/lab";
 // import SendIcon from "@mui/icons-material/Send";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { currencyFormatter } from "functions/numberFormat";
 
-export default function PaymentButton({ value, onclickTransaction, isLoading }) {
+export default function PaymentButton({ value, onclickTransaction, isLoading, disabled }) {
   return (
     <LoadingButton
       onClick={() => onclickTransaction()}
@@ -13,8 +14,9 @@ export default function PaymentButton({ value, onclickTransaction, isLoading }) 
       variant="contained"
       style={{ width: "100%" }}
       color="success"
+      disabled={disabled}
     >
-      {` Enviar ${value}`}
+      {` Enviar ${currencyFormatter({ currency: "COP", value })}`}
     </LoadingButton>
   );
 }
@@ -22,10 +24,12 @@ export default function PaymentButton({ value, onclickTransaction, isLoading }) 
 PaymentButton.defaultProps = {
   value: "0",
   isLoading: false,
+  disabled: false,
 };
 
 PaymentButton.propTypes = {
   value: PropTypes.string,
   onclickTransaction: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
