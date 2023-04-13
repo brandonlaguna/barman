@@ -116,6 +116,7 @@ export default function ItemCartBar() {
   const [responseTransaction, setResponseTransaction] = useState([]);
   const [dataItemSetting, setDataItemSetting] = useState([]);
   const [isOpenModalItemCart, setIsOpenModalItemCart] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [totalPaymentsMethod, setTotalPaymentsMethod] = useState(0);
   const [disableSendButton, setDisableSendButton] = useState(false);
 
@@ -132,10 +133,6 @@ export default function ItemCartBar() {
       });
       setTotalPaymentsMethod(subTotal);
       if (totalTransaction.length > 0 && totalTransaction.total - subTotal >= 0) {
-        console.log(
-          "🚀 ~ file: index.js:120 ~ ItemCartBar ~ totalPaymentsMethod:",
-          totalPaymentsMethod
-        );
         setDisableSendButton(true);
       }
     }
