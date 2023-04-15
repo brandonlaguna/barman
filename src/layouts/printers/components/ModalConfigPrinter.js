@@ -218,8 +218,8 @@ export default function ModalConfigPrinter({
                         height: 43,
                       }}
                     >
-                      <MenuItem value={1}>Comanda</MenuItem>
-                      <MenuItem value={2}>Ticket</MenuItem>
+                      <MenuItem value={1}>Ticket</MenuItem>
+                      <MenuItem value={2}>Comanda</MenuItem>
                     </Select>
                   </>
                 )}
