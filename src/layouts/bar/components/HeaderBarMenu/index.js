@@ -13,6 +13,7 @@ import {
   resetItemsCart,
   clean,
 } from "context/barCartContext";
+import { setResponseTransaction, useSelectorController } from "context/selectorContext";
 import { toast } from "react-toastify";
 import { getClients } from "model/clientsModel";
 import { getPaymentMethods } from "model/paymentMethodsModel";
@@ -31,6 +32,8 @@ export default function HeaderBarMenu() {
   // context controllers
   const [controllerBar, dispatchBar] = useBarCartController();
   const [controller] = useMaterialUIController();
+  // eslint-disable-next-line no-unused-vars
+  const [controllerSelector, dispatchSelector] = useSelectorController();
   // context methods
   const { darkMode, sidenavColor } = controller;
   const active = true;
@@ -107,8 +110,10 @@ export default function HeaderBarMenu() {
   const handleSelectPrint = (print) => {
     setPrintPrinter(dispatchBar, print);
     setLaunchPrinter(dispatchBar, false);
+    setIsOpenModalPrint(false);
     if (!print) {
       clean(dispatchBar);
+      setResponseTransaction(dispatchSelector, {});
     }
   };
 
