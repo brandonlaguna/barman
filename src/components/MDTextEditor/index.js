@@ -20,7 +20,7 @@ export default function MDTextEditor() {
       value={content}
       config={config}
       onBlur={handleUpdate}
-      onChange={(newContent) => console.log(newContent)}
+      onChange={() => null}
     />
   );
 }

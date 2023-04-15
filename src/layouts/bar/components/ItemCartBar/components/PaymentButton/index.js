@@ -1,13 +1,47 @@
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { LoadingButton } from "@mui/lab";
 // import SendIcon from "@mui/icons-material/Send";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { currencyFormatter } from "functions/numberFormat";
+import { useBarCartController } from "context/barCartContext";
+import { useSelectorController } from "context/selectorContext";
+import { sendTransactionAC } from "context/action-creator/TransactionAC";
+import { calculateTotal } from "functions/calculateTotal";
 
-export default function PaymentButton({ value, onclickTransaction, isLoading, disabled }) {
+export default function PaymentButton({ onclickTransaction, disabled }) {
+  const [totalTransaction, setTotalTransaction] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const [controllerBar, dispatchBar] = useBarCartController();
+  const [controllerSelector, dispatchSelector] = useSelectorController();
+  const { isLoading, responseTransaction } = controllerSelector;
+
+  const { listCarts, tableSelected, clientSelected, paymentMethods, transactionType } =
+    controllerBar;
+
+  useEffect(() => {
+    if (responseTransaction.lenght > 0) {
+      onclickTransaction(responseTransaction);
+    }
+  }, [responseTransaction]);
+
+  useEffect(() => {
+    setTotalTransaction(calculateTotal(listCarts));
+  }, [listCarts]);
+
+  const handleSentTransaction = () => {
+    sendTransactionAC(dispatchSelector, {
+      listCarts,
+      tableSelected,
+      clientSelected,
+      paymentMethods,
+      transactionType,
+    });
+  };
+
   return (
     <LoadingButton
-      onClick={() => onclickTransaction()}
+      onClick={() => handleSentTransaction()}
       endIcon={<ArrowForwardIosIcon />}
       loading={isLoading}
       loadingPosition="end"
@@ -16,20 +50,21 @@ export default function PaymentButton({ value, onclickTransaction, isLoading, di
       color="success"
       disabled={disabled}
     >
-      {` Enviar ${currencyFormatter({ currency: "COP", value })}`}
+      {` Enviar ${currencyFormatter({
+        currency: "COP",
+        value: totalTransaction ? totalTransaction.total : 0,
+      })}`}
     </LoadingButton>
   );
 }
 
 PaymentButton.defaultProps = {
-  value: "0",
-  isLoading: false,
   disabled: false,
+  onclickTransaction: () => null,
 };
 
 PaymentButton.propTypes = {
-  value: PropTypes.string,
-  onclickTransaction: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool,
+  onclickTransaction: PropTypes.func,
+  // isLoading: PropTypes.bool,
   disabled: PropTypes.bool,
 };

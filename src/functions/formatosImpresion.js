@@ -8,6 +8,7 @@ const formatoImpresion = {
     `P.B.X: businessPBX Cel: businessPhone`,
     `_____________________________`,
     `Venta numberTransaction`,
+    `MESA# tableNumber`,
     `_____________________________`,
     `Hora: transactionTime Fecha: transactionDate`,
     `DOCUMENTO: clientDocument`,

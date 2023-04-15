@@ -23,7 +23,8 @@ import CircleButton from "components/MDCircleButton";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { currencyFormatter } from "functions/numberFormat";
-import calculateTotal from "functions/calculateTotal";
+import { calculateTotal } from "functions/calculateTotal";
+import PaymentButton from "layouts/bar/components/ItemCartBar/components/PaymentButton";
 import { ModalPaymentMethodsStyle, clearButtonIconStyle } from "../../style";
 
 export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }) {
@@ -32,6 +33,8 @@ export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }
   const [listMethods, setListMethods] = useState([]);
   const [valueMethod, setValueMethod] = useState([]);
   const [totalPaymentsMethod, setTotalPaymentsMethod] = useState(0);
+  const [totalTransaction, setTotalTransaction] = useState([]);
+
   // context methods
   const { darkMode, sidenavColor } = controller;
   const { listCarts, paymentMethods } = controllerBar;
@@ -41,6 +44,10 @@ export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }
     const dataPaymentMethod = data;
     setListMethods(dataPaymentMethod);
   }, [data]);
+
+  useEffect(() => {
+    setTotalTransaction(calculateTotal(listCarts));
+  }, [listCarts]);
 
   useEffect(() => {
     const currentListValue = [];
@@ -206,9 +213,23 @@ export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }
                   </TableCell>
                   <TableCell align="right">{}</TableCell>
                 </TableRow>
+                <TableRow key="title" sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                  <TableCell component="th" scope="row">
+                    {`${totalPaymentsMethod - totalTransaction.total >= 0 ? `Cambio` : `Faltante`}`}
+                  </TableCell>
+                  <TableCell align="right">
+                    {currencyFormatter({
+                      currency: "COP",
+                      value: totalTransaction ? totalPaymentsMethod - totalTransaction.total : 0,
+                    })}
+                  </TableCell>
+                  <TableCell align="right">{}</TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
+          <br />
+          <PaymentButton disabled={!(totalPaymentsMethod - totalTransaction.total >= 0)} />
         </Grid>
       </Grid>
     </MainModal>

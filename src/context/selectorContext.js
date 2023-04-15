@@ -72,6 +72,12 @@ function reducer(state, action) {
         isLoadingComprobantes: value,
       };
     }
+    case "SET_RESPONSE_TRANSACTION": {
+      return {
+        ...state,
+        responseTransaction: value,
+      };
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -92,6 +98,7 @@ function SelectorProvider({ children }) {
     isLoadingAdministrador: 1,
     comprobantes: [],
     isLoadingComprobantes: 1,
+    responseTransaction: [],
   };
 
   const [controllerSelector, dispatchSelector] = useReducer(reducer, initialState);
@@ -139,6 +146,8 @@ const setComprobantes = (dispatchSelector, value) =>
   dispatchSelector({ type: "SET_COMPROBANTES", value });
 const setIsLoadingComprobantes = (dispatchSelector, value) =>
   dispatchSelector({ type: "SET_LOADING_COMPROBANTES", value });
+const setResponseTransaction = (dispatchSelector, value) =>
+  dispatchSelector({ type: "SET_RESPONSE_TRANSACTION", value });
 
 export {
   SelectorProvider,
@@ -153,4 +162,5 @@ export {
   setIsLoadingAdministrador,
   setComprobantes,
   setIsLoadingComprobantes,
+  setResponseTransaction,
 };

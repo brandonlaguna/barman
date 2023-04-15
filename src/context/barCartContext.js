@@ -20,6 +20,7 @@ const initialState = {
   launchTransaction: false,
   launchPrinter: false,
   printPrinter: "",
+  responseTransaction: [],
 };
 
 function reducer(state, action) {

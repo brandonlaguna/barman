@@ -1,3 +1,5 @@
+import instance from "config/instances";
+
 const C = {
   AccionWrite: "write",
   AccionCut: "cut",
@@ -40,6 +42,17 @@ export class OperacionTicket {
   }
 }
 
+instance.interceptors.request.use(
+  (config) => {
+    // eslint-disable-next-line no-param-reassign
+    config.baseURL = URL_PLUGIN;
+    // eslint-disable-next-line no-param-reassign
+    config.mode = "no-cors";
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 export class Impresora extends OperacionTicket {
   constructor(ruta) {
     super();
@@ -68,8 +81,21 @@ export class Impresora extends OperacionTicket {
       .then((respuestaDecodificada) => respuestaDecodificada === nombreImpresora);
   }
 
-  static getImpresora(ruta) {
+  static getImpresoraO(ruta) {
     return fetch(`${ruta ?? URL_PLUGIN}/impresora`).then((r) => r.json());
+  }
+
+  static async getImpresora(ruta) {
+    // eslint-disable-next-line no-useless-catch
+    try {
+      const response = await instance
+        .get(`${ruta ?? URL_PLUGIN}/impresora`)
+        .then((red) => red)
+        .catch(({ red }) => red.data);
+      return response;
+    } catch (error) {
+      throw error;
+    }
   }
 
   static getImpresoras(ruta) {
