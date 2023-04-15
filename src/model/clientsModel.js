@@ -1,9 +1,9 @@
-export const filterClients = async () => console.log("filtro");
+export const filterClients = async () => null;
 
 export const getClients = async () => {
   try {
     const items = localStorage.getItem("clientes");
-    return JSON.parse(items).data;
+    return JSON.parse(items);
   } catch (e) {
     return e;
   }

@@ -1,29 +1,56 @@
-import { createContext, useState, useMemo } from "react";
+import { createContext, useMemo, useReducer, useContext } from "react";
 import PropTypes from "prop-types";
 
-const AuthContext = createContext();
+const UserAuth = createContext();
+UserAuth.displayName = "UserAuthContext";
 
-const initialAuth = null;
+const initialState = {
+  userInfo: {
+    name: "nombre",
+  },
+};
 
-function AuthProvider({ children }) {
-  const [auth, setAuth] = useState(initialAuth);
-
-  const handleAuth = (e) => {
-    console.log(e);
-    if (auth) {
-      setAuth(null);
-    } else {
-      setAuth(true);
+function reducer(state, action) {
+  const { value } = action;
+  switch (action.type) {
+    case "SET_userInfo": {
+      return {
+        ...state,
+        sendTransaction: value,
+      };
     }
-  };
-
-  const data = useMemo(() => [auth, handleAuth]);
-  return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
+    default: {
+      throw new Error(`Unhandled action type: ${action.type}`);
+    }
+  }
 }
 
-AuthProvider.propTypes = {
+function UserAuthProvider({ children }) {
+  const [userAuthController, userAuthDispatch] = useReducer(reducer, initialState);
+
+  const data = useMemo(
+    () => [userAuthController, userAuthDispatch],
+    [userAuthController, userAuthDispatch]
+  );
+
+  return <UserAuth.Provider value={data}>{children}</UserAuth.Provider>;
+}
+
+// Silpos Barman React custom hook for using context
+function useUserAuthController() {
+  const context = useContext(UserAuth);
+
+  if (!context) {
+    throw new Error("useUserAuthController should be used inside the ProductControllerProvider.");
+  }
+
+  return context;
+}
+
+UserAuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export { AuthProvider };
-export default AuthContext;
+const setUserAuth = (userAuthDispatch, value) => userAuthDispatch({ type: "SET_USER", value });
+
+export { useUserAuthController, UserAuthProvider, setUserAuth };

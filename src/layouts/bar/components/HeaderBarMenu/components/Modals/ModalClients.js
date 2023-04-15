@@ -66,7 +66,6 @@ export default function ModalClient({
   const handleResponseDataClient = (client) => {
     setIsSend(false);
     saveClient(client).then((response) => {
-      console.log(response.data);
       if (response.data.status) {
         toast.success(response.data.message);
         importClientes().then((result) => {

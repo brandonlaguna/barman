@@ -7,25 +7,37 @@ import { SelectorProvider } from "context/selectorContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContextProvider } from "context/userContext";
+import { ProductControllerProvider } from "context/productContext";
+import { ClientsControllerProvider } from "context/clientsContext";
+import { UserAuthProvider } from "context/AuthContext";
+import { PrintersControllerProvider } from "context/printersContext";
 
 ReactDOM.render(
   <AuthContextProvider>
     <BrowserRouter>
       <SelectorProvider>
-        <MaterialUIControllerProvider>
-          <App />
-          <ToastContainer
-            position="bottom-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-        </MaterialUIControllerProvider>
+        <UserAuthProvider>
+          <MaterialUIControllerProvider>
+            <ClientsControllerProvider>
+              <PrintersControllerProvider>
+                <ProductControllerProvider>
+                  <App />
+                  <ToastContainer
+                    position="bottom-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                  />
+                </ProductControllerProvider>
+              </PrintersControllerProvider>
+            </ClientsControllerProvider>
+          </MaterialUIControllerProvider>
+        </UserAuthProvider>
       </SelectorProvider>
     </BrowserRouter>
   </AuthContextProvider>,

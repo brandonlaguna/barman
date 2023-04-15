@@ -6,21 +6,87 @@ import DataTable from "examples/Tables/DataTable";
 import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import { useProductController } from "context/productContext";
+import { getProductsAC, deleteProductAC } from "context/action-creator/productsAC";
+import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import AddIcon from "@mui/icons-material/Add";
+
+// import modals
+import ModalItem from "./components/modals/ModalItem";
+import ModalDeleteItem from "./components/modals/ModalDeleteItem";
 
 export default function Products() {
   const [rows, setRows] = useState([]);
+  const [openModalItem, setOpenModalItem] = useState(false);
+  const [openModalEditItem, setOpenModalEditItem] = useState(false);
+  const [dataItemSelected, setDataItemSelected] = useState(null);
+  const [openDeleteModalItem, setOpenDeleteModalItem] = useState(false);
+  const [productController, productDispatch] = useProductController();
+  const { products, isLoadingProducts } = productController;
+
   const columns = [
     { Header: "ID", accessor: "id", width: "5%", align: "left" },
-    { Header: "Nombre", accessor: "printer", width: "45%", align: "left" },
-    { Header: "Tipo", accessor: "function", align: "left" },
-    { Header: "Estado", accessor: "status", align: "center" },
-    { Header: "Ruta", accessor: "route", align: "center" },
-    { Header: "Accion", accessor: "action", align: "center" },
+    { Header: "Articulo", accessor: "articulo", width: "45%", align: "left" },
+    { Header: "Barras", accessor: "barras", align: "left" },
+    { Header: "Precio Costo", accessor: "precio_costo", align: "right" },
+    { Header: "Precio Venta uno", accessor: "venta_uno", align: "right" },
+    { Header: "Total", accessor: "total", align: "center" },
+  ];
+
+  const handleRowSelected = (dataSelected) => {
+    if (dataSelected) {
+      const itemFound = rows.find((itemRow) => itemRow.id === dataSelected.id);
+      setDataItemSelected(itemFound);
+    } else {
+      setDataItemSelected(null);
+    }
+  };
+
+  const handleOnDeleteItem = () => {
+    if (dataItemSelected && dataItemSelected?.id) {
+      deleteProductAC(productDispatch, { id: dataItemSelected?.id });
+    }
+  };
+
+  const handleOnNewItem = (val) => {
+    setOpenModalEditItem(false);
+    setOpenModalItem(val);
+  };
+
+  const buttons = [
+    {
+      name: "Nuevo",
+      onClick: () => handleOnNewItem(true),
+      inheritDisable: false,
+      iconButton: <AddIcon />,
+      color: "success",
+    },
+    {
+      name: "Editar",
+      onClick: () => setOpenModalEditItem(true),
+      inheritDisable: true,
+      iconButton: <ModeEditOutlineIcon />,
+      color: "warning",
+    },
+    {
+      name: "Eliminar",
+      onClick: () => setOpenDeleteModalItem(true),
+      inheritDisable: true,
+      iconButton: <DeleteOutlineIcon />,
+      color: "error",
+    },
   ];
 
   useEffect(() => {
-    setRows([]);
+    getProductsAC(productDispatch);
   }, []);
+
+  useEffect(() => {
+    if (products) {
+      setRows(products);
+    }
+  }, [products]);
 
   return (
     <DashboardLayout>
@@ -51,16 +117,40 @@ export default function Products() {
               <MDBox pt={3}>
                 <DataTable
                   table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
+                  isSorted
+                  entriesPerPage
                   noEndBorder
+                  canSearch
+                  pagination={{
+                    variant: "gradient",
+                  }}
+                  selectRow={handleRowSelected}
+                  buttons={buttons}
+                  isLoading={isLoadingProducts}
                 />
               </MDBox>
             </Card>
           </Grid>
         </Grid>
       </MDBox>
+      <ModalItem
+        isOpen={openModalItem || openModalEditItem}
+        handleOnForceClose={() =>
+          openModalItem ? setOpenModalItem(false) : setOpenModalEditItem(false)
+        }
+        data={openModalEditItem ? dataItemSelected : null}
+        handleOnSubmit={() => {
+          setDataItemSelected(null);
+          getProductsAC(productDispatch);
+        }}
+      />
+      <ModalDeleteItem
+        isOpen={openDeleteModalItem}
+        handleOnForceClose={() => setOpenDeleteModalItem(false)}
+        data={dataItemSelected}
+        onSuccess={() => handleOnDeleteItem()}
+        onCancel={() => setOpenDeleteModalItem(false)}
+      />
     </DashboardLayout>
   );
 }

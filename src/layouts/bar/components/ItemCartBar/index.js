@@ -10,13 +10,11 @@ import {
   clean,
   updateItemCart,
 } from "context/barCartContext";
-import { useSelectorController, setIsLoading } from "context/selectorContext";
-import { toast } from "react-toastify";
+// eslint-disable-next-line no-unused-vars
+import { useSelectorController, setResponseTransaction } from "context/selectorContext";
 import useWindowDimensions from "functions/windowDimension";
 import { SwipeableList } from "@sandstreamdev/react-swipeable-list";
-import generateTransaction from "transactions/generateTransaction";
 import "@sandstreamdev/react-swipeable-list/dist/styles.css";
-import calculateTotal from "functions/calculateTotal";
 import printTransaction from "transactions/printTransaction";
 import { BANK_ICONS } from "config/contants";
 import { importAllUsers } from "services/userServices";
@@ -53,28 +51,28 @@ function RenderIdTable({ tableSelected }) {
       {tableSelected && (
         <>
           <Grid container>
-            <Grid item xs={10} sm={10} md={10}>
+            <Grid item xs={9} sm={9} md={9}>
               <Typography
                 id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                style={{ color: "white" }}
+                variant="p"
+                component="div"
+                style={{ color: "white", fontSize: 13 }}
               >
-                Pedido Mesa # {tableSelected} {listCarts.length}
+                Pedido Mesa # {tableSelected} ({listCarts.length} items)
               </Typography>
             </Grid>
             <Grid item xs={1} sm={1} md={1}>
               <CircleButton
                 iconPath={`${BANK_ICONS}/interface/duster.svg`}
-                sx={{ width: "40px", height: "40px" }}
+                sx={{ width: "35px", height: "35px" }}
                 sxIcon={buttonIconStyle}
                 onClick={() => clean(dispatchBar, true)}
               />
             </Grid>
-            <Grid item xs={1} sm={1} md={1}>
+            <Grid item xs={2} sm={2} md={2}>
               <CircleButton
                 iconPath={`${BANK_ICONS}/interface/bin.svg`}
-                sx={{ width: "40px", height: "40px" }}
+                sx={{ width: "35px", height: "35px" }}
                 sxIcon={buttonIconStyle}
                 onClick={() => handleClickUserAuth()}
               />
@@ -95,6 +93,7 @@ export default function ItemCartBar() {
   // context controllers
   const [controller] = useMaterialUIController();
   const [controllerBar, dispatchBar] = useBarCartController();
+  // eslint-disable-next-line no-unused-vars
   const [controllerSelector, dispatchSelector] = useSelectorController();
   // context methods
   const { darkMode, sidenavColor } = controller;
@@ -106,63 +105,63 @@ export default function ItemCartBar() {
     transactionType,
     printPrinter,
   } = controllerBar;
-  const { isLoading } = controllerSelector;
+  // eslint-disable-next-line no-unused-vars
+  const { isLoading, responseTransaction } = controllerSelector;
   const handleDeleteItemToCart = (itemId) => deleteToCart(dispatchBar, itemId);
   const active = true;
   const { height } = useWindowDimensions();
 
   const [listItemCart, setListItemCart] = useState([]);
-  const [totalTransaction, setTotalTransaction] = useState([]);
-  const [responseTransaction, setResponseTransaction] = useState([]);
   const [dataItemSetting, setDataItemSetting] = useState([]);
   const [isOpenModalItemCart, setIsOpenModalItemCart] = useState(false);
 
   useEffect(() => {
     setListItemCart(listCarts);
-    setTotalTransaction(calculateTotal(listCarts));
   }, [listCarts]);
 
-  const handleSentTransaction = () => {
-    setIsLoading(dispatchSelector, true);
-    generateTransaction({
-      listCarts,
-      tableSelected,
-      clientSelected,
-      paymentMethods,
-      transactionType,
-    }).then((dataTransaction) => {
-      if (!dataTransaction[0]) {
-        toast.error(dataTransaction[1]);
-        setIsLoading(dispatchSelector, false);
-      } else {
-        setResponseTransaction(dataTransaction);
-        toast.success("Transaccion realizada correctamente");
-      }
-    });
-  };
+  // const handleSentTransaction = () => {
+  //   setIsLoading(dispatchSelector, true);
+  //   generateTransaction({
+  //     listCarts,
+  //     tableSelected,
+  //     clientSelected,
+  //     paymentMethods,
+  //     transactionType,
+  //   }).then((dataTransaction) => {
+  //     if (!dataTransaction[0]) {
+  //       toast.error(dataTransaction[1]);
+  //       setIsLoading(dispatchSelector, false);
+  //     } else {
+  //       setResponseTransaction(dataTransaction);
+  //       toast.success("Transaccion realizada correctamente");
+  //     }
+  //   });
+  // };
 
   useEffect(() => {
-    if (responseTransaction.length > 0) {
+    if (responseTransaction.consecutivo > 0) {
       setLaunchPrinter(dispatchBar, true);
-      setIsLoading(dispatchSelector, false);
     }
   }, [responseTransaction]);
 
   useEffect(() => {
-    printTransaction(
-      responseTransaction[2],
-      transactionType,
-      printPrinter,
-      clientSelected,
-      paymentMethods
-    );
-    clean(dispatchBar, true);
+    if (printPrinter) {
+      printTransaction(
+        responseTransaction,
+        transactionType,
+        printPrinter,
+        clientSelected,
+        paymentMethods
+      );
+      console.log("clean");
+      clean(dispatchBar, true);
+      setLaunchPrinter(dispatchBar, false);
+    }
   }, [printPrinter]);
 
   const handleOnForceCloseItemCart = () => setIsOpenModalItemCart(false);
   const handleSettingItemToCart = (idItem) => {
     const dataItem = listCarts.find((item) => item.id === idItem);
-    console.log(dataItem);
     setIsOpenModalItemCart(true);
     setDataItemSetting(dataItem);
   };
@@ -193,11 +192,7 @@ export default function ItemCartBar() {
           />
         ))}
       </SwipeableList>
-      <PaymentButton
-        value={totalTransaction ? totalTransaction.total : 0}
-        onclickTransaction={handleSentTransaction}
-        isLoading={isLoading}
-      />
+      <PaymentButton />
       {/** Modals */}
       <ModalItemSetting
         isOpen={isOpenModalItemCart}

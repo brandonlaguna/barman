@@ -59,7 +59,7 @@ export function ModalStyle(theme, ownerState) {
     position: "absolute",
     top: "50%",
     left: "50%",
-    width: "80%",
+    width: "70%",
     height: "90%",
     transform: "translate(-50%, -50%)",
     bgcolor: "background.paper",
@@ -138,7 +138,7 @@ export function ModalPaymentMethodsStyle(theme, ownerState) {
     position: "absolute",
     top: "50%",
     left: "50%",
-    width: "40%",
+    width: "80%",
     height: "90%",
     transform: "translate(-50%, -50%)",
     bgcolor: "background.paper",
@@ -253,4 +253,10 @@ export const buttonIconStyle = {
   height: "20px",
   color: "white",
   filter: "invert(88%) sepia(21%) saturate(935%) hue-rotate(123deg) brightness(85%) contrast(97%)",
+};
+
+export const clearButtonIconStyle = {
+  width: "20px",
+  height: "20px",
+  color: "white",
 };

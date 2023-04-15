@@ -1,6 +1,8 @@
+/* eslint-disable no-useless-catch */
 import axios from "axios";
 import headerRequest from "functions/headerRequest";
-import { API_URL } from "../config/contants";
+import instance from "config/instances";
+import { API_URL, API_SILPOS_WEB } from "../config/contants";
 
 const DEFAULT_ERROR_DATA = {
   status: false,
@@ -9,11 +11,38 @@ const DEFAULT_ERROR_DATA = {
 };
 const headers = headerRequest();
 
-export const importItems = () =>
-  axios
-    .get(`${API_URL}/productos`, { headers })
-    .then((response) => response.data)
-    .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+instance.interceptors.request.use(
+  (config) => {
+    const token = window.localStorage.getItem("accessToken");
+    const businessData = JSON.parse(window.localStorage.getItem("businessData"));
+    // eslint-disable-next-line no-param-reassign
+    config.baseURL = API_URL;
+    // eslint-disable-next-line no-param-reassign
+    config.headers.authorization = `Bearer ${token}`;
+    // eslint-disable-next-line no-param-reassign
+    config.headers.dbu = businessData.dbuser;
+    // eslint-disable-next-line no-param-reassign
+    config.headers.dbp = businessData.dbpass;
+    // eslint-disable-next-line no-param-reassign
+    config.headers.dbd = businessData.dbname;
+    // eslint-disable-next-line no-param-reassign
+    config.headers.Company = businessData.id;
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+export const importItems = async () => {
+  try {
+    const response = await instance
+      .get(`/productos`, { headers })
+      .then((res) => res.data)
+      .catch(({ res }) => res.data || DEFAULT_ERROR_DATA);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const obtenerItem = (idarticulo) =>
   axios
@@ -23,3 +52,63 @@ export const obtenerItem = (idarticulo) =>
     })
     .then((response) => response.data)
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
+
+export const saveItem = async (dataItem) => {
+  try {
+    const response = await instance
+      .post(`/productos`, dataItem)
+      .then((res) => res.data)
+      .catch(({ res }) => res.data || DEFAULT_ERROR_DATA);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateItem = async (dataItem) => {
+  try {
+    const response = await instance.put(`${API_URL}/productos`, dataItem);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteItem = async (dataItem) => {
+  try {
+    const response = await instance
+      .delete(`${API_URL}/productos`, { data: dataItem })
+      .then((red) => red.data)
+      .catch(({ red }) => red.data || DEFAULT_ERROR_DATA);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const importParameters = async () => {
+  try {
+    const response = await fetch(`${API_SILPOS_WEB}/app/models/api_caja/soenac_listings.php`, {
+      method: "GET",
+      headers,
+      type: "json",
+    })
+      .then((res) => res.json())
+      .catch(({ res }) => res.data || DEFAULT_ERROR_DATA);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const importLocations = async () => {
+  try {
+    const response = await instance
+      .get(`/productos/ubicacion`, { headers })
+      .then((res) => res.data.data)
+      .catch(({ res }) => res.data || DEFAULT_ERROR_DATA);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

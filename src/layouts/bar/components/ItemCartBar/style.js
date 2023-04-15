@@ -55,7 +55,7 @@ export function ItemCartCardStyle(theme, ownerState) {
     background: "white",
     color: (!darkMode && !active) || (whiteSidenav && !active) ? "white" : "black",
     width: "100%",
-    height: "70px",
+    height: "60px",
     padding: `${pxToRem(1)} ${pxToRem(5)}`,
     margin: `${pxToRem(1)} ${pxToRem(5)}`,
     borderRadius: borderRadius.md,

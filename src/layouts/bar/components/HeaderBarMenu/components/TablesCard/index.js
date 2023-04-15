@@ -1,8 +1,5 @@
 import PropTypes from "prop-types";
-import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { toast } from "react-toastify";
@@ -34,36 +31,35 @@ export default function TablesCard({ data, onClickTable, busyTables, isChangeTab
   if (statusMesa && isChangeTable) {
     disableMesa = true;
   }
+  // eslint-disable-next-line no-unused-vars
   const imgStatus =
     statusMesa === false
-      ? "assets/Bankicon/icons/tables/mesa_libre.png"
-      : "assets/Bankicon/icons/tables/mesa_ocupada.png";
+      ? "assets/Bankicon/icons/tables/round-table.png"
+      : "assets/Bankicon/icons/tables/round-table.png";
+  // eslint-disable-next-line no-unused-vars
   const altStatus = statusMesa === false ? "Mesa Disponible" : "Mesa Ocupada";
 
   return (
     <Grid
       role="button"
       item
-      xs={4}
-      md={3}
+      xs={3}
+      md={2}
       lg={2}
       key={id}
       onClick={() => (disableMesa ? toast.warn("Mesa ocupada") : onClickTable(id, tableData))}
     >
       <Card style={colorStatus}>
-        <Box>
-          <CardContent style={{ paddingBottom: "0px" }}>
-            <Typography style={{ color: "#ffffff" }} component="div" variant="h5">
+        <Grid container>
+          <Grid item xs={12}>
+            <Typography style={{ color: "#ffffff", fontSize: 12 }} component="div" variant="p">
               {`Mesa #${id}`}
             </Typography>
-          </CardContent>
-        </Box>
-        <CardMedia
-          component="img"
-          sx={{ width: "30%" }}
-          image={process.env.PUBLIC_URL + imgStatus}
-          alt={altStatus}
-        />
+          </Grid>
+          <Grid item xs={12}>
+            <img src={process.env.PUBLIC_URL + imgStatus} width="50%" alt="as" />
+          </Grid>
+        </Grid>
         <RenderTotal total={tableData.length > 0 ? tableData[0].total_factura : 0} />
       </Card>
     </Grid>

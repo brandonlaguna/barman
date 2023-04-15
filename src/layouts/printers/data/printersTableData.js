@@ -3,7 +3,7 @@ import MDTypography from "components/MDTypography";
 import MDAvatar from "components/MDAvatar";
 import MDBadge from "components/MDBadge";
 import PropTypes from "prop-types";
-import { getAllPrinters } from "model/printersModel";
+// import { getAllPrinters } from "model/printersModel";
 // Images
 import team2 from "assets/images/icons/hardware/printer.png";
 
@@ -29,12 +29,13 @@ function Type({ title, description }) {
   );
 }
 
-const data = async () => {
+const data = async (printers) => {
   try {
     const rows = [];
-    const printerList = getAllPrinters();
-    printerList.forEach((printer) => {
+    // const printerList = getAllPrinters();
+    printers.forEach((printer) => {
       rows.push({
+        id: printer.id,
         printer: <Printer image={team2} name={printer.nombre} email="" />,
         function: <Type title={printer.tipo} description="80mm" />,
         status: (
@@ -45,11 +46,6 @@ const data = async () => {
         route: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
             {printer.ruta}
-          </MDTypography>
-        ),
-        action: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            Edit
           </MDTypography>
         ),
       });

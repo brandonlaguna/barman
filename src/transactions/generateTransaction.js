@@ -1,9 +1,10 @@
+/* eslint-disable camelcase */
 import { dataTransaction, ventaTransaction } from "model/dataTransaction";
 import PropTypes from "prop-types";
 import { sendIndividualTransaction } from "services/transactionServices";
 import md5 from "md5";
 import { getDate } from "functions/getTime";
-import calculateTotal from "functions/calculateTotal";
+import { calculateTotal } from "functions/calculateTotal";
 import { getUserData } from "model/userModel";
 
 const idventa = Math.floor(Math.random() * 1000);
@@ -27,20 +28,33 @@ function itemsCollection(listCarts) {
       venta_tres: element.venta_tres,
       idventa,
       valor: element.venta_uno,
-      observacion: element.descripcion,
+      observacion: element.observacion,
     });
   });
   return arrayItems;
 }
 
 function paymentMethodsCollection(paymentMethods) {
-  const arrayPayments = [];
-  paymentMethods.forEach((element) => {
-    if (element.id > 0) {
-      arrayPayments.push(element);
-    }
-  });
-  return arrayPayments;
+  // eslint-disable-next-line camelcase, no-nested-ternary
+  const tipo_pago = paymentMethods.length > 1 ? 5 : paymentMethods[0] ? paymentMethods[0].id : 1;
+  let payments = [];
+  if (paymentMethods.length > 1) {
+    const medios_pago = [];
+    const idmedios_pago = [];
+    const observacion_medios_pago = [];
+    paymentMethods.forEach((element) => {
+      if (element.id > 0) {
+        medios_pago.push(parseFloat(element.value));
+        idmedios_pago.push(parseInt(element.id, 10));
+        observacion_medios_pago.push("");
+      }
+    });
+    payments = { tipo_pago, medios_pago, idmedios_pago, observacion_medios_pago };
+  } else {
+    payments = { tipo_pago };
+  }
+  return payments;
+  // eslint-disable-next-line camelcase
 }
 
 function dataCollection(
@@ -53,21 +67,21 @@ function dataCollection(
 ) {
   const arrayPayments = paymentMethodsCollection(paymentMethods);
   const hashToken = `${
-    clientSelected.id > 0 ? clientSelected.documento : dataTransaction.cc_cliente
+    clientSelected?.id > 0 ? clientSelected.documento : dataTransaction.cc_cliente
   }-${getDate().toString()}`;
 
   const totales = calculateTotal(listCarts);
   const arrayData = {
     ...dataTransaction,
     ...totales,
-    cc_cliente: clientSelected.id > 0 ? clientSelected.documento : dataTransaction.cc_cliente, // client or default
-    cliente: clientSelected.id > 0 ? clientSelected.id : dataTransaction.cliente,
+    ...arrayPayments,
+    cc_cliente: clientSelected?.id > 0 ? clientSelected.documento : dataTransaction.cc_cliente, // client or default
+    cliente: clientSelected?.id > 0 ? clientSelected.id : dataTransaction.cliente,
     nombre:
-      clientSelected.id > 0
+      clientSelected?.id > 0
         ? `${clientSelected.razon_social} ${clientSelected.nombres} ${clientSelected.apellidos}`
         : dataTransaction.nombre,
     puesto: tableSelected,
-    payments: arrayPayments,
     token: md5(`${clientSelected.documento}${hashToken}`),
     guardar_vender: transactionType
       ? transactionType.guardar_vender
@@ -76,7 +90,7 @@ function dataCollection(
       ? transactionType.tipo_transaccion
       : dataTransaction.tipo_transaccion,
     idventa,
-    vendedor: userData.id,
+    vendedor: userData?.id,
   };
   return arrayData;
 }
@@ -89,8 +103,8 @@ const generateTransaction = async ({
   transactionType,
 }) => {
   let estado = false;
-  let mensajeEstado = "Transaccion realizada correctamente.";
-  const dataResponse = [];
+  let mensajeEstado = "Ocurrió un error en la transaccion.";
+  let dataResponse = [];
   const userData = getUserData();
   try {
     const venta = itemsCollection(listCarts);
@@ -116,16 +130,17 @@ const generateTransaction = async ({
     }
 
     await sendIndividualTransaction({ data, venta }).then((response) => {
-      dataResponse.push(response[0]);
-      if (response[0].httpStatus === 200) {
-        mensajeEstado = "mensaje cambiado";
-        // throw new Error("Ocurrió un error al realizar la venta.");
+      const { message, httpStatus } = response[0];
+      if (httpStatus === 200) {
+        // eslint-disable-next-line prefer-destructuring
+        dataResponse = response[0];
+        mensajeEstado = message;
+        estado = true;
       }
     });
-    estado = true;
-    return [estado, mensajeEstado, dataResponse];
+    return { estado, mensajeEstado, dataResponse };
   } catch (e) {
-    return [estado, e.message, dataResponse];
+    return { estado, mensajeEstado: e.message, dataResponse };
   }
 };
 

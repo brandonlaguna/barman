@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import * as loginService from "services/loginServices";
 
 const Context = createContext();
-
+Context.displayName = "userContext";
 function AuthContextProvider({ children }) {
   const token = window.localStorage.getItem("accessToken");
   const user = window.localStorage.getItem("userData");
@@ -12,7 +12,6 @@ function AuthContextProvider({ children }) {
   if (token != null && authState.user == null) {
     // Cerrar sesión del usuario cuando el token ha expirado
     loginService.checkAuthStatus({ accessToken: token }).then((response) => {
-      console.log(response);
       if (!response.status) {
         window.localStorage.removeItem("accessToken");
         setAuthState({ token: null, user: null });

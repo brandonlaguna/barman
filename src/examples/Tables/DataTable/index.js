@@ -28,6 +28,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Icon from "@mui/material/Icon";
 import Autocomplete from "@mui/material/Autocomplete";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 
 // Silpos Barman React components
 import MDBox from "components/MDBox";
@@ -38,6 +41,8 @@ import MDPagination from "components/MDPagination";
 // Silpos Barman React example components
 import DataTableHeadCell from "examples/Tables/DataTable/DataTableHeadCell";
 import DataTableBodyCell from "examples/Tables/DataTable/DataTableBodyCell";
+import { useMaterialUIController } from "context";
+import StatusIcon from "components/MDStatusIcon";
 
 function DataTable({
   entriesPerPage,
@@ -47,13 +52,32 @@ function DataTable({
   pagination,
   isSorted,
   noEndBorder,
+  selectRow,
+  buttons,
+  isLoading,
 }) {
+  const [controller] = useMaterialUIController();
+  const { sidenavColor } = controller;
   const defaultValue = entriesPerPage.defaultValue ? entriesPerPage.defaultValue : 10;
   const entries = entriesPerPage.entries
     ? entriesPerPage.entries.map((el) => el.toString())
     : ["5", "10", "15", "20", "25"];
   const columns = useMemo(() => table.columns, [table]);
   const data = useMemo(() => table.rows, [table]);
+  const [rowSelected, setRowSelected] = useState(null);
+
+  const handleRowSelected = (dataSelected) => {
+    if (rowSelected === null) {
+      setRowSelected(dataSelected);
+      selectRow(dataSelected);
+    } else if (rowSelected.id === dataSelected.id) {
+      setRowSelected(null);
+      selectRow(null);
+    } else if (rowSelected.id !== dataSelected.id) {
+      setRowSelected(dataSelected);
+      selectRow(dataSelected);
+    }
+  };
 
   const tableInstance = useTable(
     { columns, data, initialState: { pageIndex: 0 } },
@@ -163,14 +187,14 @@ function DataTable({
                 renderInput={(params) => <MDInput {...params} />}
               />
               <MDTypography variant="caption" color="secondary">
-                &nbsp;&nbsp;entries per page
+                &nbsp;&nbsp;items por página
               </MDTypography>
             </MDBox>
           )}
           {canSearch && (
             <MDBox width="12rem" ml="auto">
               <MDInput
-                placeholder="Search..."
+                placeholder="Buscar..."
                 value={search}
                 size="small"
                 fullWidth
@@ -182,6 +206,22 @@ function DataTable({
             </MDBox>
           )}
         </MDBox>
+      ) : null}
+      {buttons.length > 0 ? (
+        <Stack direction="row" spacing={0} marginLeft={3}>
+          {buttons.map((buttonItem) => (
+            <Tooltip title={buttonItem.name} placement="top">
+              <IconButton
+                aria-label={buttonItem.name}
+                color={buttonItem.color ? buttonItem.color : "success"}
+                onClick={buttonItem.onClick}
+                disabled={!rowSelected && buttonItem.inheritDisable}
+              >
+                {buttonItem.iconButton ? buttonItem.iconButton : null}
+              </IconButton>
+            </Tooltip>
+          ))}
+        </Stack>
       ) : null}
       <Table {...getTableProps()}>
         <MDBox component="thead">
@@ -204,12 +244,14 @@ function DataTable({
           {page.map((row, key) => {
             prepareRow(row);
             return (
-              <TableRow {...row.getRowProps()}>
+              <TableRow {...row.getRowProps()} onClick={() => handleRowSelected(row.values)}>
                 {row.cells.map((cell) => (
                   <DataTableBodyCell
                     noBorder={noEndBorder && rows.length - 1 === key}
                     align={cell.column.align ? cell.column.align : "left"}
                     {...cell.getCellProps()}
+                    selected={row.values.id === rowSelected?.id}
+                    rowColor={pagination.color ? pagination.color : sidenavColor}
                   >
                     {cell.render("Cell")}
                   </DataTableBodyCell>
@@ -230,14 +272,19 @@ function DataTable({
         {showTotalEntries && (
           <MDBox mb={{ xs: 3, sm: 0 }}>
             <MDTypography variant="button" color="secondary" fontWeight="regular">
-              Showing {entriesStart} to {entriesEnd} of {rows.length} entries
+              mostrando {entriesStart} a {entriesEnd} de {rows.length} registros
             </MDTypography>
+          </MDBox>
+        )}
+        {isLoading > 0 && (
+          <MDBox mb={{ xs: 3, sm: 0 }}>
+            <StatusIcon status={isLoading} />
           </MDBox>
         )}
         {pageOptions.length > 1 && (
           <MDPagination
             variant={pagination.variant ? pagination.variant : "gradient"}
-            color={pagination.color ? pagination.color : "info"}
+            color={pagination.color ? pagination.color : sidenavColor}
           >
             {canPreviousPage && (
               <MDPagination item onClick={() => previousPage()}>
@@ -275,6 +322,9 @@ DataTable.defaultProps = {
   pagination: { variant: "gradient", color: "info" },
   isSorted: true,
   noEndBorder: false,
+  buttons: [],
+  selectRow: () => null,
+  isLoading: 0,
 };
 
 // Typechecking props for the DataTable
@@ -304,6 +354,9 @@ DataTable.propTypes = {
   }),
   isSorted: PropTypes.bool,
   noEndBorder: PropTypes.bool,
+  selectRow: PropTypes.func,
+  buttons: PropTypes.objectOf(PropTypes.array),
+  isLoading: PropTypes.number,
 };
 
 export default DataTable;

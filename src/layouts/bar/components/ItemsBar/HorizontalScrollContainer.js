@@ -3,6 +3,7 @@ import useWindowDimensions from "functions/windowDimension";
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import { getCategories } from "model/categoryModel";
 import Grid from "@mui/material/Grid";
+import { Box } from "@mui/material";
 import PropTypes from "prop-types";
 import easingFunctions from "functions/easeFunctions";
 import ItemsCard from "./ItemsCard";
@@ -49,10 +50,12 @@ function Card({
       tabIndex={0}
       selected={selected}
     >
-      <p>{title.categoria}</p>
+      <Box>
+        <p>{title?.categoria}</p>
+      </Box>
       <Grid
         container
-        spacing={1}
+        spacing={2}
         py={3}
         px={3}
         title={title}
@@ -60,13 +63,16 @@ function Card({
         style={{
           position: "absolute",
         }}
+        xs={12}
+        md={12}
+        lg={12}
       >
         {Object.entries(listItems[itemId].items).map((element) => (
           <ItemsCard
             rol="button"
             data={element[1]}
             onclickItem={onClickItem}
-            categoryName={title.categoria}
+            categoryImg={title?.url_image}
           />
         ))}
       </Grid>
@@ -76,6 +82,7 @@ function Card({
 
 function ScrollMenuItem({ parentWidth, listItems, onClickItem, scrollToCategory }) {
   const [selected, setSelected] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [position, setPosition] = useState(0);
   const [categories, setCategories] = useState([]);
   const isItemSelected = (id) => !!selected.find((el) => el === id);
@@ -86,11 +93,10 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem, scrollToCategory 
   const [ease, setEase] = useState("noEase");
 
   useEffect(() => {
-    console.log(position);
     setPosition(0);
     getCategories().then((response) => setCategories(response));
     setDuration(500);
-    setEase("easeInOutQuad");
+    setEase("easeInCubic");
   }, []);
 
   useEffect(() => {
@@ -103,7 +109,7 @@ function ScrollMenuItem({ parentWidth, listItems, onClickItem, scrollToCategory 
       itemSelected ? currentSelected.filter((el) => el !== id) : currentSelected.concat(id)
     );
   };
-  const onKeyPressHandle = (id) => console.log(id);
+  const onKeyPressHandle = () => null;
 
   return (
     <ScrollMenu

@@ -25,13 +25,12 @@ export default function ModalItemSetting({
 
   useEffect(() => {
     /* eslint-disable camelcase */
-    const { articulo, venta_uno, cantidad, descripcion } = dataItemSetting;
+    const { articulo, venta_uno, cantidad, observacion } = dataItemSetting;
     setItemName(articulo);
     setItemPrice(venta_uno);
     setItemQuantity(cantidad);
     setData(dataItemSetting);
-    console.log("en cart descripcion es", descripcion);
-    setItemDescription(descripcion);
+    setItemDescription(observacion);
   }, [dataItemSetting]);
 
   const onHandleSave = () => {
@@ -39,10 +38,10 @@ export default function ModalItemSetting({
       ...data,
       venta_uno: Number.parseInt(itemPrice, 10),
       cantidad: Number.parseInt(itemQuantity, 10),
-      descripcion: itemDescription,
+      observacion: itemDescription,
     };
-    console.log("cambio", tempData.articulo, tempData.descripcion);
     handleSaveSetting(tempData);
+    setItemDescription("");
   };
 
   return (

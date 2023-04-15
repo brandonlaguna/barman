@@ -254,14 +254,14 @@ const colors = {
   },
 
   disponible: {
-    background: "#4caf4f",
+    background: "#6ad96d",
     text: "#339537",
     textAlign: "center",
     color: "white",
   },
 
   ocupado: {
-    background: "#f44336",
+    background: "#f5695f",
     text: "#339537",
     textAlign: "center",
     color: "white",

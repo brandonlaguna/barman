@@ -18,8 +18,14 @@ import PropTypes from "prop-types";
 
 // Silpos Barman React components
 import MDBox from "components/MDBox";
+import { useMaterialUIController } from "context";
 
-function DataTableBodyCell({ noBorder, align, children }) {
+function DataTableBodyCell({ noBorder, align, children, selected, rowColor }) {
+  const [controller] = useMaterialUIController();
+  const { darkMode } = controller;
+  const colorRowSelected = darkMode ? "#657da5" : "#fbfbfb";
+  const colorText = darkMode ? "white" : rowColor;
+  const colorMode = darkMode ? "white" : "none";
   return (
     <MDBox
       component="td"
@@ -29,12 +35,13 @@ function DataTableBodyCell({ noBorder, align, children }) {
       sx={({ palette: { light }, typography: { size }, borders: { borderWidth } }) => ({
         fontSize: size.sm,
         borderBottom: noBorder ? "none" : `${borderWidth[1]} solid ${light.main}`,
+        background: selected ? colorRowSelected : "none",
       })}
     >
       <MDBox
         display="inline-block"
         width="max-content"
-        color="text"
+        color={selected ? colorText : colorMode}
         sx={{ verticalAlign: "middle" }}
       >
         {children}
@@ -47,6 +54,8 @@ function DataTableBodyCell({ noBorder, align, children }) {
 DataTableBodyCell.defaultProps = {
   noBorder: false,
   align: "left",
+  selected: false,
+  rowColor: "info",
 };
 
 // Typechecking props for the DataTableBodyCell
@@ -54,6 +63,17 @@ DataTableBodyCell.propTypes = {
   children: PropTypes.node.isRequired,
   noBorder: PropTypes.bool,
   align: PropTypes.oneOf(["left", "right", "center"]),
+  selected: PropTypes.bool,
+  rowColor: PropTypes.oneOf([
+    "primary",
+    "secondary",
+    "info",
+    "success",
+    "warning",
+    "error",
+    "dark",
+    "light",
+  ]),
 };
 
 export default DataTableBodyCell;
