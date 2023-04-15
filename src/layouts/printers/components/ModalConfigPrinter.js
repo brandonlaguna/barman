@@ -14,6 +14,7 @@ import { validationIp } from "utils/mask";
 import { usePrintersController } from "context/printersContext";
 import { updatePrinterAC, createPrinterAC } from "context/action-creator/printersAC";
 import formatoImpresion from "functions/formatosImpresion";
+import DEFAULTFORM from "config/defaultMessages";
 import { ModalConfigPrinterStyle } from "../style";
 
 const schema = yup
@@ -21,7 +22,8 @@ const schema = yup
     nombre: yup.string().required("Debe seleccionar una impresora válida"),
     ruta: yup.string().required("Debe ingresar una ruta"),
     tipo: yup.string().required("Debe ingresar un tipo de impresora  ej: POS"),
-    formato: yup.string().required("Debe seleccionar un formato válido"),
+    formato: yup.string(),
+    tipo_formato: yup.number().min(1, DEFAULTFORM.selectItem).required(DEFAULTFORM.selectItem),
     id: yup.number().nullable(),
     estado: yup.number(),
   })
@@ -55,7 +57,7 @@ export default function ModalConfigPrinter({
     if (dataInput && dataInput.id) {
       updatePrinterAC(
         printerDispatch,
-        { ...dataInput, formato: formatoImpresion[dataInput.formato] },
+        { ...dataInput, formato: formatoImpresion[dataInput.tipo_formato] },
         isEdited + 1
       );
     } else {
@@ -63,7 +65,7 @@ export default function ModalConfigPrinter({
         printerDispatch,
         {
           ...dataInput,
-          formato: formatoImpresion[dataInput.formato],
+          formato: formatoImpresion[dataInput.tipo_formato],
         },
         isEdited + 1
       );
@@ -86,7 +88,7 @@ export default function ModalConfigPrinter({
       setValue("nombre", data.nombre);
       setValue("ruta", data.ruta);
       setValue("tipo", data.tipo);
-      setValue("formato", 1);
+      setValue("tipo_formato", data.tipo_formato);
       setValue("estado", data.estado);
     } else {
       reset();
@@ -201,23 +203,23 @@ export default function ModalConfigPrinter({
           <Grid item xs={12} sm={6} md={6} lg={6}>
             <FormControl fullWidth sx={{ mb: 1, mt: 1 }}>
               <Controller
-                name="formato"
+                name="tipo_formato"
                 control={control}
                 rules={{ required: false }}
                 render={({ field }) => (
                   <>
-                    <InputLabel id="formato_label">Formato de Impresora</InputLabel>
+                    <InputLabel id="tipo_formato_label">Formato de Impresora</InputLabel>
                     <Select
                       {...field}
-                      label="Formato de Impresora"
-                      labelId="formato_label"
-                      id="formato"
+                      label="tipo_formato de Impresora"
+                      labelId="tipo_formato_label"
+                      id="tipo_formato"
                       style={{
                         height: 43,
                       }}
                     >
-                      <MenuItem value="1">Comanda</MenuItem>
-                      <MenuItem value="2">Ticket</MenuItem>
+                      <MenuItem value={1}>Comanda</MenuItem>
+                      <MenuItem value={2}>Ticket</MenuItem>
                     </Select>
                   </>
                 )}

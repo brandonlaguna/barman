@@ -35,7 +35,7 @@ const schema = yup
   .object({
     articulo: yup.string().required(DEFAULTFORM.required),
     barras: yup.number().typeError(DEFAULTFORM.onlyNumber),
-    referencia: yup.string().required(DEFAULTFORM.required),
+    referencia: yup.string(),
     factor_venta: yup
       .number()
       .typeError(DEFAULTFORM.onlyNumber)
@@ -46,15 +46,15 @@ const schema = yup
       .typeError(DEFAULTFORM.onlyNumber)
       .min(1, `${DEFAULTFORM.min} 1`)
       .required(DEFAULTFORM.required),
-    unidad: yup.string().min(1, DEFAULTFORM.selectItem).required(DEFAULTFORM.selectItem),
-    fraccion: yup.string().min(1, DEFAULTFORM.selectItem).required(DEFAULTFORM.selectItem),
+    unidad: yup.string().min(1, DEFAULTFORM.selectItem),
+    fraccion: yup.string().min(1, DEFAULTFORM.selectItem),
     precio_referencia: yup.string().min(1, DEFAULTFORM.selectItem).required(DEFAULTFORM.selectItem),
     venta_uno: yup.string().min(3, `${DEFAULTFORM.min} 3`).required(DEFAULTFORM.required),
-    venta_dos: yup.string().min(3, `${DEFAULTFORM.min} 3`).required(DEFAULTFORM.required),
-    venta_tres: yup.string().min(3, `${DEFAULTFORM.min} 3`).required(DEFAULTFORM.required),
-    venta_detal_uno: yup.string().min(3, `${DEFAULTFORM.min} 3`).required(DEFAULTFORM.required),
-    venta_detal_dos: yup.string().min(3, `${DEFAULTFORM.min} 3`).required(DEFAULTFORM.required),
-    venta_detal_tres: yup.string().min(3, `${DEFAULTFORM.min} 3`).required(DEFAULTFORM.required),
+    venta_dos: yup.string().min(3, `${DEFAULTFORM.min} 3`),
+    venta_tres: yup.string().min(3, `${DEFAULTFORM.min} 3`),
+    venta_detal_uno: yup.string().min(3, `${DEFAULTFORM.min} 3`),
+    venta_detal_dos: yup.string().min(3, `${DEFAULTFORM.min} 3`),
+    venta_detal_tres: yup.string().min(3, `${DEFAULTFORM.min} 3`),
     ubicacion: yup.string().min(1, DEFAULTFORM.selectItem).required(DEFAULTFORM.selectItem),
     temperatura: yup.number().typeError(DEFAULTFORM.onlyNumber),
     minimo: yup.number().typeError(DEFAULTFORM.onlyNumber),
@@ -65,7 +65,7 @@ const schema = yup
     url_foto: yup.string().nullable(),
     usuario: yup.string(),
     iva: yup.number().min(1, DEFAULTFORM.selectItem).required(DEFAULTFORM.selectItem),
-    precio_costo: yup.string(),
+    precio_costo: yup.string().min(1, DEFAULTFORM.selectItem).required(DEFAULTFORM.selectItem),
     type_item_identification_id: yup.number(),
     unit_measures_unidad: yup.number(),
     unit_measures_fraccion: yup.number(),
@@ -100,7 +100,11 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
     resolver: yupResolver(schema),
     mode: "onChange",
   });
+
   const onSubmit = (handleData) => {
+    const parseUserData = typeof userData === "string" ? JSON.parse(userData) : userData;
+    // eslint-disable-next-line no-param-reassign
+    handleData = { ...handleData, user: parseUserData.id };
     if (handleData) {
       if (handleData.id) {
         updateProductAC(productDispatch, handleData, isEdited + 1);
@@ -128,6 +132,7 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
       setValue("usuario", parseUserData.id);
       setValue("id", data.id);
       setValue("articulo", data.articulo);
+      setValue("categoria", data.categoria);
       setValue("barras", data.barras);
       setValue("referencia", data.referencia);
       setValue("factor_venta", data.factor_venta);
@@ -169,6 +174,7 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
     const parseUserData = typeof userData === "string" ? JSON.parse(userData) : userData;
     if (parseUserData && parseUserData.id) {
       setValue("usuario", parseUserData.id);
+      setValue("activo", 1);
       if (!data) {
         setValue("type_item_identification_id", 1);
         setValue("unit_measures_unidad", 1);
@@ -178,6 +184,14 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
       }
     }
   }, [userData]);
+
+  const handleSetAllPrices = (price) => {
+    setValue("venta_dos", price, { shouldDirty: true });
+    setValue("venta_tres", price, { shouldDirty: true });
+    setValue("venta_detal_uno", price, { shouldDirty: true });
+    setValue("venta_detal_dos", price, { shouldDirty: true });
+    setValue("venta_detal_tres", price, { shouldDirty: true });
+  };
 
   return (
     <MainModal
@@ -486,7 +500,10 @@ export default function ModalItem({ isOpen, handleOnForceClose, data, handleOnSu
                             label="Precio Venta 1*"
                             placeholder=""
                             error={Boolean(errors.venta_uno)}
-                            onChange={(e) => field.onChange(e.target.value)}
+                            onChange={(e) => {
+                              field.onChange(e.target.value);
+                              handleSetAllPrices(e.target.value);
+                            }}
                           />
                         )}
                       />

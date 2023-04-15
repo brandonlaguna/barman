@@ -10,13 +10,11 @@ import {
   clean,
   updateItemCart,
 } from "context/barCartContext";
-import { useSelectorController, setIsLoading } from "context/selectorContext";
-import { toast } from "react-toastify";
+// eslint-disable-next-line no-unused-vars
+import { useSelectorController, setResponseTransaction } from "context/selectorContext";
 import useWindowDimensions from "functions/windowDimension";
 import { SwipeableList } from "@sandstreamdev/react-swipeable-list";
-import generateTransaction from "transactions/generateTransaction";
 import "@sandstreamdev/react-swipeable-list/dist/styles.css";
-import calculateTotal from "functions/calculateTotal";
 import printTransaction from "transactions/printTransaction";
 import { BANK_ICONS } from "config/contants";
 import { importAllUsers } from "services/userServices";
@@ -95,6 +93,7 @@ export default function ItemCartBar() {
   // context controllers
   const [controller] = useMaterialUIController();
   const [controllerBar, dispatchBar] = useBarCartController();
+  // eslint-disable-next-line no-unused-vars
   const [controllerSelector, dispatchSelector] = useSelectorController();
   // context methods
   const { darkMode, sidenavColor } = controller;
@@ -106,73 +105,58 @@ export default function ItemCartBar() {
     transactionType,
     printPrinter,
   } = controllerBar;
-  const { isLoading } = controllerSelector;
+  // eslint-disable-next-line no-unused-vars
+  const { isLoading, responseTransaction } = controllerSelector;
   const handleDeleteItemToCart = (itemId) => deleteToCart(dispatchBar, itemId);
   const active = true;
   const { height } = useWindowDimensions();
 
   const [listItemCart, setListItemCart] = useState([]);
-  const [totalTransaction, setTotalTransaction] = useState([]);
-  const [responseTransaction, setResponseTransaction] = useState([]);
   const [dataItemSetting, setDataItemSetting] = useState([]);
   const [isOpenModalItemCart, setIsOpenModalItemCart] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [totalPaymentsMethod, setTotalPaymentsMethod] = useState(0);
-  const [disableSendButton, setDisableSendButton] = useState(false);
 
   useEffect(() => {
     setListItemCart(listCarts);
-    setTotalTransaction(calculateTotal(listCarts));
   }, [listCarts]);
 
-  useEffect(() => {
-    if (paymentMethods) {
-      let subTotal = 0;
-      paymentMethods.forEach((payment) => {
-        subTotal += parseFloat(payment.value);
-      });
-      setTotalPaymentsMethod(subTotal);
-      if (totalTransaction.length > 0 && totalTransaction.total - subTotal >= 0) {
-        setDisableSendButton(true);
-      }
-    }
-  }, [paymentMethods]);
-
-  const handleSentTransaction = () => {
-    setIsLoading(dispatchSelector, true);
-    generateTransaction({
-      listCarts,
-      tableSelected,
-      clientSelected,
-      paymentMethods,
-      transactionType,
-    }).then((dataTransaction) => {
-      if (!dataTransaction[0]) {
-        toast.error(dataTransaction[1]);
-        setIsLoading(dispatchSelector, false);
-      } else {
-        setResponseTransaction(dataTransaction);
-        toast.success("Transaccion realizada correctamente");
-      }
-    });
-  };
+  // const handleSentTransaction = () => {
+  //   setIsLoading(dispatchSelector, true);
+  //   generateTransaction({
+  //     listCarts,
+  //     tableSelected,
+  //     clientSelected,
+  //     paymentMethods,
+  //     transactionType,
+  //   }).then((dataTransaction) => {
+  //     if (!dataTransaction[0]) {
+  //       toast.error(dataTransaction[1]);
+  //       setIsLoading(dispatchSelector, false);
+  //     } else {
+  //       setResponseTransaction(dataTransaction);
+  //       toast.success("Transaccion realizada correctamente");
+  //     }
+  //   });
+  // };
 
   useEffect(() => {
-    if (responseTransaction.length > 0) {
+    if (responseTransaction.consecutivo > 0) {
       setLaunchPrinter(dispatchBar, true);
-      setIsLoading(dispatchSelector, false);
     }
   }, [responseTransaction]);
 
   useEffect(() => {
-    printTransaction(
-      responseTransaction[2],
-      transactionType,
-      printPrinter,
-      clientSelected,
-      paymentMethods
-    );
-    clean(dispatchBar, true);
+    if (printPrinter) {
+      printTransaction(
+        responseTransaction,
+        transactionType,
+        printPrinter,
+        clientSelected,
+        paymentMethods
+      );
+      console.log("clean");
+      clean(dispatchBar, true);
+      setLaunchPrinter(dispatchBar, false);
+    }
   }, [printPrinter]);
 
   const handleOnForceCloseItemCart = () => setIsOpenModalItemCart(false);
@@ -208,12 +192,7 @@ export default function ItemCartBar() {
           />
         ))}
       </SwipeableList>
-      <PaymentButton
-        value={totalTransaction ? totalTransaction.total : 0}
-        onclickTransaction={handleSentTransaction}
-        isLoading={isLoading}
-        disabled={disableSendButton}
-      />
+      <PaymentButton />
       {/** Modals */}
       <ModalItemSetting
         isOpen={isOpenModalItemCart}

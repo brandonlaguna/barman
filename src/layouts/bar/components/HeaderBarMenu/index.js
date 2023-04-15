@@ -11,6 +11,7 @@ import {
   setLaunchPrinter,
   setPrintPrinter,
   resetItemsCart,
+  clean,
 } from "context/barCartContext";
 import { toast } from "react-toastify";
 import { getClients } from "model/clientsModel";
@@ -104,8 +105,12 @@ export default function HeaderBarMenu() {
   };
 
   const handleSelectPrint = (print) => {
+    console.log("🚀 ~ file: index.js:107 ~ handleSelectPrint ~ print:", print);
     setPrintPrinter(dispatchBar, print);
     setLaunchPrinter(dispatchBar, false);
+    if (!print) {
+      clean(dispatchBar);
+    }
   };
 
   const handleHoldTable = () => {
