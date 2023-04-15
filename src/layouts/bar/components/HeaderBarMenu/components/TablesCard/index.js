@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import { toast } from "react-toastify";
 // import calculateTotal from "functions/calculateTotal";
 import colors from "assets/theme/base/colors";
+import { BANK_ICONS } from "config/contants";
 
 function RenderTotal({ total }) {
   const calcTotal = Number.parseInt(total, 10).toFixed(0);
@@ -34,8 +35,8 @@ export default function TablesCard({ data, onClickTable, busyTables, isChangeTab
   // eslint-disable-next-line no-unused-vars
   const imgStatus =
     statusMesa === false
-      ? "assets/Bankicon/icons/tables/round-table.png"
-      : "assets/Bankicon/icons/tables/round-table.png";
+      ? `${BANK_ICONS}/icons/tables/round-table.png`
+      : `${BANK_ICONS}/icons/tables/round-table.png`;
   // eslint-disable-next-line no-unused-vars
   const altStatus = statusMesa === false ? "Mesa Disponible" : "Mesa Ocupada";
 
