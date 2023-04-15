@@ -105,7 +105,6 @@ export default function HeaderBarMenu() {
   };
 
   const handleSelectPrint = (print) => {
-    console.log("🚀 ~ file: index.js:107 ~ handleSelectPrint ~ print:", print);
     setPrintPrinter(dispatchBar, print);
     setLaunchPrinter(dispatchBar, false);
     if (!print) {

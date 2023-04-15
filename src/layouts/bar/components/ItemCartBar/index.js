@@ -153,7 +153,6 @@ export default function ItemCartBar() {
         clientSelected,
         paymentMethods
       );
-      console.log("clean");
       clean(dispatchBar, true);
       setLaunchPrinter(dispatchBar, false);
     }
