@@ -4,7 +4,7 @@ export default {
   businessDocument: "documento",
   businessCity: "email",
   systemName: "system_name",
-  clientName: "nombres",
+  clientName: "nombre",
   clientDocument: "cc_cliente",
   clientAddress: "direccion",
   clientCity: "direccion",
