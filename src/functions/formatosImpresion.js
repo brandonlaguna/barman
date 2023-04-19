@@ -14,7 +14,6 @@ const formatoImpresion = {
     `DOCUMENTO: clientDocument`,
     `CLIENTE: clientName`,
     `DIR: clientAddress`,
-    `CIUDAD: clientCity`,
     `TEL: clientPhone`,
     `_____________________________`,
     `{{items}}`,

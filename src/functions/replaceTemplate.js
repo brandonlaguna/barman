@@ -22,8 +22,16 @@ export default function replaceTemplate({
     dataToReplace = [...dataToReplace, ...dataBusiness];
   }
   if (clientSelected !== undefined) {
-    dataToReplace = [...dataToReplace, clientSelected];
+    dataToReplace = [
+      {
+        ...dataToReplace[0],
+        ...clientSelected,
+        clientAddress: clientSelected.direccion,
+        clientPhone: clientSelected.telefono,
+      },
+    ];
   }
+  console.log("🚀 ~ file: replaceTemplate.js:27 ~ dataToReplace:", dataToReplace, clientSelected);
   const joined = Object.keys(replaceParams[0])
     .map((key) => key)
     .join("|");
@@ -89,6 +97,7 @@ export default function replaceTemplate({
     }
 
     const replaced = temp.replace(regex, (matched) => dataToReplace[0][replaceParams[0][matched]]);
+    console.log("🚀 ~ file: replaceTemplate.js:100 ~ template.forEach ~ replaced:", replaced);
     if (replaced !== undefined) {
       stringReturn.push([replaced, "center"]);
       return;

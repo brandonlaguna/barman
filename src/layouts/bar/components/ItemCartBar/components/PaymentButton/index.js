@@ -4,12 +4,12 @@ import { LoadingButton } from "@mui/lab";
 // import SendIcon from "@mui/icons-material/Send";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { currencyFormatter } from "functions/numberFormat";
-import { useBarCartController } from "context/barCartContext";
+import { useBarCartController, setTransactionType } from "context/barCartContext";
 import { useSelectorController } from "context/selectorContext";
 import { sendTransactionAC } from "context/action-creator/TransactionAC";
 import { calculateTotal } from "functions/calculateTotal";
 
-export default function PaymentButton({ onclickTransaction, disabled }) {
+export default function PaymentButton({ onclickTransaction, disabled, defaultTypeTransaction }) {
   const [totalTransaction, setTotalTransaction] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [controllerBar, dispatchBar] = useBarCartController();
@@ -20,7 +20,7 @@ export default function PaymentButton({ onclickTransaction, disabled }) {
     controllerBar;
 
   useEffect(() => {
-    if (responseTransaction.lenght > 0) {
+    if (responseTransaction.httpStatus === 200) {
       onclickTransaction(responseTransaction);
     }
   }, [responseTransaction]);
@@ -30,12 +30,15 @@ export default function PaymentButton({ onclickTransaction, disabled }) {
   }, [listCarts]);
 
   const handleSentTransaction = () => {
+    if (defaultTypeTransaction != null) {
+      setTransactionType(dispatchBar, defaultTypeTransaction);
+    }
     sendTransactionAC(dispatchSelector, {
       listCarts,
       tableSelected,
       clientSelected,
       paymentMethods,
-      transactionType,
+      transactionType: defaultTypeTransaction != null ? defaultTypeTransaction : transactionType,
     });
   };
 
@@ -61,10 +64,12 @@ export default function PaymentButton({ onclickTransaction, disabled }) {
 PaymentButton.defaultProps = {
   disabled: false,
   onclickTransaction: () => null,
+  defaultTypeTransaction: null,
 };
 
 PaymentButton.propTypes = {
   onclickTransaction: PropTypes.func,
   // isLoading: PropTypes.bool,
   disabled: PropTypes.bool,
+  defaultTypeTransaction: PropTypes.instanceOf(Array),
 };

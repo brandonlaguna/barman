@@ -229,7 +229,15 @@ export default function ModalPaymentMethods({ isOpen, handleOnForceClose, data }
             </Table>
           </TableContainer>
           <br />
-          <PaymentButton disabled={!(totalPaymentsMethod - totalTransaction.total >= 0)} />
+          <PaymentButton
+            disabled={!(totalPaymentsMethod - totalTransaction.total >= 0)}
+            defaultTypeTransaction={{
+              guardar_vender: 2,
+              tipo_transaccion: 1,
+              printPrinter: ["all", 1, 2, false],
+            }}
+            onclickTransaction={() => handleOnForceClose(false)}
+          />
         </Grid>
       </Grid>
     </MainModal>

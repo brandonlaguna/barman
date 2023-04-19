@@ -44,7 +44,7 @@ export const importClientes = async () => {
   }
 };
 
-export const obtenerCliente = (idcliente) =>
+export const getClient = (idcliente) =>
   axios
     .post(`${API_URL}/clientes`, {
       headers,
@@ -53,11 +53,17 @@ export const obtenerCliente = (idcliente) =>
     .then((response) => response.data)
     .catch(({ response }) => response.data || DEFAULT_ERROR_DATA);
 
-export const saveClient = (params) =>
-  axios
-    .post(`${API_URL}/clients/store`, params, { headers })
-    .then((response) => response)
-    .catch(({ response }) => response || DEFAULT_ERROR_DATA);
+export const saveClient = async (params) => {
+  try {
+    const response = await instance
+      .post(`/clients/store`, params)
+      .then((res) => res.data)
+      .catch(({ res }) => res.data || DEFAULT_ERROR_DATA);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const saveClientFetch = (params) =>
   fetch(`${API_SILPOS_WEB}/api/cliente/store`, {

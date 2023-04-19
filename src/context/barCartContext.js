@@ -63,6 +63,7 @@ function reducer(state, action) {
         transactionType: {
           guardar_vender: 0,
           tipo_transaccion: 0,
+          printPrinter: [2, false],
         },
       };
     }
