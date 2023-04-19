@@ -14,6 +14,8 @@ import {
   clean,
 } from "context/barCartContext";
 import { setResponseTransaction, useSelectorController } from "context/selectorContext";
+import { useClientsController } from "context/clientsContext";
+import { getClientsAC } from "context/action-creator/clientsAC";
 import { toast } from "react-toastify";
 import { getClients } from "model/clientsModel";
 import { getPaymentMethods } from "model/paymentMethodsModel";
@@ -34,6 +36,8 @@ export default function HeaderBarMenu() {
   const [controller] = useMaterialUIController();
   // eslint-disable-next-line no-unused-vars
   const [controllerSelector, dispatchSelector] = useSelectorController();
+  // eslint-disable-next-line no-unused-vars
+  const [clientsController, clientDispatch] = useClientsController();
   // context methods
   const { darkMode, sidenavColor } = controller;
   const active = true;
@@ -63,6 +67,7 @@ export default function HeaderBarMenu() {
     transactionType,
     launchPrinter,
   } = controllerBar;
+  const { clients } = clientsController;
 
   const insertTablesToCard = (tableData) => {
     if (tableData.length > 0) {
@@ -145,21 +150,26 @@ export default function HeaderBarMenu() {
   };
 
   const loadClients = () => {
-    getClients().then((resClients) => {
-      setItemsClients(resClients);
-    });
+    getClientsAC(clientDispatch);
   };
 
   useEffect(() => {
     getListTables(listTables).then((resTables) => setItemsTables(resTables));
     getClients().then((resClients) => setItemsClients(resClients));
     loadClients();
+    getClientsAC(clientDispatch);
     getPaymentMethods().then((resPayments) => setItemsPaymentMethods(resPayments));
   }, []);
 
   useEffect(() => {
     setIsOpenModalPrint(launchPrinter);
   }, [launchPrinter]);
+
+  useEffect(() => {
+    if (clients.length > 0) {
+      setItemsClients(clients);
+    }
+  }, [clients]);
 
   return (
     <MDBox
@@ -234,6 +244,7 @@ export default function HeaderBarMenu() {
         isOpen={isOpenModalPrint}
         handleOnForceClose={handleOnForceClosePrint}
         handleSelectPrint={handleSelectPrint}
+        enabledPrinters={transactionType?.printPrinter}
       />
       <ModalChange
         isOpen={isOpenModalChange}

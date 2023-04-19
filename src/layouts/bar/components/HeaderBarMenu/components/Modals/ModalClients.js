@@ -66,23 +66,21 @@ export default function ModalClient({
   const handleResponseDataClient = (client) => {
     setIsSend(false);
     saveClient(client).then((response) => {
-      if (response.data.status) {
-        toast.success(response.data.message);
+      if (response.status) {
+        toast.success(response.message);
         importClientes().then((result) => {
-          localStorage.removeItem("clientes");
-          localStorage.setItem("clientes", JSON.stringify(result));
           setShowForm(false);
-          setFilteredDataSource(result);
-          setFilterQuantity(result.length);
+          setFilteredDataSource(result.data);
+          setFilterQuantity(result.data.length);
           handleForceReload(true);
           selectClientToCart(dispatchBar, {
             ...client,
-            id: response.data.data,
+            id: response.data,
           });
         });
       } else {
         selectClientToCart(clientSelected, client);
-        toast.error(response.data.message);
+        toast.error(response.message);
       }
       setClearForm(true);
       setIsSend(true);

@@ -40,6 +40,7 @@ const printTransaction = (
           },
         ],
       });
+      console.log("🚀 ~ file: printTransaction.js:43 ~ printerList.forEach ~ content:", content);
       const impresora = new Impresora();
       content.forEach((res) => {
         if (res[2] !== undefined) {

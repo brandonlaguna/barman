@@ -1,4 +1,4 @@
-import { importClientes } from "services/clientsServices";
+import { importClientes, saveClient } from "services/clientsServices";
 import { setLoadingClients, setClients } from "context/clientsContext";
 import { toast } from "react-toastify";
 
@@ -16,4 +16,15 @@ export const getClientsAC = (dispatch) => {
     });
 };
 
-export const addClientAC = () => true;
+export const addClientAC = (dispatch, data) => {
+  saveClient(data)
+    .then((res) => {
+      const { data: resData } = res;
+      if (res.status === 200) {
+        toast.success(resData.message);
+      } else {
+        toast.error(resData.sqlMessage);
+      }
+    })
+    .catch((err) => toast.error(err));
+};

@@ -12,7 +12,7 @@ const getAllTransactionType = async () => {
         guardarVender: 2,
         tipoTransaccion: 1,
         print: true,
-        printPrinter: [1, 2],
+        printPrinter: ["all", 1, 2, false],
       },
       // {
       //   id: 2,
@@ -55,7 +55,7 @@ const getAllTransactionType = async () => {
         guardarVender: 0,
         tipoTransaccion: 0,
         print: true,
-        printPrinter: [2],
+        printPrinter: [2, false],
       },
     ];
   } catch (e) {
