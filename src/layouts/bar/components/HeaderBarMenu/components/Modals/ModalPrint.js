@@ -88,7 +88,7 @@ export default function ModalPrint({
               noWrap
               alignSelf="center"
             >
-              {printMode.title} {`${enabledPrinters.length}`}
+              {printMode.title}
             </MDTypography>
           </Card>
         </Grid>
