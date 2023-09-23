@@ -27,6 +27,8 @@ instance.interceptors.request.use(
     config.headers.dbd = businessData.dbname;
     // eslint-disable-next-line no-param-reassign
     config.headers.Company = businessData.id;
+
+    //hola
     return config;
   },
   (error) => Promise.reject(error)
